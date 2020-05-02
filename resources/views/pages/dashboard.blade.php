@@ -34,7 +34,7 @@ $title = 'Dashboard';
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis quisquam suscipit in assumenda inventore nulla id labore unde rerum doloribus, repellendus repellat quibusdam ducimus aliquam voluptates similique dolorum accusamus amet.
                                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi odit sit velit quos qui, expedita sequi iusto aliquid ea perferendis quas, voluptates dolorem eveniet deleniti laborum officia, nulla nesciunt consequuntur?
                                 </p>
-                                <a href="#" class="btn btn-primary float-right mt-3">Start</a>
+                                <a href="{{route('page', 'data-latih')}}" class="btn btn-primary float-right mt-3">Start</a>
                             </div>
                         </div>
                     </div>

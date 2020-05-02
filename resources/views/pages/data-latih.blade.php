@@ -22,19 +22,51 @@ $title = 'Data Latih';
         <!-- Main content -->
         <div class="content">
             <div class="container-fluid">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-check"></i> Success!</h4>
+                    {{ $message }}
+                  </div>
+                @endif
+                @if ($message = Session::get('error'))
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-exclamation-triangle"></i> Failed!</h4>
+                    {{ $message }}
+                  </div>
+                @endif
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="text-center">SISTEM PERAMALAN JUMLAH KEMUNCULAN TITIK API DI RIAU</h4>
-                                <h5 class="text-center mb-5">MENGGUNAKAN METODE DEKOMPOSISI</h5>
-                                <p class="card-text">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum ipsam quia ducimus, explicabo harum amet expedita non. Quis labore iste saepe voluptas, hic voluptatem sapiente, itaque eos, et eaque expedita.
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita consequuntur et doloremque quos! Porro, laboriosam eveniet blanditiis distinctio laborum quam ut. Suscipit quod recusandae eaque voluptatibus itaque praesentium facere similique.
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis quisquam suscipit in assumenda inventore nulla id labore unde rerum doloribus, repellendus repellat quibusdam ducimus aliquam voluptates similique dolorum accusamus amet.
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi odit sit velit quos qui, expedita sequi iusto aliquid ea perferendis quas, voluptates dolorem eveniet deleniti laborum officia, nulla nesciunt consequuntur?
-                                </p>
-                                <a href="#" class="btn btn-primary float-right mt-3">Start</a>
+                                <h4 class="text-center mb-5">Upload Data Latih</h4>
+                                <div class="card-body col-6 mx-auto">
+                                    <form action="{{route('api.export')}}" method="get">
+                                        <div class="form-group">
+                                            <label for="tahun">Template Excel</label>
+                                            <select id="tahun" name="tahun" class="form-control">
+                                                <option selected>Pilih Tahun...</option>
+                                                <option value="2016">2016</option>
+                                                <option value="2017">2017</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary my-3">Download</button>
+                                        </div>
+                                    </form>
+                                    <form action="{{route('api.import')}}" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="file">Upload Data</label>
+                                            <div class="input-group mb-3">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="file" name="file">
+                                                    <label class="custom-file-label" for="file">Choose file</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -43,4 +75,14 @@ $title = 'Data Latih';
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+    <script>
+        $('#file').on('change',function(){
+            //get the file name
+            var fileName = $(this).val().replace('C:\\fakepath\\', "");
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(fileName);
+        })
+    </script>
 @endsection

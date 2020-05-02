@@ -19,4 +19,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('export', 'ApiController@export')->name('export');
+    Route::post('import', 'ApiController@import')->name('import');
+});
+
 Route::get('/{page}', 'HomeController@index')->name('page');

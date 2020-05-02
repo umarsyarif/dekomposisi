@@ -16,7 +16,7 @@ class CreateKebakaranTable extends Migration
         Schema::create('kebakaran', function (Blueprint $table) {
             $table->id();
             $table->date('waktu');
-            $table->integer('jumlah');
+            $table->integer('jumlah')->default(0);
             $table->timestamps();
         });
     }

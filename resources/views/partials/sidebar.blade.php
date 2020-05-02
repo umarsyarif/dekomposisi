@@ -15,13 +15,13 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="{{route('page', 'dashboard')}}" class="nav-link">
+            <a href="{{route('page', 'dashboard')}}" class="nav-link {{$title == 'Dashboard' ? 'active' : ''}}">
               <i class="nav-icon fas fa-home"></i>
               <p>Dashboard</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('page', 'data-latih')}}" class="nav-link">
+            <a href="{{route('page', 'data-latih')}}" class="nav-link {{$title == 'Data Latih' ? 'active' : ''}}">
               <i class="nav-icon fas fa-chart-line"></i>
               <p>Data Latih</p>
             </a>
