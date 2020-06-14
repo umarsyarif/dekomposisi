@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Api;
+use App\Latih;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -21,7 +21,7 @@ class ApiExport implements FromQuery, WithMapping, WithColumnFormatting, WithHea
 
     public function query()
     {
-        return Api::query()->select('waktu', 'jumlah')->whereYear('waktu', $this->year);
+        return Latih::query()->select('waktu', 'jumlah')->whereYear('waktu', $this->year);
     }
 
     public function map($api): array

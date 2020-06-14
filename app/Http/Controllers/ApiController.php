@@ -102,4 +102,15 @@ class ApiController extends Controller
         Excel::import(new ApiImport, $request->file('file'));
         return redirect()->route('page', 'data-latih')->with('success', 'Data berhasil disimpan!');
     }
+
+    public function getYear()
+    {
+        $data = Api::orderBy('waktu')->get();
+        $x = [];
+        foreach ($data as $row) {
+            array_push($x, date('Y', strtotime($row->waktu)));
+        }
+        $years = array_unique($x);
+        return $years;
+    }
 }

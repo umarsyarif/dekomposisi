@@ -21,41 +21,23 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown" data-toggle="dropdown">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="javascript:void(0)">
-            <img src="{{asset('images/user.png')}}" alt="user-image" class="rounded-circle" width="32px">
-            <span class="pro-user-name ml-1">{{Auth::user()->name}}  <i class="fas fa-angle-down"></i></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <div class="dropdown-item dropdown">
-                <p>Hai, {{Auth::user()->name}}</p>
-                <small>{{Auth::user()->email}}</small>
+            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="javascript:void(0)">
+                <img src="{{asset('images/user.png')}}" alt="user-image" class="rounded-circle" width="32px">
+                <span class="pro-user-name ml-1">{{Auth::user()->name}}  <i class="fas fa-angle-down"></i></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <div class="dropdown-item dropdown">
+                    <p>Hai, {{Auth::user()->name}}</p>
+                    <small>{{Auth::user()->email}}</small>
+                </div>
+                <div class="dropdown-item dropdown">
+                    <a href="javascript:void(0)" class="dropdown-item dropdown" onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">Logout</a>
+                </div>
             </div>
-            <div class="dropdown-item dropdown">
-                <a href="javascript:void(0)" class="dropdown-item dropdown" data-toggle="modal" data-target="#logoutModal">Logout</a>
-            </div>
-        </div>
         </li>
     </ul>
 </nav>
-
-{{-- logout modal --}}
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <form action="{{ route('logout') }}" method="post">
-                    @csrf
-                    <button type="submit" class="btn btn-primary" href="">Logout</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none">
+    @csrf
+</form>

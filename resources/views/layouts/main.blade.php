@@ -8,6 +8,8 @@
   <title>{{config('app.name')}} | @yield('title')</title>
 
   <link rel="stylesheet" href="{{asset('css/app.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('datatables/datatables.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{asset('bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}"/>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -26,6 +28,8 @@
 
     </div>
     <script src="{{asset('js/app.js')}}"></script>
-    @yield('script')
+    <script type="text/javascript" src="{{asset('datatables/datatables.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+    @stack('scripts')
 </body>
 </html>

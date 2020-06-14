@@ -49,6 +49,7 @@ $title = 'Data Latih';
                                                 <option selected>Pilih Tahun...</option>
                                                 <option value="2016">2016</option>
                                                 <option value="2017">2017</option>
+                                                <option value="2018">2018</option>
                                             </select>
                                             <button type="submit" class="btn btn-primary my-3">Download</button>
                                         </div>
@@ -76,7 +77,7 @@ $title = 'Data Latih';
     </div>
 </div>
 @endsection
-@section('script')
+@push('scripts')
     <script>
         $('#file').on('change',function(){
             //get the file name
@@ -84,5 +85,12 @@ $title = 'Data Latih';
             //replace the "Choose a file" label
             $(this).next('.custom-file-label').html(fileName);
         })
+
+        axios.get('/api/get-year')
+        .then(response => {
+            console.log.response;
+        }).catch(error => {
+            console.error(error)
+        });
     </script>
-@endsection
+@endpush

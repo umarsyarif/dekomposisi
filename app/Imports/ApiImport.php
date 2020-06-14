@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Api;
+use App\Latih;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -27,7 +27,7 @@ class ApiImport implements ToCollection, WithHeadingRow
                 return null;
             }
 
-            Api::updateOrCreate(
+            Latih::updateOrCreate(
                 [
                     'waktu'  => $waktu
                 ],
