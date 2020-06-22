@@ -82,7 +82,7 @@ $title = 'Nilai Indeks Musiman';
                             </div>
                             <div class="modal-body">
                                 <h5 class="text-center">Rumus Nilai Indeks Musiman</h5>
-                                <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6>
+                                {{-- <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6> --}}
                                 <div class="col-12">
                                     <div class="row mt-3">
                                         <div class="bg-purple col-6 pt-1">
