@@ -47,6 +47,7 @@ $title = 'Nilai Indeks Musiman';
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $jumlahIndeks = 0; ?>
                                         @foreach ($data as $row)
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
@@ -55,9 +56,13 @@ $title = 'Nilai Indeks Musiman';
                                                     <?php $ma = $item ?? '-' ?>
                                                     <td class="text-center">{{$ma > 0 ? round($ma, 2) : $ma}}</td>
                                                 @endforeach
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
+                                                <?php
+                                                ?>
+                                                <td class="text-center">{{$row->medial}}</td>
+                                                <td class="text-center">{{$indeks = $row->medial * $penyesuaian}}</td>
+                                                <?php $jumlahIndeks += $indeks ?>
                                             </tr>
+                                            {{-- <?php die() ?> --}}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -81,10 +86,10 @@ $title = 'Nilai Indeks Musiman';
                                 <div class="col-12">
                                     <div class="row mt-3">
                                         <div class="bg-purple col-6 pt-1">
-                                            {{-- <h6 class="text-center"><strong><em>a</em> = {{$a = pow(10, $logy/$data->count())}}</strong></h6> --}}
+                                            <h6 class="text-center"><strong><em>Nilai penyesuaian</em>  {{$penyesuaian}}</strong></h6>
                                         </div>
                                         <div class="bg-info col-6 pt-1">
-                                            {{-- <h6 class="text-center"><strong><em>b</em> = {{$b = pow(10, $xlogy/$x2)}}</strong></h6> --}}
+                                            <h6 class="text-center"><strong><em>Jumlah Indeks Musiman</em> <br> {{$jumlahIndeks}}</strong></h6>
                                         </div>
                                     </div>
                                 </div>

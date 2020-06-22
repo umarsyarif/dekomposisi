@@ -32,9 +32,9 @@ class PrediksiController extends Controller
         $data = Latih::orderBy('waktu')->get()->toArray();
         $years = $this->getYear();
         $date = $this->getdate();
-
         $result = $this->movingAverage($data);
         // return $result;
+        $penyesuaian = 0;
         foreach ($date as $row) {
             $jumlah = new stdClass();
             $ma = new stdClass();
@@ -56,13 +56,24 @@ class PrediksiController extends Controller
             }
             $row->jumlah = $jumlah;
             $row->ma = $ma;
+            $row->medial = $this->medial($ma);
+            $penyesuaian += $row->medial;
         }
-        // return $date;
+        $penyesuaian = 365 / $penyesuaian;
+        // return $penyesuaian;
         $data = [
             'data' => $date,
             'year' => $years,
+            'penyesuaian' => $penyesuaian
         ];
         return view('proses-prediksi.data-musiman', $data);
+    }
+
+    public function medial($data)
+    {
+        $ma = array_diff((array) $data, array(NULL));
+        $jumlah = count($ma) - 2;
+        return $jumlah > 0 ? (array_sum($ma) - min($ma) - max($ma)) / $jumlah : 0;
     }
 
     public function getMovingAverage($date, $data)
@@ -81,17 +92,19 @@ class PrediksiController extends Controller
         $y = count($data);
         $start = 0;
         $end = 365;
+        $jumlah = array_map(function ($n) {
+            return $n['jumlah'];
+        }, $data);
         foreach ($data as $row) {
             $currentResult = new stdClass();
             $currentResult->waktu = $row['waktu'];
             $currentResult->jumlah = $row['jumlah'];
             if ($x > 183 && $y > 183) {
-                $tmp = array_sum(array_slice(array_map(function ($n) {
-                    return $n['jumlah'];
-                }, $data), $start, $end)) / 7;
+                $tmp = array_sum(array_slice($jumlah, $start, $end)) / 7;
                 $currentResult->ma = $tmp;
+                // echo 'x ' . $x . '| ' . $start . '(' . $jumlah[$start] . ') -' . $end . '(' . $jumlah[$end] . ') = ' . $tmp;
+                // echo '<br/>';
                 $start++;
-                $end++;
             } else {
                 $currentResult->ma = null;
             }
