@@ -89,9 +89,11 @@ $title = 'Nilai Trend';
                                         <div class="row mt-3">
                                             <div class="bg-purple col-6 pt-1">
                                                 <h6 class="text-center"><strong><em>a</em> = {{$a = pow(10, $logy/$data->count())}}</strong></h6>
+                                                <?php Cache::put('a', $a); ?>
                                             </div>
                                             <div class="bg-info col-6 pt-1">
                                                 <h6 class="text-center"><strong><em>b</em> = {{$b = pow(10, $xlogy/$x2)}}</strong></h6>
+                                                <?php Cache::put('b', $b); ?>
                                             </div>
                                         </div>
                                     </div>

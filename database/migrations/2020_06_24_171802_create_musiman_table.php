@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKebakaranTable extends Migration
+class CreateMusimanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateKebakaranTable extends Migration
      */
     public function up()
     {
-        Schema::create('kebakaran', function (Blueprint $table) {
+        Schema::create('musiman', function (Blueprint $table) {
             $table->id();
             $table->date('waktu');
-            $table->integer('jumlah')->default(0);
+            $table->double('medial')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateKebakaranTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kebakaran');
+        Schema::dropIfExists('musiman');
     }
 }

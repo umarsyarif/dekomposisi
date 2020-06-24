@@ -6,8 +6,10 @@ use App\Uji;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use App\Imports\UjiImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UjiController extends Controller
 {
@@ -122,5 +124,11 @@ class UjiController extends Controller
     public function destroy(Uji $uji)
     {
         //
+    }
+
+    public function import(Request $request)
+    {
+        Excel::import(new UjiImport, $request->file('file'));
+        return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('success', 'Data berhasil disimpan!');
     }
 }

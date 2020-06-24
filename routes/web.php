@@ -31,15 +31,16 @@ Route::prefix('data-uji')->name('data-uji.')->group(function () {
     Route::get('/', 'UjiController@page')->name('page');
     Route::post('/', 'UjiController@store')->name('store');
     Route::get('get-year', 'UjiController@getYear')->name('get-year');
-    Route::get('export', 'UjiController@export')->name('export');
+    // Route::get('export', 'UjiController@export')->name('export');
     Route::post('import', 'UjiController@import')->name('import');
     Route::delete('/{year}', 'UjiController@destroy')->name('destroy');
 });
 
 Route::prefix('prediksi')->name('prediksi.')->group(function () {
     Route::get('/', 'PrediksiController@page')->name('page');
-    Route::get('/data-trend', 'PrediksiController@trend')->name('data-trend');
-    Route::get('/data-musiman', 'PrediksiController@musiman')->name('data-musiman');
+    Route::get('data-trend', 'PrediksiController@trend')->name('data-trend');
+    Route::get('data-musiman', 'PrediksiController@musiman')->name('data-musiman');
+    Route::get('hasil', 'PrediksiController@hasil')->name('hasil');
 });
 
 
