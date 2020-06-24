@@ -48,7 +48,8 @@ $title = 'Peramalan';
                                     Nasional (LAPAN). Pengujian dilakukan dengan pengujian black box dan pengujian akurasi
                                     sistem menggunakan Mean Absolute Percent Error (MAPE).
                                 </p>
-                                <a href="javascript:void(0);" class="btn btn-primary float-right mt-3" data-toggle="modal" data-target="#start-modal">Start</a>
+                                {{-- <a href="javascript:void(0);" class="btn btn-primary float-right mt-3" data-toggle="modal" data-target="#start-modal">Start</a> --}}
+                                <a href="{{route('prediksi.hasil')}}" class="btn btn-primary float-right mt-3">Start</a>
                             </div>
                         </div>
                     </div>

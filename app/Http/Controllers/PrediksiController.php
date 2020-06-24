@@ -18,9 +18,16 @@ class PrediksiController extends Controller
         return view('proses-prediksi.index');
     }
 
+    public function index()
+    {
+        $year = $this->getYear();
+        $data = Latih::whereIn(DB::raw('YEAR(waktu)'), $year)->orderBy('waktu')->get();
+        return $data;
+    }
+
     public function trend()
     {
-        $data = Latih::orderBy('waktu')->get();
+        $data = $this->index();
         foreach ($data as $row) {
             //
         }
@@ -32,7 +39,7 @@ class PrediksiController extends Controller
 
     public function musiman()
     {
-        $data = Latih::orderBy('waktu')->get()->toArray();
+        $data = $this->index()->toArray();
         $years = $this->getYear();
         $date = $this->getdate();
         $result = $this->movingAverage($data);
@@ -155,7 +162,7 @@ class PrediksiController extends Controller
 
     public function getYear()
     {
-        $year = Latih::select(DB::raw('YEAR(waktu) as year'))->orderBy('year')->distinct()->get();
+        $year = Latih::select(DB::raw('YEAR(waktu) as year'))->orderBy('year')->limit(6)->distinct()->get();
         $year = $year->pluck('year');
         return $year;
     }

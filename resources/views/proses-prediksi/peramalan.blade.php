@@ -86,10 +86,10 @@ $title = 'Peramalan';
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-purple col-6 pt-1">
-                                    <h6 class="text-center"><strong>Aditif <br> <em>{{$jumlahAditif / $uji->count()}}</em></strong></h6>
+                                    <h6 class="text-center"><strong>Aditif <br> <em>{{round($jumlahAditif / $uji->count(), 2)}} %</em></strong></h6>
                                 </div>
                                 <div class="bg-info col-6 pt-1">
-                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{$jumlahMultiplikatif / $uji->count()}}</em></strong></h6>
+                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{round($jumlahMultiplikatif / $uji->count(), 2)}} %</em></strong></h6>
                                 </div>
                             </div>
                         </div>
