@@ -47,6 +47,7 @@ $title = 'Peramalan';
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
                                 @foreach ($uji as $row)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
@@ -58,6 +59,10 @@ $title = 'Peramalan';
                                     <td class="text-center">{{$multiplikatif = ($a + pow($b, $xt)) * $row->musiman}}</td>
                                     <td class="text-center">{{($xt - $multiplikatif) / $xt}}</td>
                                 </tr>
+                                <?php
+                                    $jumlahAditif += $aditif;
+                                    $jumlahMultiplikatif += $multiplikatif;
+                                ?>
                                 @endforeach
                             </tbody>
                         </table>
@@ -66,35 +71,35 @@ $title = 'Peramalan';
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="start-modal" tabindex="-1" role="dialog" aria-labelledby="start-modal-label" aria-hidden="true">
+        <div class="modal fade" id="modal-hasil" tabindex="-1" role="dialog" aria-labelledby="modal-hasil-label" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="start-modal-label">Peramalan Jumlah Titik Api</h5>
+                        <h5 class="modal-title" id="modal-hasil-label">Peramalan Jumlah Titik Api</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h5 class="text-center">Rumus Nilai Indeks Musiman</h5>
-                        <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6>
+                        <h5 class="text-center">Akurasi</h5>
+                        {{-- <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6> --}}
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-purple col-6 pt-1">
-                                    {{-- <h6 class="text-center"><strong><em>a</em> = {{$a = pow(10, $logy/$data->count())}}</strong></h6> --}}
+                                    <h6 class="text-center"><strong>Aditif <br> <em>{{$jumlahAditif / $uji->count()}}</em></strong></h6>
                                 </div>
                                 <div class="bg-info col-6 pt-1">
-                                    {{-- <h6 class="text-center"><strong><em>b</em> = {{$b = pow(10, $xlogy/$x2)}}</strong></h6> --}}
+                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{$jumlahMultiplikatif / $uji->count()}}</em></strong></h6>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-success col-12 pt-1">
-                                    {{-- <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6> --}}
+                                    <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
