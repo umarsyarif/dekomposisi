@@ -72,7 +72,8 @@ $title = 'Akurasi';
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
-                                    {{-- <td class="text-center">{{++$xt}}</td> --}}
+                                    {{-- <td class="text-center">{{$xt++}}</td> --}}
+                                    <?php $xt++ ?>
                                     <td class="text-center">{{$row->jumlah}}</td>
                                     <td class="text-center">{{$aditif = ($a + pow($b, $xt)) + $row->musiman}}</td>
                                     <td class="text-center">{{($xt - $aditif) / $xt}}</td>

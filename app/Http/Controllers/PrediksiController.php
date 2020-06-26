@@ -151,8 +151,10 @@ class PrediksiController extends Controller
             new DateInterval('P1D'),
             new DateTime($akhir . ' +1 day')
         );
-        // $uji = Uji::all();
         $xt = Latih::all()->count();
+        $last = Latih::orderBy('waktu', 'DESC')->pluck('waktu')->first();
+        $diff = $last->diff($awal)->format('%a');
+        $xt += $diff;
         $a = Cache::get('a', null);
         $b = Cache::get('b', null);
         $penyesuaian = Cache::get('penyesuaian', null);

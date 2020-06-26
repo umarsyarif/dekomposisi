@@ -148,6 +148,9 @@ class UjiController extends Controller
         $now = now();
         if ($awal >= '2020-01-01' && $akhir < $now) {
             $xt = Latih::all()->count();
+            $last = Latih::orderBy('waktu', 'DESC')->pluck('waktu')->first();
+            $diff = $last->diff($awal)->format('%a');
+            $xt += $diff;
             $a = Cache::get('a', null);
             $b = Cache::get('b', null);
             $penyesuaian = Cache::get('penyesuaian', null);
