@@ -144,7 +144,7 @@ class PrediksiController extends Controller
         $uji = new DatePeriod(
             new DateTime($awal),
             new DateInterval('P1D'),
-            new DateTime($akhir)
+            new DateTime($akhir . ' +1 day')
         );
         // $uji = Uji::all();
         $xt = Latih::all()->count();
