@@ -33,6 +33,6 @@ class HomeController extends Controller
     public function home()
     {
         $this->middleware('guest');
-        return view('welcome');
+        return view('welcome2');
     }
 }

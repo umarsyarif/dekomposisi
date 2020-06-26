@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@home')->name('home');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::prefix('data-latih')->name('data-latih.')->group(function () {
     Route::get('/', 'LatihController@page')->name('page');
