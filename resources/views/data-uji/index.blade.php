@@ -53,12 +53,13 @@ $title = 'Akurasi';
                                         </button>
                                     </div>
                                     {{-- <div class="btn-group float-right"> --}}
-                                        <a href="javascript:void(0);" class="btn btn-primary float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
+                                        <a href="javascript:void(0);" class="btn btn-primary float-right" data-toggle="modal" data-target="#create-modal"> Cek Akurasi</a>
                                         <a href="javascript:void(0);" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#import-modal"><i class="fas fa-download mr-2"></i> Import</a>
-                                    {{-- </div> --}}
+                                        {{-- </div> --}}
                                 </form>
                             </div>
                             <div class="card-body">
+                                <h4 class="text-center">Data Aktual</h4>
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -85,7 +86,7 @@ $title = 'Akurasi';
                                     </thead>
                                     <tbody>
                                         @if ($filter == null)
-                                            @foreach ($latih as $row)
+                                            @foreach ($uji as $row)
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td>{{$row->waktu->format('d F Y')}}</td>
@@ -95,21 +96,21 @@ $title = 'Akurasi';
                                                 </tr>
                                             @endforeach
                                         @elseif ($filter == 'tahun')
-                                            @foreach ($latih as $row)
+                                            @foreach ($uji as $row)
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td>{{$row->year}}</td>
                                                     <td>{{$row->jumlah->count()}}</td>
                                                     <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                     <td>
-                                                        <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-success">
+                                                        <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-success">
                                                             <i class="fas fa-upload mr-1"></i> Export
                                                         </a>
                                                         <button class="btn btn-danger" onclick="event.preventDefault();
                                                         document.getElementById('delete-form-{{$row->year}}').submit();">
                                                             <i class="fas fa-trash mr-1"></i> Hapus
                                                         </button>
-                                                        <form id="delete-form-{{$row->year}}" action="{{route('data-latih.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
+                                                        <form id="delete-form-{{$row->year}}" action="{{route('data-uji.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                         </form>
@@ -117,21 +118,21 @@ $title = 'Akurasi';
                                                 </tr>
                                             @endforeach
                                         @elseif ($filter == 'bulan')
-                                                @foreach ($latih as $row)
+                                                @foreach ($uji as $row)
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
                                                         <td>{{date('F', mktime(0, 0, 0, $row->month, 10))}} {{$row->year}}</td>
                                                         <td>{{$row->jumlah->count()}}</td>
                                                         <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                         <td>
-                                                            <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-success disabled">
+                                                            <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-success disabled">
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
                                                             <button class="btn btn-danger" onclick="event.preventDefault();
                                                             document.getElementById('delete-form-{{$row->year}}').submit();" disabled>
                                                                 <i class="fas fa-trash mr-1"></i> Hapus
                                                             </button>
-                                                            <form id="delete-form-{{$row->year}}" action="{{route('data-latih.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
+                                                            <form id="delete-form-{{$row->year}}" action="{{route('data-uji.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
@@ -150,19 +151,19 @@ $title = 'Akurasi';
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="create-modal-label">Tambah Data Uji</h5>
+                            <h5 class="modal-title" id="create-modal-label">Cek Akurasi</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{route('data-uji.store')}}" method="post">
+                        <form action="{{route('data-uji.akurasi')}}" method="post">
                             @csrf
                             <div class="modal-body">
                                 <input type="hidden" name="filter" value="{{$filter}}">
                                 <div class="form-group">
-                                    <label for="datepicker">Bulan</label>
+                                    <label for="datepicker">Tanggal</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="datepicker" name="bulan" placeholder="Pilih bulan" required>
+                                        <input type="text" class="form-control" id="datepicker" name="tanggal" placeholder="Pilih tanggal" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="fas fa-calendar"></i>
@@ -170,10 +171,11 @@ $title = 'Akurasi';
                                         </div>
                                     </div>
                                 </div>
+                                <small class="text-muted"><em>*)Tanggal yang dipilih harus memiliki data aktual</em></small>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Tambah</button>
+                                <button type="submit" class="btn btn-primary">Check</button>
                             </div>
                         </form>
                     </div>
@@ -219,6 +221,8 @@ $title = 'Akurasi';
 </div>
 @endsection
 @push('scripts')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         $('#file').on('change',function(){
             //get the file name
@@ -233,11 +237,7 @@ $title = 'Akurasi';
           });
         });
 
-        $("#datepicker").datepicker({
-            format: "M-yyyy",
-            minViewMode : 1,
-            autoclose : true
-        });
+        $("#datepicker").daterangepicker();
 
     </script>
 @endpush

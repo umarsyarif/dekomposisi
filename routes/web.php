@@ -31,6 +31,7 @@ Route::prefix('data-uji')->name('data-uji.')->group(function () {
     Route::get('/', 'UjiController@page')->name('page');
     Route::post('/', 'UjiController@store')->name('store');
     Route::get('get-year', 'UjiController@getYear')->name('get-year');
+    Route::post('akurasi', 'UjiController@akurasi')->name('akurasi');
     // Route::get('export', 'UjiController@export')->name('export');
     Route::post('import', 'UjiController@import')->name('import');
     Route::delete('/{year}', 'UjiController@destroy')->name('destroy');
