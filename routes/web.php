@@ -41,7 +41,7 @@ Route::prefix('prediksi')->name('prediksi.')->group(function () {
     Route::get('/', 'PrediksiController@page')->name('page');
     Route::get('data-trend', 'PrediksiController@trend')->name('data-trend');
     Route::get('data-musiman', 'PrediksiController@musiman')->name('data-musiman');
-    Route::get('hasil', 'PrediksiController@hasil')->name('hasil');
+    Route::post('hasil', 'PrediksiController@hasil')->name('hasil');
 });
 
 

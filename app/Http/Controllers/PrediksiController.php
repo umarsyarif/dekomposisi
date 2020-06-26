@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use stdClass;
+use DateTime;
+use DatePeriod;
+use DateInterval;
 
 class PrediksiController extends Controller
 {
@@ -133,9 +136,17 @@ class PrediksiController extends Controller
         return $result;
     }
 
-    public function hasil()
+    public function hasil(Request $request)
     {
-        $uji = Uji::all();
+        $tanggal = explode('-', $request->tanggal);
+        $awal = date('Y-m-d', strtotime($tanggal[0]));
+        $akhir = date('Y-m-d', strtotime($tanggal[1]));
+        $uji = new DatePeriod(
+            new DateTime($awal),
+            new DateInterval('P1D'),
+            new DateTime($akhir)
+        );
+        // $uji = Uji::all();
         $xt = Latih::all()->count();
         $a = Cache::get('a', null);
         $b = Cache::get('b', null);
@@ -146,17 +157,23 @@ class PrediksiController extends Controller
         if (is_null($penyesuaian)) {
             return redirect()->route('prediksi.data-musiman');
         }
+        $prediksi = collect();
         foreach ($uji as $row) {
-            $tgl = $row->waktu;
+            $tmp = new stdClass();
+            $tgl = $row;
             $musiman = Musiman::whereMonth('waktu', $tgl->format('m'))->whereDay('waktu', $tgl->format('d'))->first();
-            $row->musiman = $musiman->medial * $penyesuaian;
+            $tmp->musiman = $musiman->medial * $penyesuaian;
+            $tmp->waktu = $tgl;
+            $prediksi->push($tmp);
         }
         $data = [
-            'uji' => $uji,
+            'uji' => $prediksi,
             'a' => $a,
             'b' => $b,
             'xt' => $xt,
+            'tanggal' => $request->tanggal
         ];
+        // return $data;
         return view('proses-prediksi.peramalan', $data);
     }
 

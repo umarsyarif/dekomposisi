@@ -48,52 +48,70 @@ $title = 'Peramalan';
                                     Nasional (LAPAN). Pengujian dilakukan dengan pengujian black box dan pengujian akurasi
                                     sistem menggunakan Mean Absolute Percent Error (MAPE).
                                 </p>
-                                {{-- <a href="javascript:void(0);" class="btn btn-primary float-right mt-3" data-toggle="modal" data-target="#start-modal">Start</a> --}}
-                                <a href="{{route('prediksi.hasil')}}" class="btn btn-primary float-right mt-3">Start</a>
+                                <a href="javascript:void(0);" class="btn btn-primary float-right mt-3" data-toggle="modal" data-target="#start-modal">Mulai</a>
+                                {{-- <a href="{{route('prediksi.hasil')}}" class="btn btn-primary float-right mt-3">Start</a> --}}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal -->
+        <!-- Modal Create -->
         <div class="modal fade" id="start-modal" tabindex="-1" role="dialog" aria-labelledby="start-modal-label" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="start-modal-label">Peramalan Jumlah Titik Api</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="start-modal-label">Peramalan Titik Api</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('prediksi.hasil')}}" method="post">
+                    @csrf
                     <div class="modal-body">
-                        <h5 class="text-center">Rumus Nilai Indeks Musiman</h5>
-                        <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6>
-                        <div class="col-12">
-                            <div class="row mt-3">
-                                <div class="bg-purple col-6 pt-1">
-                                    {{-- <h6 class="text-center"><strong><em>a</em> = {{$a = pow(10, $logy/$data->count())}}</strong></h6> --}}
-                                </div>
-                                <div class="bg-info col-6 pt-1">
-                                    {{-- <h6 class="text-center"><strong><em>b</em> = {{$b = pow(10, $xlogy/$x2)}}</strong></h6> --}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="row mt-3">
-                                <div class="bg-success col-12 pt-1">
-                                    {{-- <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6> --}}
+                        <div class="form-group">
+                            <label for="datepicker">Tanggal</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="datepicker" name="tanggal" placeholder="Pilih tanggal" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
+                        {{-- <small class="text-muted"><em>*)Tanggal yang dipilih harus memiliki data aktual</em></small> --}}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Check</button>
                     </div>
-                </div>
+                </form>
+            </div>
             </div>
         </div>
-        {{-- end modal --}}
+        <!-- Modal Create -->
     </div>
 </div>
 @endsection
+@push('scripts')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+        // $('#file').on('change',function(){
+        //     //get the file name
+        //     var fileName = $(this).val().replace('C:\\fakepath\\', "");
+        //     //replace the "Choose a file" label
+        //     $(this).next('.custom-file-label').html(fileName);
+        // })
+
+        // $(function () {
+        //   $("#example1").DataTable({
+        //     "autoWidth": true
+        //   });
+        // });
+
+        $("#datepicker").daterangepicker();
+
+    </script>
+@endpush

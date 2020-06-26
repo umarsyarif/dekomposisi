@@ -23,11 +23,31 @@ $title = 'Peramalan';
         <div class="content">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header">
-                        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
+                    <form action="{{route('prediksi.hasil')}}" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="datepicker">Tanggal</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="datepicker" name="tanggal"  value="{{$tanggal}}" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary ml-2">Check</button>
+                                </div>
+                            </div>
+                            {{-- <small class="text-muted"><em>*)Tanggal yang dipilih harus memiliki data aktual</em></small> --}}
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    {{-- <div class="card-header"> --}}
+                        {{-- <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
                             <i class="fas fa-file mr-1"></i> Hasil
-                        </button>
-                    </div>
+                        </button> --}}
+                    {{-- </div> --}}
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -35,29 +55,29 @@ $title = 'Peramalan';
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
                                     <th class="text-center" rowspan="2">xt</th>
-                                    <th class="text-center" rowspan="2">Data Aktual</th>
-                                    <th class="text-center" colspan="2">Aditif</th>
-                                    <th class="text-center" colspan="2">Multiplikatif</th>
+                                    {{-- <th class="text-center" rowspan="2">Data Aktual</th> --}}
+                                    <th class="text-center" colspan="2">Prediksi Titik Api</th>
+                                    {{-- <th class="text-center" colspan="2">Multiplikatif</th> --}}
                                 </tr>
                                 <tr>
                                     <td class="text-center">Ramalan</td>
                                     <td class="text-center">Akurasi</td>
-                                    <td class="text-center">Ramalan</td>
-                                    <td class="text-center">Akurasi</td>
+                                    {{-- <td class="text-center">Ramalan</td>
+                                    <td class="text-center">Akurasi</td> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
                                 @foreach ($uji as $row)
                                 <tr>
-                                    <td>{{$loop->iteration}}</td>
+                                    <td class="text-center">{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{++$xt}}</td>
-                                    <td class="text-center">{{$row->jumlah}}</td>
+                                    {{-- <td class="text-center">{{$row->jumlah}}</td> --}}
                                     <td class="text-center">{{$aditif = ($a + pow($b, $xt)) + $row->musiman}}</td>
-                                    <td class="text-center">{{($xt - $aditif) / $xt}}</td>
+                                    {{-- <td class="text-center">{{($xt - $aditif) / $xt}}</td> --}}
                                     <td class="text-center">{{$multiplikatif = ($a + pow($b, $xt)) * $row->musiman}}</td>
-                                    <td class="text-center">{{($xt - $multiplikatif) / $xt}}</td>
+                                    {{-- <td class="text-center">{{($xt - $multiplikatif) / $xt}}</td> --}}
                                 </tr>
                                 <?php
                                     $jumlahAditif += $aditif;
@@ -112,12 +132,20 @@ $title = 'Peramalan';
 </div>
 @endsection
 @push('scripts')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
 
         $(function () {
           $("#example1").DataTable({
             "autoWidth": true
           });
+        });
+
+        $("#datepicker").daterangepicker({
+            locale: {
+                // format: 'D/M/Y'
+            }
         });
 
     </script>

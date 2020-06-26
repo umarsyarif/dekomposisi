@@ -162,6 +162,7 @@ class UjiController extends Controller
                 'a' => $a,
                 'b' => $b,
                 'xt' => $xt,
+                'tanggal' => $request->tanggal
             ];
             return view('data-uji.akurasi', $data);
         }

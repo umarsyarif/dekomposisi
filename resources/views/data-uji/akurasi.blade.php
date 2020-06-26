@@ -23,6 +23,26 @@ $title = 'Akurasi';
         <div class="content">
             <div class="container-fluid">
                 <div class="card">
+                    <form action="{{route('data-uji.akurasi')}}" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="datepicker">Tanggal</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="datepicker" name="tanggal"  value="{{$tanggal}}" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary ml-2">Check</button>
+                                </div>
+                            </div>
+                            {{-- <small class="text-muted"><em>*)Tanggal yang dipilih harus memiliki data aktual</em></small> --}}
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
                     <div class="card-header">
                         <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
                             <i class="fas fa-tachometer-alt mr-1"></i> Cek Akurasi
@@ -34,7 +54,7 @@ $title = 'Akurasi';
                                 <tr>
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                                    <th class="text-center" rowspan="2">xt</th>
+                                    {{-- <th class="text-center" rowspan="2">xt</th> --}}
                                     <th class="text-center" rowspan="2">Data Aktual</th>
                                     <th class="text-center" colspan="2">Aditif</th>
                                     <th class="text-center" colspan="2">Multiplikatif</th>
@@ -52,7 +72,7 @@ $title = 'Akurasi';
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
-                                    <td class="text-center">{{++$xt}}</td>
+                                    {{-- <td class="text-center">{{++$xt}}</td> --}}
                                     <td class="text-center">{{$row->jumlah}}</td>
                                     <td class="text-center">{{$aditif = ($a + pow($b, $xt)) + $row->musiman}}</td>
                                     <td class="text-center">{{($xt - $aditif) / $xt}}</td>
@@ -119,6 +139,8 @@ $title = 'Akurasi';
             "autoWidth": true
           });
         });
+
+        $("#datepicker").daterangepicker();
 
     </script>
 @endpush
