@@ -15,6 +15,11 @@ use stdClass;
 
 class LatihController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function page(Request $request)
     {
         $filter = $request->filter;

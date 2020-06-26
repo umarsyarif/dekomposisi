@@ -16,6 +16,11 @@ use DateInterval;
 
 class PrediksiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function page()
     {
         return view('proses-prediksi.index');

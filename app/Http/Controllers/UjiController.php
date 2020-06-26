@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Cache;
 
 class UjiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function page(Request $request)
     {
         $filter = $request->filter;
