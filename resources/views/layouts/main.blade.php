@@ -11,6 +11,7 @@
   <link rel="stylesheet" type="text/css" href="{{asset('datatables/datatables.min.css')}}"/>
   <link rel="stylesheet" type="text/css" href="{{asset('bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}"/>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
