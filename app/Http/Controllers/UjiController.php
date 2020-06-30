@@ -158,7 +158,7 @@ class UjiController extends Controller
             // get data uji
             $uji = Uji::whereDate('waktu', '>=', $awal)->whereDate('waktu', '<=', $akhir)->get();
             if ($uji->isEmpty()) {
-                return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('error', 'Data aktual tidak ada!');
+                return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('error', 'Data titik api tidak ada!');
             }
             foreach ($uji as $row) {
                 $tgl = $row->waktu;
