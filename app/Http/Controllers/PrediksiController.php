@@ -186,7 +186,7 @@ class PrediksiController extends Controller
 
     public function getYear()
     {
-        $year = Latih::select(DB::raw('YEAR(waktu) as year'))->orderBy('year')->limit(6)->distinct()->get();
+        $year = Latih::select(DB::raw('YEAR(waktu) as year'))->orderBy('year')->distinct()->get();
         $year = $year->pluck('year');
         return $year;
     }
