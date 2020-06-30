@@ -58,8 +58,8 @@ $title = 'Nilai Indeks Musiman';
                                                 @endforeach
                                                 <?php
                                                 ?>
-                                                <td class="text-center">{{$row->medial}}</td>
-                                                <td class="text-center">{{$indeks = $row->medial * $penyesuaian}}</td>
+                                                <td class="text-center">{{round($row->medial, 2)}}</td>
+                                                <td class="text-center">{{round($indeks = $row->medial * $penyesuaian, 2)}}</td>
                                                 <?php $jumlahIndeks += $indeks ?>
                                             </tr>
                                         @endforeach
