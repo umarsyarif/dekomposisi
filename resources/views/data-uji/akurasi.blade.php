@@ -73,11 +73,11 @@ $title = 'Akurasi';
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     {{-- <td class="text-center">{{$xt++}}</td> --}}
-                                    <?php $xt++ ?>
+                                    <?php $xt++; $aditif = ($a + pow($b, $xt)) + $row->musiman; $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?>
                                     <td class="text-center">{{$row->jumlah}}</td>
-                                    <td class="text-center">{{$aditif = ($a + pow($b, $xt)) + $row->musiman}}</td>
+                                    <td class="text-center">{{round($aditif)}}</td>
                                     <td class="text-center">{{($xt - $aditif) / $xt}}</td>
-                                    <td class="text-center">{{$multiplikatif = ($a + pow($b, $xt)) * $row->musiman}}</td>
+                                    <td class="text-center">{{round($multiplikatif)}}</td>
                                     <td class="text-center">{{($xt - $multiplikatif) / $xt}}</td>
                                 </tr>
                                 <?php
