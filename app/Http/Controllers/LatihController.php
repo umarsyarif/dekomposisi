@@ -8,6 +8,7 @@ use DatePeriod;
 use DateInterval;
 use App\Exports\ApiExport;
 use App\Imports\ApiImport;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -82,6 +83,7 @@ class LatihController extends Controller
         foreach ($period as $key => $value) {
             Latih::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
         }
+        Cache::forget('musiman');
         return $this->page($request);
     }
 
@@ -149,6 +151,7 @@ class LatihController extends Controller
     public function import(Request $request)
     {
         Excel::import(new ApiImport, $request->file('file'));
+        Cache::forget('musiman');
         return redirect()->route('data-latih.page', ['filter' => $request->filter])->with('success', 'Data berhasil disimpan!');
     }
 

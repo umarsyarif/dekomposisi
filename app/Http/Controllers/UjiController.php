@@ -74,17 +74,29 @@ class UjiController extends Controller
      */
     public function store(Request $request)
     {
-        $string = $request->bulan;
-        $bulan = explode('-', $string)[0];
-        $bulan = date('m', strtotime($bulan));
-        $tahun = explode('-', $string)[1];
-        $period = new DatePeriod(
-            new DateTime($tahun . '-' . $bulan++ . '-01'),
-            new DateInterval('P1D'),
-            new DateTime($tahun . '-' . $bulan . '-01')
-        );
-        foreach ($period as $key => $value) {
-            Uji::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+        if ($request->new == 'tahunan') {
+            $tahun = $request->tahun;
+            $period = new DatePeriod(
+                new DateTime($tahun . '-01-01'),
+                new DateInterval('P1D'),
+                new DateTime($tahun + 1 . '-01-01')
+            );
+            foreach ($period as $key => $value) {
+                Uji::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+            }
+        } else if ($request->new == 'bulanan') {
+            $string = $request->bulan;
+            $bulan = explode('-', $string)[0];
+            $bulan = date('m', strtotime($bulan));
+            $tahun = explode('-', $string)[1];
+            $period = new DatePeriod(
+                new DateTime($tahun . '-' . $bulan++ . '-01'),
+                new DateInterval('P1D'),
+                new DateTime($tahun . '-' . $bulan . '-01')
+            );
+            foreach ($period as $key => $value) {
+                Uji::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+            }
         }
         return $this->page($request);
     }
@@ -129,9 +141,12 @@ class UjiController extends Controller
      * @param  \App\Uji  $uji
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Uji $uji)
+    public function destroy(Request $request, $year)
     {
-        //
+        $data = Uji::whereYear('waktu', $year)->get()->each(function ($data) {
+            $data->delete();
+        });
+        return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('success', 'Data berhasil dihapus!');
     }
 
     public function import(Request $request)

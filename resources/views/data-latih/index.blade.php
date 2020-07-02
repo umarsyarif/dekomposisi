@@ -53,12 +53,13 @@ $title = 'Data Titik Api';
                                         </button>
                                     </div>
                                     {{-- <div class="btn-group float-right"> --}}
-                                        <a href="javascript:void(0);" class="btn btn-primary float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
+                                        <a href="javascript:void(0);" class="btn btn-success float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
                                         <a href="javascript:void(0);" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#import-modal"><i class="fas fa-download mr-2"></i> Import</a>
                                     {{-- </div> --}}
                                 </form>
                             </div>
                             <div class="card-body">
+                                <h4 class="text-center">Data Jumlah Titik Api</h4>
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -102,7 +103,7 @@ $title = 'Data Titik Api';
                                                     <td>{{$row->jumlah->count()}}</td>
                                                     <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                     <td>
-                                                        <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-success">
+                                                        <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-warning">
                                                             <i class="fas fa-upload mr-1"></i> Export
                                                         </a>
                                                         <button class="btn btn-danger" onclick="event.preventDefault();
@@ -124,7 +125,7 @@ $title = 'Data Titik Api';
                                                         <td>{{$row->jumlah->count()}}</td>
                                                         <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                         <td>
-                                                            <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-success disabled">
+                                                            <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-warning disabled">
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
                                                             <button class="btn btn-danger" onclick="event.preventDefault();
@@ -160,9 +161,27 @@ $title = 'Data Titik Api';
                             <div class="modal-body">
                                 <input type="hidden" name="filter" value="{{$filter}}">
                                 <div class="form-group">
-                                    <label for="datepicker">Tahun</label>
+                                    <label for="new">Tambah data :</label>
+                                    <select name="new" id="new" class="form-control custom-select">
+                                        <option value="bulanan">Bulanan</option>
+                                        <option value="tahunan">Tahunan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3" id="month">
+                                    <label for="monthpicker">Bulan</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="tahun" id="datepicker" placeholder="Pilih tahun" required>
+                                        <input type="text" class="form-control" name="bulan" id="monthpicker" placeholder="Pilih bulan" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group d-none" id="year">
+                                    <label for="yearpicker">Tahun</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="tahun" id="yearpicker" placeholder="Pilih tahun">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="fas fa-calendar"></i>
@@ -233,11 +252,32 @@ $title = 'Data Titik Api';
           });
         });
 
-        $("#datepicker").datepicker({
+        $("#monthpicker").datepicker({
+            format: "M-yyyy",
+            minViewMode : 1,
+            autoclose : true
+        });
+
+        $("#yearpicker").datepicker({
             format: "yyyy",
             viewMode: "years",
             minViewMode: "years",
             autoclose: true
+        });
+
+        $('#new').on('change', function(){
+            // alert(this.value);
+            if(this.value == 'tahunan' ){
+                $('#year').removeClass('d-none');
+                $('#month').addClass('d-none');
+                $('#yearpicker').attr('required', true);
+                $('#monthpicker').removeAttr('required');
+            } else if (this.value == 'bulanan' ){
+                $('#year').addClass('d-none');
+                $('#month').removeClass('d-none');
+                $('#monthpicker').attr('required', true);
+                $('#yearpicker').removeAttr('required');
+            }
         });
 
     </script>

@@ -31,6 +31,7 @@ $title = 'Nilai Indeks Musiman';
                                 </button>
                             </div>
                             <div class="card-body">
+                                <h4 class="text-center">Data Indeks Musiman</h4>
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>

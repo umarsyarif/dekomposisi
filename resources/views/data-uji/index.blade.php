@@ -42,7 +42,7 @@ $title = 'Persentase Kesalahan';
                             <div class="card-header">
                                 <form action="{{route('data-uji.page')}}">
                                     <h3 class="card-title mt-2 mr-3">Filter :</h3>
-                                    <div class="btn-group mb-2 mr-2" class="in-line">
+                                    <div class="btn-group mr-2" class="in-line">
                                         <select class="custom-select" name="filter">
                                             <option value="" selected>Harian</option>
                                             <option value="bulan" {{$filter == 'bulan' ? 'selected' : ''}}>Bulanan</option>
@@ -52,8 +52,9 @@ $title = 'Persentase Kesalahan';
                                             <i class="fas fa-filter"></i>
                                         </button>
                                     </div>
+                                    <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#check-modal"> Cek Akurasi</a>
                                     {{-- <div class="btn-group float-right"> --}}
-                                        <a href="javascript:void(0);" class="btn btn-primary float-right" data-toggle="modal" data-target="#create-modal"> Cek Akurasi</a>
+                                        <a href="javascript:void(0);" class="btn btn-success float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
                                         <a href="javascript:void(0);" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#import-modal"><i class="fas fa-download mr-2"></i> Import</a>
                                         {{-- </div> --}}
                                 </form>
@@ -103,7 +104,7 @@ $title = 'Persentase Kesalahan';
                                                     <td>{{$row->jumlah->count()}}</td>
                                                     <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                     <td>
-                                                        <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-success">
+                                                        <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-warning">
                                                             <i class="fas fa-upload mr-1"></i> Export
                                                         </a>
                                                         <button class="btn btn-danger" onclick="event.preventDefault();
@@ -125,7 +126,7 @@ $title = 'Persentase Kesalahan';
                                                         <td>{{$row->jumlah->count()}}</td>
                                                         <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                         <td>
-                                                            <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-success disabled">
+                                                            <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-warning disabled">
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
                                                             <button class="btn btn-danger" onclick="event.preventDefault();
@@ -151,7 +152,60 @@ $title = 'Persentase Kesalahan';
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="create-modal-label">Cek Akurasi</h5>
+                            <h5 class="modal-title" id="create-modal-label">Tambah Data Aktual</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{{route('data-uji.store')}}" method="post">
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="filter" value="{{$filter}}">
+                                <div class="form-group">
+                                    <label for="new">Tambah data :</label>
+                                    <select name="new" id="new" class="form-control custom-select">
+                                        <option value="bulanan">Bulanan</option>
+                                        <option value="tahunan">Tahunan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3" id="month">
+                                    <label for="monthpicker">Bulan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="bulan" id="monthpicker" placeholder="Pilih bulan" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group d-none" id="year">
+                                    <label for="yearpicker">Tahun</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="tahun" id="yearpicker" placeholder="Pilih tahun">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+                <!-- Modal Create -->
+                <!-- Modal Check -->
+                <div class="modal fade" id="check-modal" tabindex="-1" role="dialog" aria-labelledby="check-modal-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="check-modal-label">Cek Akurasi</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -238,6 +292,34 @@ $title = 'Persentase Kesalahan';
         });
 
         $("#datepicker").daterangepicker();
+
+        $("#monthpicker").datepicker({
+            format: "M-yyyy",
+            minViewMode : 1,
+            autoclose : true
+        });
+
+        $("#yearpicker").datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years",
+            autoclose: true
+        });
+
+        $('#new').on('change', function(){
+            // alert(this.value);
+            if(this.value == 'tahunan' ){
+                $('#year').removeClass('d-none');
+                $('#month').addClass('d-none');
+                $('#yearpicker').attr('required', true);
+                $('#monthpicker').removeAttr('required');
+            } else if (this.value == 'bulanan' ){
+                $('#year').addClass('d-none');
+                $('#month').removeClass('d-none');
+                $('#monthpicker').attr('required', true);
+                $('#yearpicker').removeAttr('required');
+            }
+        });
 
     </script>
 @endpush

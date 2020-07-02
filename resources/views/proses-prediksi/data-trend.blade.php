@@ -31,6 +31,7 @@ $title = 'Nilai Trend';
                                 </button>
                             </div>
                             <div class="card-body">
+                                <h4 class="text-center">Data Nilai Trend</h4>
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>

@@ -29,7 +29,7 @@ $title = 'Peramalan';
                                 <h4 class="text-center">SISTEM PERAMALAN JUMLAH KEMUNCULAN TITIK API DI RIAU</h4>
                                 <h5 class="text-center mb-5">MENGGUNAKAN METODE DEKOMPOSISI</h5>
                                 <p class="card-text">
-                                    kebakaran hutan merupakan suatu keadaan dimana hutan di landa api yang kemudian
+                                    Kebakaran hutan merupakan suatu keadaan dimana hutan di landa api yang kemudian
                                     mengakibatkan rusaknya hutan dan menimbulkan kerugian ekonomis terhadap hasil hutan dan
                                     atau nilai lingkungan. Selain faktor curah hujan yang menjadi indikator yang paling utama
                                     sebagai pemicu kebakaran di Indonesia, Titik Panas (Hotspot) juga merupakan indikator
