@@ -60,13 +60,8 @@ $title = 'Peramalan';
                                     {{-- <th class="text-center" colspan="2">Multiplikatif</th> --}}
                                 </tr>
                                 <tr>
-<<<<<<< HEAD
                                     <td class="text-center">Dekomposisi Aditif</td>
                                     <td class="text-center">Dekomposisi Multiplikatif</td>
-=======
-                                    <td class="text-center">Aditif</td>
-                                    <td class="text-center">Multiplikatif</td>
->>>>>>> ab5b919d94e858c8157ca4197788cf890f43775e
                                     {{-- <td class="text-center">Ramalan</td>
                                     <td class="text-center">Akurasi</td> --}}
                                 </tr>
