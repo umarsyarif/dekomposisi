@@ -54,14 +54,14 @@ $title = 'Peramalan';
                                 <tr>
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                                    <th class="text-center" rowspan="2">xt</th>
+                                    <th class="text-center" rowspan="2">Xt</th>
                                     {{-- <th class="text-center" rowspan="2">Data Aktual</th> --}}
-                                    <th class="text-center" colspan="2">Prediksi Titik Api</th>
+                                    <th class="text-center" colspan="2">Peramalan Jumlah Titik Api</th>
                                     {{-- <th class="text-center" colspan="2">Multiplikatif</th> --}}
                                 </tr>
                                 <tr>
-                                    <td class="text-center">Aditif</td>
-                                    <td class="text-center">Multiplikatif</td>
+                                    <td class="text-center">Dekomposisi Aditif</td>
+                                    <td class="text-center">Dekomposisi Multiplikatif</td>
                                     {{-- <td class="text-center">Ramalan</td>
                                     <td class="text-center">Akurasi</td> --}}
                                 </tr>

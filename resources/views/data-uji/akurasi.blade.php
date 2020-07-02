@@ -1,5 +1,5 @@
 <?php
-$title = 'Akurasi';
+$title = 'Persentase Kesalahan';
 ?>
 @extends('layouts.main')
 
@@ -45,7 +45,8 @@ $title = 'Akurasi';
                 <div class="card">
                     <div class="card-header">
                         <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
-                            <i class="fas fa-tachometer-alt mr-1"></i> Cek Akurasi
+                            {{-- <i class="fas fa-tachometer-alt mr-1"></i>  --}}
+                            Cek MAPE
                         </button>
                     </div>
                     <div class="card-body">
@@ -56,14 +57,14 @@ $title = 'Akurasi';
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
                                     {{-- <th class="text-center" rowspan="2">xt</th> --}}
                                     <th class="text-center" rowspan="2">Data Aktual</th>
-                                    <th class="text-center" colspan="2">Aditif</th>
-                                    <th class="text-center" colspan="2">Multiplikatif</th>
+                                    <th class="text-center" colspan="2">Dekomposisi Aditif</th>
+                                    <th class="text-center" colspan="2">Dekomposisi Multiplikatif</th>
                                 </tr>
                                 <tr>
-                                    <td class="text-center">Ramalan</td>
-                                    <td class="text-center">Akurasi</td>
-                                    <td class="text-center">Ramalan</td>
-                                    <td class="text-center">Akurasi</td>
+                                    <td class="text-center">Jumlah Titik Api</td>
+                                    <td class="text-center">Error</td>
+                                    <td class="text-center">Jumlah Titik Api</td>
+                                    <td class="text-center">Error</td>
                                 </tr>
                             </thead>
                             <tbody>

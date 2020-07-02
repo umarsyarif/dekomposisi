@@ -3,8 +3,10 @@
     <center>
         <a href="{{route('home')}}" class="brand-link mb-3 justify-content-center">
           <img src="{{asset('images/crystalball.png')}}" alt="Logo" class="img-circle elevation-3 mb-3" width="120px">
-               <br>
+          <br>
           <span class="brand-text font-weight-light"> Forecasting</span>
+          <br>
+          <small>Decomposision Method</small>
         </a>
     </center>
 
@@ -60,9 +62,9 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{route('data-uji.page')}}" class="nav-link {{$title == 'Akurasi' ? 'active' : ''}}">
+                <a href="{{route('data-uji.page')}}" class="nav-link {{$title == 'Persentase Kesalahan' ? 'active' : ''}}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>Akurasi</p>
+                <p>Persentase Kesalahan</p>
                 </a>
             </li>
 

@@ -1,5 +1,5 @@
 <?php
-$title = 'Akurasi';
+$title = 'Persentase Kesalahan';
 ?>
 @extends('layouts.main')
 
