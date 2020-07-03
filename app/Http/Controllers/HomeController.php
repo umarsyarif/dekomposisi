@@ -70,7 +70,9 @@ class HomeController extends Controller
             'year' => $year,
             'waktu' => $waktu,
             'uji' => $uji,
-            'prediksi' => $this->prediksi($month, $tahun)
+            'prediksi' => $this->prediksi($month, $tahun),
+            'latih' => Latih::all()->count(),
+            'aktual' => Uji::all()->count()
         ];
         // return $data;
         return view('pages.dashboard', $data);
@@ -100,9 +102,16 @@ class HomeController extends Controller
                 $musiman = Musiman::whereMonth('waktu', $tgl->format('m'))->whereDay('waktu', $tgl->format('d'))->first();
                 $row->musiman = $musiman->medial * $penyesuaian;
             }
-            return array_map(function ($x) use ($a, $b, $xt) {
+            $aditif = array_map(function ($x) use ($a, $b, $xt) {
                 return ($a + pow($b, $xt++)) + $x['musiman'];
             }, $uji->toArray());
+            $multiplikatif = array_map(function ($x) use ($a, $b, $xt) {
+                return ($a + pow($b, $xt++)) * $x['musiman'];
+            }, $uji->toArray());
+            return [
+                'aditif' => $aditif,
+                'multiplikatif' => $multiplikatif,
+            ];
         }
     }
 

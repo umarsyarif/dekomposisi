@@ -8,7 +8,7 @@ use DatePeriod;
 use DateInterval;
 use App\Exports\ApiExport;
 use App\Imports\ApiImport;
-use Illuminate\Filesystem\Cache;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -132,6 +132,7 @@ class LatihController extends Controller
         $data = Latih::whereYear('waktu', $year)->get()->each(function ($data) {
             $data->delete();
         });
+        Cache::forget('musiman');
         return redirect()->route('data-latih.page', ['filter' => $request->filter])->with('success', 'Data berhasil dihapus!');
     }
 
