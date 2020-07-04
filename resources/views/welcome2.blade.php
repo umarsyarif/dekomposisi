@@ -242,14 +242,14 @@
                     <button type="button" class="btn btn-box-tool float-right" onclick="hide()"><i class="fa fa-times"></i></button>
               </div>
               <div class="card-body">
-                  <h4 class="text-center mb-3">Prediksi Jumlah Titik Api</h4>
+                  <h4 class="text-center mb-3">Peramalan Jumlah Titik Api</h4>
                   <table id="example1" class="table table-bordered table-striped">
                       <thead>
                           <tr>
                               <th class="text-center" rowspan="2">No</th>
                               <th class="text-center" rowspan="2">Tanggal / Bulan</th>
                               <th class="text-center" rowspan="2">Xt</th>
-                              <th class="text-center" colspan="2">Peramalan Jumlah Titik Api</th>
+                              <th class="text-center" colspan="2">Jumlah Titik Api</th>
                           </tr>
                       </thead>
                       <tbody id="peramalan-table-body">
