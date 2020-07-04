@@ -60,9 +60,6 @@
           <li class="nav-item">
             <a class="nav-link js-scroll" href="#work">Peramalan</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#blog">Blog</a>
-          </li>
           @auth
             <li class="nav-item">
                 <a class="nav-link js-scroll" href="{{route('dashboard')}}"><i class="ion-home mr-2"></i>Dashboard</a>
@@ -240,7 +237,7 @@
                   </form>
               </div>
           </div>
-          <div class="card" id="ramalan-table">
+          <div class="card d-none" id="ramalan-table">
               <div class="card-header">
                     <button type="button" class="btn btn-box-tool float-right" onclick="hide()"><i class="fa fa-times"></i></button>
               </div>
@@ -309,7 +306,7 @@
   </div>
 
   <!--/ Section Blog Star /-->
-  <section id="blog" class="blog-mf sect-pt4 route">
+  {{-- <section id="blog" class="blog-mf sect-pt4 route">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
@@ -420,7 +417,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
   <!--/ Section Blog End /-->
 
   <!--/ Section Contact-Footer Star /-->
@@ -677,7 +674,7 @@
             })
         });
 
-        function hide (){
+        function hide(){
             $('#ramalan-table').addClass('d-none');
         }
   </script>
