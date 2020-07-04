@@ -43,7 +43,6 @@ class HomeController extends Controller
             'tahun' => $this->getYear()->count(),
             'jumlah' => Latih::sum('jumlah')
         ];
-        // return $data;
         return view('welcome2', $data);
     }
 
@@ -80,7 +79,6 @@ class HomeController extends Controller
             'latih' => Latih::all()->count(),
             'aktual' => Uji::all()->count()
         ];
-        // return $data;
         return view('pages.dashboard', $data);
     }
 

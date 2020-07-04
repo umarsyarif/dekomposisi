@@ -83,6 +83,7 @@ class LatihController extends Controller
         foreach ($period as $key => $value) {
             Latih::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
         }
+        Cache::forget('trend');
         Cache::forget('musiman');
         return $this->page($request);
     }
@@ -132,6 +133,7 @@ class LatihController extends Controller
         $data = Latih::whereYear('waktu', $year)->get()->each(function ($data) {
             $data->delete();
         });
+        Cache::forget('trend');
         Cache::forget('musiman');
         return redirect()->route('data-latih.page', ['filter' => $request->filter])->with('success', 'Data berhasil dihapus!');
     }

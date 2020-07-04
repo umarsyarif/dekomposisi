@@ -35,10 +35,9 @@ class PrediksiController extends Controller
 
     public function trend()
     {
-        $data = $this->index();
-        foreach ($data as $row) {
-            //
-        }
+        $data = Cache::rememberForever('trend', function () {
+            return $this->index();
+        });
         $data = [
             'data' => $data
         ];
@@ -52,7 +51,6 @@ class PrediksiController extends Controller
             $years = $this->getYear();
             $date = $this->getdate();
             $result = $this->movingAverage($data);
-            // return $date;
             $penyesuaian = 0;
             foreach ($date as $row) {
                 $jumlah = new stdClass();
@@ -87,7 +85,6 @@ class PrediksiController extends Controller
             }
             $penyesuaian = 365 / $penyesuaian;
             Cache::put('penyesuaian', $penyesuaian);
-            // return $penyesuaian;
             $data = [
                 'data' => $date,
                 'year' => $years,
@@ -131,8 +128,6 @@ class PrediksiController extends Controller
             if ($x > 183 && $y > 183) {
                 $tmp = array_sum(array_slice($jumlah, $start, $end)) / 7;
                 $currentResult->ma = $tmp;
-                // echo 'x ' . $x . '| ' . $start . '(' . $jumlah[$start] . ') -' . $end . '(' . $jumlah[$end] . ') = ' . $tmp;
-                // echo '<br/>';
                 $start++;
             } else {
                 $currentResult->ma = null;
@@ -183,7 +178,6 @@ class PrediksiController extends Controller
             'xt' => $xt,
             'tanggal' => $request->tanggal
         ];
-        // return $data;
         return view('proses-prediksi.peramalan', $data);
     }
 
