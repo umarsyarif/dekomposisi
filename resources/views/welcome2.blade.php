@@ -251,10 +251,6 @@
                               <th class="text-center" rowspan="2">Xt</th>
                               <th class="text-center" colspan="2">Peramalan Jumlah Titik Api</th>
                           </tr>
-                          <tr>
-                              <td class="text-center">Dekomposisi Aditif</td>
-                              <td class="text-center">Dekomposisi Multiplikatif</td>
-                          </tr>
                       </thead>
                       <tbody id="peramalan-table-body">
                       </tbody>
@@ -659,7 +655,6 @@
                         tmp += '<td>'+no+'</td>';
                         tmp += '<td class="text-center">'+x.waktu+'</td>';
                         tmp += '<td class="text-center">'+xt+'</td>';
-                        tmp += '<td class="text-center">'+Math.round((a + Math.pow(b, xt)) + x.musiman)+'</td>';
                         tmp += '<td class="text-center">'+Math.round((a + Math.pow(b, xt)) * x.musiman)+'</td>';
                         tmp += '</tr>'
                         no++;
