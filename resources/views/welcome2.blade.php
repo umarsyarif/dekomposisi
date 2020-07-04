@@ -20,6 +20,8 @@
   <link href="{{asset('DevFolio/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
   <link href="{{asset('DevFolio/lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
   <link href="{{asset('DevFolio/lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{asset('datatables/datatables.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
   <!-- Main Stylesheet File -->
   <link href="{{asset('DevFolio/css/style.css')}}" rel="stylesheet">
@@ -53,10 +55,10 @@
             <a class="nav-link js-scroll" href="#about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll" href="#service">Services</a>
+            <a class="nav-link js-scroll" href="#service">Features</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll" href="#work">Work</a>
+            <a class="nav-link js-scroll" href="#work">Peramalan</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll" href="#blog">Blog</a>
@@ -64,9 +66,16 @@
           <li class="nav-item">
             <a class="nav-link js-scroll" href="#contact">Contact</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#" data-toggle="modal" data-target="#login-modal"><i class="ion-log-in mr-2"></i>Login</a>
-          </li>
+          @auth
+            <li class="nav-item">
+                <a class="nav-link js-scroll" href="{{route('dashboard')}}"><i class="ion-home mr-2"></i>Dashboard</a>
+            </li>
+          @endauth
+          @guest
+            <li class="nav-item">
+                <a class="nav-link js-scroll" href="#" data-toggle="modal" data-target="#login-modal"><i class="ion-log-in mr-2"></i>Login</a>
+            </li>
+          @endguest
         </ul>
       </div>
     </div>
@@ -95,7 +104,7 @@
         <div class="col-sm-12">
           <div class="box-shadow-full">
             <div class="row">
-              <div class="col-md-6">
+              {{-- <div class="col-md-6">
                 <div class="row">
                   <div class="col-sm-6 col-md-5">
                     <div class="about-img">
@@ -134,15 +143,43 @@
                       aria-valuemax="100"></div>
                   </div>
                 </div>
-              </div>
-              <div class="col-md-6">
+              </div> --}}
+              <div class="col-md-12">
                 <div class="about-me pt-4 pt-md-0">
                   <div class="title-box-2">
                     <h5 class="title-left">
-                      About me
+                      About
                     </h5>
                   </div>
                   <p class="lead">
+                    Kebakaran hutan merupakan suatu keadaan dimana hutan di landa api yang kemudian
+                    mengakibatkan rusaknya hutan dan menimbulkan kerugian ekonomis terhadap hasil hutan dan
+                    atau nilai lingkungan. Selain faktor curah hujan yang menjadi indikator yang paling utama
+                    sebagai pemicu kebakaran di Indonesia, Titik Panas (Hotspot) juga merupakan indikator
+                    kebakaran hutan.
+                  </p>
+                  <p class="lead">
+                    Berdasarkan Data yang dikeluarkan oleh BNPB pada tahun 2019, Masalah
+                    bencana yang terjadi di Indonesia salah satunya adalah terbakarnya luas lahan. Data KLHK
+                    mencatat luas karhutla dari bulan Januri hingga bulan September 2019 yaitu sebesar 857.756 ha.
+                    Data BNPB juga mencatat masih terjadi karhutla di sejumlah wilayah Indonesia pada bulan
+                    Oktober 2019. Titik panas atau Hotspot teridentifikasi di beberapa provinsi.
+                  </p>
+                  <p class="lead">
+                    Salah satunya pada Provinsi Riau. Berdasarkan masalah yang telah dijelaskan, maka akan dibangun sebuah aplikasi
+                    peramalan jumlah kemunculan titik api yang merupakan salah satu proses penanggulangan
+                    kebakaran hutan agar berkurangnya bencana kebakaran hutan dan lahan di Indonesia khususnya
+                    pada Provinsi Riau. Aplikasi yang akan dibangun menggunakan metode Dekomposisi berbasis
+                    web yang akan di implementasikan menggunakan bahasa pemrograman PHP.
+                  </p>
+                  <p class="lead">
+                    Data latih yang
+                    akan digunakan yaitu data jumlah titik api di Provinsi Riau pada tahun 2014-2019 dan data uji
+                    adalah data bulan Januari tahun 2020 yang diperoleh dari Lembaga Penerbangan Antariksa
+                    Nasional (LAPAN). Pengujian dilakukan dengan pengujian black box dan pengujian akurasi
+                    sistem menggunakan Mean Absolute Percent Error (MAPE).
+                  </p>
+                  {{-- <p class="lead">
                     Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Curabitur arcu erat, accumsan id
                     imperdiet et, porttitor
                     at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Nulla
@@ -157,7 +194,7 @@
                     Nulla porttitor accumsan tincidunt. Quisque velit nisi, pretium ut lacinia in, elementum id enim.
                     Nulla porttitor accumsan
                     tincidunt. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
-                  </p>
+                  </p> --}}
                 </div>
               </div>
             </div>
@@ -174,7 +211,7 @@
         <div class="col-sm-12">
           <div class="title-box text-center">
             <h3 class="title-a">
-              Services
+              Features
             </h3>
             <p class="subtitle-a">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit.
@@ -332,167 +369,82 @@
   </div>
 
   <!--/ Section Portfolio Star /-->
-  <section id="work" class="portfolio-mf sect-pt4 route">
+  <section id="work" class="portfolio-mf sect-pt4 route pb-5">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div class="title-box text-center">
             <h3 class="title-a">
-              Portfolio
+              Peramalan
             </h3>
             <p class="subtitle-a">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Pilih tanggal yang akan di ramal jumlah titik apinya.
             </p>
             <div class="line-mf"></div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="work-box">
-            <a href="img/work-1.jpg" data-lightbox="gallery-mf">
-              <div class="work-img">
-                <img src="{{asset('DevFolio/img/work-1.jpg')}}" alt="" class="img-fluid">
+      <div class="col-12 mb-5">
+          <div class="card mb-2">
+              <div class="card-body">
+                  <form action="" method="get" id="ramalan-form">
+                      @csrf
+                      <div class="modal-body">
+                          <div class="form-group">
+                              {{-- <label for="datepicker">Tanggal</label> --}}
+                              <div class="input-group">
+                                  <input type="text" class="form-control" id="datepicker" name="tanggal" placeholder="Pilih tanggal" required>
+                                  <div class="input-group-append">
+                                      <button type="submit" class="btn btn-primary">Check</button>
+                                  </div>
+                              </div>
+                              {{-- <small class="text-muted">tanggal yang akan di ramal jumlah titik api nya</small> --}}
+                          </div>
+                      </div>
+                  </form>
               </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Lorem impsum dolor</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Web Design</span> / <span class="w-date">18 Sep. 2018</span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      <span class="ion-ios-plus-outline"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-            <a href="img/work-2.jpg" data-lightbox="gallery-mf">
-              <div class="work-img">
-                <img src="{{asset('DevFolio/img/work-2.jpg')}}" alt="" class="img-fluid">
+          <div class="card" id="ramalan-table">
+              <div class="card-body">
+                  <table id="example1" class="table table-bordered table-striped">
+                      <thead>
+                          <tr>
+                              <th class="text-center" rowspan="2">No</th>
+                              <th class="text-center" rowspan="2">Tanggal / Bulan</th>
+                              <th class="text-center" rowspan="2">Xt</th>
+                              <th class="text-center" colspan="2">Peramalan Jumlah Titik Api</th>
+                          </tr>
+                          <tr>
+                              <td class="text-center">Dekomposisi Aditif</td>
+                              <td class="text-center">Dekomposisi Multiplikatif</td>
+                          </tr>
+                      </thead>
+                      <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
+                      <tbody id="peramalan-table-body">
+                          {{-- @foreach ($uji as $row) --}}
+                          {{-- <tr> --}}
+                              {{-- <td></td> --}}
+                              {{-- <td></td> --}}
+                              {{-- <td></td> --}}
+                              {{-- <td></td> --}}
+                              {{-- <td></td> --}}
+                              {{-- <td class="text-center">{{$loop->iteration}}</td> --}}
+                              {{-- <td class="text-center">{{$row->waktu->format('d F Y')}}</td> --}}
+                              {{-- <td class="text-center">{{$xt++}}</td> --}}
+                              {{-- <?php $aditif = ($a + pow($b, $xt)) + $row->musiman ?> --}}
+                              {{-- <td class="text-center">{{round($aditif)}}</td> --}}
+                              {{-- <?php $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?> --}}
+                              {{-- <td class="text-center">{{round($multiplikatif)}}</td> --}}
+                          {{-- </tr> --}}
+                          <?php
+                              // $jumlahAditif += $aditif;
+                              // $jumlahMultiplikatif += $multiplikatif;
+                          ?>
+                          {{-- @endforeach --}}
+                      </tbody>
+                  </table>
               </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Loreda Cuno Nere</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Web Design</span> / <span class="w-date">18 Sep. 2018</span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      <span class="ion-ios-plus-outline"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-            <a href="img/work-3.jpg" data-lightbox="gallery-mf">
-              <div class="work-img">
-                <img src="{{asset('DevFolio/img/work-3.jpg')}}" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Mavrito Lana Dere</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Web Design</span> / <span class="w-date">18 Sep. 2018</span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      <span class="ion-ios-plus-outline"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-            <a href="img/work-4.jpg" data-lightbox="gallery-mf">
-              <div class="work-img">
-                <img src="{{asset('DevFolio/img/work-4.jpg')}}" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Bindo Laro Cado</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Web Design</span> / <span class="w-date">18 Sep. 2018</span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      <span class="ion-ios-plus-outline"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-            <a href="img/work-5.jpg" data-lightbox="gallery-mf">
-              <div class="work-img">
-                <img src="{{asset('DevFolio/img/work-5.jpg')}}" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Studio Lena Mado</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Web Design</span> / <span class="w-date">18 Sep. 2018</span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      <span class="ion-ios-plus-outline"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-            <a href="img/work-6.jpg" data-lightbox="gallery-mf">
-              <div class="work-img">
-                <img src="{{asset('DevFolio/img/work-6.jpg')}}" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Studio Big Bang</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Web Design</span> / <span class="w-date">18 Sep. 2017</span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      <span class="ion-ios-plus-outline"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
@@ -653,7 +605,7 @@
   <!--/ Section Blog End /-->
 
   <!--/ Section Contact-Footer Star /-->
-  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(DevFolio/img/overlay-bg.jpg)">
+  {{-- <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(DevFolio/img/overlay-bg.jpg)">
     <div class="overlay-mf"></div>
     <div class="container">
       <div class="row">
@@ -757,7 +709,7 @@
         </div>
       </div>
     </footer>
-  </section>
+  </section> --}}
   <!--/ Section Contact-footer End /-->
 
     <!-- Modal Create -->
@@ -852,10 +804,66 @@
   <script src="{{asset('DevFolio/lib/typed/typed.min.js')}}"></script>
   <!-- Contact Form JavaScript File -->
   <script src="{{asset('DevFolio/contactform/contactform.js')}}"></script>
-
+  {{-- Datarange Picker --}}
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  {{-- Datatables --}}
+  <script type="text/javascript" src="{{asset('datatables/datatables.min.js')}}"></script>
   <!-- Template Main Javascript File -->
   <script src="{{asset('DevFolio/js/main.js')}}"></script>
 
+  <script>
+        // $("#example1").DataTable({
+        //     "autoWidth": true
+        // });
+
+        $("#datepicker").daterangepicker({
+            opens: 'left'
+        }, function(start, end, label){
+            val = start.format('MM/DD/YYYY')+'-'+end.format('MM/DD/YYYY');
+        });
+
+        let val = $('#datepicker').val();
+
+        $("#ramalan-form").submit(function(e){
+            let data = {
+                tanggal: val
+            }
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/api/prediksi',
+                data: data,
+                dataType: 'json',
+                success: (response) => {
+                    $('#peramalan-table-body').empty();
+                    let xt = response.xt;
+                    let uji = response.uji;
+                    let a = response.a;
+                    let b = response.b;
+                    console.log(data.xt);
+                    let no = 1;
+                    let print = uji.map(x => {
+                        let tmp = '<tr>';
+                        tmp += '<td>'+no+'</td>';
+                        tmp += '<td class="text-center">'+x.waktu+'</td>';
+                        tmp += '<td class="text-center">'+xt+'</td>';
+                        tmp += '<td class="text-center">'+Math.round((a + Math.pow(b, xt)) + x.musiman)+'</td>';
+                        tmp += '<td class="text-center">'+Math.round((a + Math.pow(b, xt)) * x.musiman)+'</td>';
+                        tmp += '</tr>'
+                        no++;
+                        xt++;
+                        return tmp;
+                    });
+                    $('#peramalan-table-body').append(print);
+                },
+                error: function(error){
+                    console.error(error);
+                }
+            })
+            // var result = $('<tr><td></td><td></td><td></td><td></td><td></td></tr>');
+        });
+  </script>
   @if ($errors->any())
     <script>
         $('#login-modal').modal('show');

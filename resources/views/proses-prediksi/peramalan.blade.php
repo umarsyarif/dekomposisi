@@ -55,15 +55,11 @@ $title = 'Peramalan';
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
                                     <th class="text-center" rowspan="2">Xt</th>
-                                    {{-- <th class="text-center" rowspan="2">Data Aktual</th> --}}
                                     <th class="text-center" colspan="2">Peramalan Jumlah Titik Api</th>
-                                    {{-- <th class="text-center" colspan="2">Multiplikatif</th> --}}
                                 </tr>
                                 <tr>
                                     <td class="text-center">Dekomposisi Aditif</td>
                                     <td class="text-center">Dekomposisi Multiplikatif</td>
-                                    {{-- <td class="text-center">Ramalan</td>
-                                    <td class="text-center">Akurasi</td> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,13 +69,10 @@ $title = 'Peramalan';
                                     <td class="text-center">{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$xt++}}</td>
-                                    {{-- <td class="text-center">{{$row->jumlah}}</td> --}}
                                     <?php $aditif = ($a + pow($b, $xt)) + $row->musiman ?>
                                     <td class="text-center">{{round($aditif)}}</td>
-                                    {{-- <td class="text-center">{{($xt - $aditif) / $xt}}</td> --}}
                                     <?php $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?>
                                     <td class="text-center">{{round($multiplikatif)}}</td>
-                                    {{-- <td class="text-center">{{($xt - $multiplikatif) / $xt}}</td> --}}
                                 </tr>
                                 <?php
                                     $jumlahAditif += $aditif;
