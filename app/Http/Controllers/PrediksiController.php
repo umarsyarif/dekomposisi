@@ -190,7 +190,6 @@ class PrediksiController extends Controller
     public function api(Request $request)
     {
         $tanggal = explode('-', $request->tanggal);
-        // return $request->tanggal;
         $awal = date('Y-m-d', strtotime($tanggal[0]));
         $akhir = date('Y-m-d', strtotime($tanggal[1]));
         $uji = new DatePeriod(
@@ -198,7 +197,6 @@ class PrediksiController extends Controller
             new DateInterval('P1D'),
             new DateTime($akhir . ' +1 day')
         );
-        // return dump($uji);
         $xt = Latih::all()->count();
         $last = Latih::orderBy('waktu', 'DESC')->pluck('waktu')->first();
         $diff = $last->diff($awal)->format('%a');
@@ -221,7 +219,6 @@ class PrediksiController extends Controller
             $tmp->waktu = $tgl->format('d F Y');
             $prediksi->push($tmp);
         }
-        // return $prediksi;
         $data = [
             'uji' => $prediksi,
             'a' => $a,

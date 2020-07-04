@@ -38,7 +38,13 @@ class HomeController extends Controller
     public function home()
     {
         $this->middleware('guest');
-        return view('welcome2');
+        $data = [
+            'latih' => Latih::all()->count(),
+            'tahun' => $this->getYear()->count(),
+            'jumlah' => Latih::sum('jumlah')
+        ];
+        // return $data;
+        return view('welcome2', $data);
     }
 
     public function dashboard()
@@ -123,5 +129,12 @@ class HomeController extends Controller
         if (is_null($penyesuaian)) {
             return redirect()->route('prediksi.data-musiman');
         }
+    }
+
+    public function getYear()
+    {
+        $year = Latih::select(DB::raw('YEAR(waktu) as year'))->orderBy('year')->distinct()->get();
+        $year = $year->pluck('year');
+        return $year;
     }
 }
