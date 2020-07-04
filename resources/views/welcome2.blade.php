@@ -391,20 +391,18 @@
                       @csrf
                       <div class="modal-body">
                           <div class="form-group">
-                              {{-- <label for="datepicker">Tanggal</label> --}}
                               <div class="input-group">
                                   <input type="text" class="form-control" id="datepicker" name="tanggal" placeholder="Pilih tanggal" required>
                                   <div class="input-group-append">
                                       <button type="submit" class="btn btn-primary">Check</button>
                                   </div>
                               </div>
-                              {{-- <small class="text-muted">tanggal yang akan di ramal jumlah titik api nya</small> --}}
                           </div>
                       </div>
                   </form>
               </div>
           </div>
-          <div class="card" id="ramalan-table">
+          <div class="card d-none" id="ramalan-table">
               <div class="card-body">
                   <table id="example1" class="table table-bordered table-striped">
                       <thead>
@@ -419,28 +417,7 @@
                               <td class="text-center">Dekomposisi Multiplikatif</td>
                           </tr>
                       </thead>
-                      <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
                       <tbody id="peramalan-table-body">
-                          {{-- @foreach ($uji as $row) --}}
-                          {{-- <tr> --}}
-                              {{-- <td></td> --}}
-                              {{-- <td></td> --}}
-                              {{-- <td></td> --}}
-                              {{-- <td></td> --}}
-                              {{-- <td></td> --}}
-                              {{-- <td class="text-center">{{$loop->iteration}}</td> --}}
-                              {{-- <td class="text-center">{{$row->waktu->format('d F Y')}}</td> --}}
-                              {{-- <td class="text-center">{{$xt++}}</td> --}}
-                              {{-- <?php $aditif = ($a + pow($b, $xt)) + $row->musiman ?> --}}
-                              {{-- <td class="text-center">{{round($aditif)}}</td> --}}
-                              {{-- <?php $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?> --}}
-                              {{-- <td class="text-center">{{round($multiplikatif)}}</td> --}}
-                          {{-- </tr> --}}
-                          <?php
-                              // $jumlahAditif += $aditif;
-                              // $jumlahMultiplikatif += $multiplikatif;
-                          ?>
-                          {{-- @endforeach --}}
                       </tbody>
                   </table>
               </div>
@@ -836,6 +813,7 @@
                 data: data,
                 dataType: 'json',
                 success: (response) => {
+                    $('#ramalan-table').removeClass('d-none');
                     $('#peramalan-table-body').empty();
                     let xt = response.xt;
                     let uji = response.uji;
