@@ -126,14 +126,14 @@ $title = 'Persentase Kesalahan';
                                                         <td>{{$row->jumlah->count()}}</td>
                                                         <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                         <td>
-                                                            <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-warning disabled">
+                                                            <a href="{{route('data-uji.export', ['bulan' => $row->month, 'tahun' => $row->year])}}" class="btn btn-warning">
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
                                                             <button class="btn btn-danger" onclick="event.preventDefault();
-                                                            document.getElementById('delete-form-{{$row->year}}').submit();" disabled>
+                                                            document.getElementById('delete-form-{{$row->year}}').submit();">
                                                                 <i class="fas fa-trash mr-1"></i> Hapus
                                                             </button>
-                                                            <form id="delete-form-{{$row->year}}" action="{{route('data-uji.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
+                                                            <form id="delete-form-{{$row->year}}" action="{{route('data-uji.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>

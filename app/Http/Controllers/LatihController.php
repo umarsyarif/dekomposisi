@@ -74,17 +74,30 @@ class LatihController extends Controller
      */
     public function store(Request $request)
     {
-        $tahun = $request->tahun;
-        $period = new DatePeriod(
-            new DateTime($tahun . '-01-01'),
-            new DateInterval('P1D'),
-            new DateTime($tahun + 1 . '-01-01')
-        );
-        foreach ($period as $key => $value) {
-            Latih::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+        if ($request->new == 'tahunan') {
+            $tahun = $request->tahun;
+            $period = new DatePeriod(
+                new DateTime($tahun . '-01-01'),
+                new DateInterval('P1D'),
+                new DateTime($tahun + 1 . '-01-01')
+            );
+            foreach ($period as $key => $value) {
+                Latih::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+            }
+        } else if ($request->new == 'bulanan') {
+            $string = $request->bulan;
+            $bulan = explode('-', $string)[0];
+            $bulan = date('m', strtotime($bulan));
+            $tahun = explode('-', $string)[1];
+            $period = new DatePeriod(
+                new DateTime($tahun . '-' . $bulan++ . '-01'),
+                new DateInterval('P1D'),
+                new DateTime($tahun . '-' . $bulan . '-01')
+            );
+            foreach ($period as $key => $value) {
+                Latih::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+            }
         }
-        Cache::forget('trend');
-        Cache::forget('musiman');
         return $this->page($request);
     }
 
@@ -128,11 +141,17 @@ class LatihController extends Controller
      * @param  $year
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $year)
+    public function destroy(Request $request)
     {
-        $data = Latih::whereYear('waktu', $year)->get()->each(function ($data) {
-            $data->delete();
-        });
+        if (is_null($request->month)) {
+            $data = Latih::whereYear('waktu', $request->year)->get()->each(function ($data) {
+                $data->delete();
+            });
+        } else {
+            $data = Latih::whereYear('waktu', $request->year)->whereMonth('waktu', $request->month)->get()->each(function ($data) {
+                $data->delete();
+            });
+        }
         Cache::forget('trend');
         Cache::forget('musiman');
         return redirect()->route('data-latih.page', ['filter' => $request->filter])->with('success', 'Data berhasil dihapus!');
@@ -141,12 +160,14 @@ class LatihController extends Controller
     public function export(Request $request)
     {
         $tahun = $request->tahun;
+        $bulan = $request->bulan;
         if ($tahun == null) {
-            return 'ads';
+            return 'Tahun tidak boleh kosong!';
         }
         $data = Latih::select('waktu', 'jumlah')->whereYear('waktu', $tahun)->get();
+        $name = !is_null($bulan) ? 'titik-api(' . date('F', mktime(0, 0, 0, $bulan, 10)) . ' ' . $tahun . ').xlsx' : 'titik-api(' . $tahun . ').xlsx';
         if ($data->count() > 0) {
-            return Excel::download(new ApiExport($tahun), 'titik-api(' . $tahun . ').xlsx');
+            return Excel::download(new ApiExport($bulan, $tahun), $name);
         }
         return redirect()->route('data-latih.page')->with('error', 'Data tidak ditemukan!');
     }

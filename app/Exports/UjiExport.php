@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Latih;
+use App\Uji;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ApiExport implements FromQuery, WithMapping, WithColumnFormatting, WithHeadings
+class UjiExport implements FromQuery, WithMapping, WithColumnFormatting, WithHeadings
 {
     protected $api;
 
@@ -23,9 +23,9 @@ class ApiExport implements FromQuery, WithMapping, WithColumnFormatting, WithHea
     public function query()
     {
         if (is_null($this->month)) {
-            return Latih::query()->select('waktu', 'jumlah')->whereYear('waktu', $this->year);
+            return Uji::query()->select('waktu', 'jumlah')->whereYear('waktu', $this->year);
         } else {
-            return Latih::query()->select('waktu', 'jumlah')->whereYear('waktu', $this->year)->whereMonth('waktu', $this->month);
+            return Uji::query()->select('waktu', 'jumlah')->whereYear('waktu', $this->year)->whereMonth('waktu', $this->month);
         }
     }
 

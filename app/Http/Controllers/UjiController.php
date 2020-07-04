@@ -9,6 +9,7 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\Imports\UjiImport;
+use App\Exports\UjiExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -141,12 +142,33 @@ class UjiController extends Controller
      * @param  \App\Uji  $uji
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $year)
+    public function destroy(Request $request)
     {
-        $data = Uji::whereYear('waktu', $year)->get()->each(function ($data) {
-            $data->delete();
-        });
+        if (is_null($request->month)) {
+            $data = Uji::whereYear('waktu', $request->year)->get()->each(function ($data) {
+                $data->delete();
+            });
+        } else {
+            $data = Uji::whereYear('waktu', $request->year)->whereMonth('waktu', $request->month)->get()->each(function ($data) {
+                $data->delete();
+            });
+        }
         return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('success', 'Data berhasil dihapus!');
+    }
+
+    public function export(Request $request)
+    {
+        $tahun = $request->tahun;
+        $bulan = $request->bulan;
+        if ($tahun == null) {
+            return 'Tahun tidak boleh kosong!';
+        }
+        $data = Uji::select('waktu', 'jumlah')->whereYear('waktu', $tahun)->get();
+        $name = !is_null($bulan) ? 'titik-api(' . date('F', mktime(0, 0, 0, $bulan, 10)) . ' ' . $tahun . ').xlsx' : 'titik-api(' . $tahun . ').xlsx';
+        if ($data->count() > 0) {
+            return Excel::download(new UjiExport($bulan, $tahun), $name);
+        }
+        return redirect()->route('data-uji.page')->with('error', 'Data tidak ditemukan!');
     }
 
     public function import(Request $request)
