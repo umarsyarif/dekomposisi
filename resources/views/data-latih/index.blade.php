@@ -282,9 +282,17 @@ $title = 'Data Titik Api';
         $.fn.editable.defaults.mode = 'inline';
         $('.jumlah').editable('option', 'validate', function(v) {
             if(!v) {
-                alert('Jumlah tidak boleh kosong');
-                return 'x';
-            };
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Jumlah tidak boleh kosong!'
+                });
+                return '.';
+            }else{
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Data berhasil disimpan!'
+                });
+            }
         });
 
         function deleteByYear(year){
