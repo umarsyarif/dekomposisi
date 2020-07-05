@@ -340,10 +340,6 @@ $title = 'Persentase Kesalahan';
             })
             .then((result) => {
                 if (result.value) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Berhasil dihapus'
-                    })
                     $('#delete-form-'+year).submit();
                 }
             });
@@ -361,11 +357,7 @@ $title = 'Persentase Kesalahan';
             })
             .then((result) => {
                 if (result.value) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Berhasil dihapus'
-                    })
-                    $('#delete-form-'+month+'-'+month).submit();
+                    $('#delete-form-'+month+'-'+year).submit();
                 }
             });
         }
