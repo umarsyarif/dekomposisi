@@ -73,13 +73,13 @@ $title = 'Persentase Kesalahan';
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$jumlah = $row->jumlah}}</td>
                                     <td class="text-center">{{round($aditif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? ($jumlah - $aditif) / $row->jumlah : 0}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? $errorAditif = ($jumlah - $aditif) / $row->jumlah : 0}}</td>
                                     <td class="text-center">{{round($multiplikatif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? ($jumlah - $multiplikatif) / $row->jumlah : 0}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = ($jumlah - $multiplikatif) / $row->jumlah : 0}}</td>
                                 </tr>
                                 <?php
-                                    $jumlahAditif += $aditif;
-                                    $jumlahMultiplikatif += $multiplikatif;
+                                    $jumlahAditif += $errorAditif;
+                                    $jumlahMultiplikatif += $errorMultiplikatif;
                                 ?>
                                 @endforeach
                             </tbody>
@@ -103,10 +103,10 @@ $title = 'Persentase Kesalahan';
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-purple col-6 pt-1">
-                                    <h6 class="text-center"><strong>Aditif <br> <em>{{round($jumlahAditif / $uji->count(), 2)}} %</em></strong></h6>
+                                    <h6 class="text-center"><strong>Aditif <br> <em>{{round($jumlahAditif/ $uji->count(), 2)}} %</em></strong></h6>
                                 </div>
                                 <div class="bg-info col-6 pt-1">
-                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{round($jumlahMultiplikatif / $uji->count(), 2)}} %</em></strong></h6>
+                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{round($jumlahMultiplikatif/ $uji->count(), 2)}} %</em></strong></h6>
                                 </div>
                             </div>
                         </div>
