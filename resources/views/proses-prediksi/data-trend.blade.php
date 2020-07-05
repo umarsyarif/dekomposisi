@@ -57,13 +57,13 @@ $title = 'Nilai Trend';
                                                 <td class="text-center">{{$y != 0 ? $x * $y : 0}}</td>
                                                 <td class="text-center">{{pow($x, 2)}}</td>
                                                 <td class="text-center">{{pow($y, 2)}}</td>
-                                                <td class="text-center">{{!is_infinite(log10($y)) ? log10($y) : 0}}</td>
-                                                <td class="text-center">{{!is_infinite(log10($y)) ? $x * log10($y) : 0}}</td>
+                                                <td class="text-center">{{!is_infinite(log10($y)) ? $a = round(log10($y), 3) : $a = 0}}</td>
+                                                <td class="text-center">{{!is_infinite(log10($y)) ? $b = round($x * $a, 3) : $b = 0}}</td>
                                             </tr>
                                             <?php
                                                 $x2 += pow($x, 2);
-                                                !is_infinite(log10($y)) ? $logy += log10($y) : $logy += 0;
-                                                !is_infinite(log10($y)) ? $xlogy += $x * log10($y) : $xlogy += 0;
+                                                $logy += $a;
+                                                $xlogy += $b;
                                             ?>
                                         @endforeach
                                     </tbody>
@@ -89,11 +89,11 @@ $title = 'Nilai Trend';
                                     <div class="col-12">
                                         <div class="row mt-3">
                                             <div class="bg-purple col-6 pt-1">
-                                                <h6 class="text-center"><strong><em>a</em> = {{$a = pow(10, $logy/$data->count())}}</strong></h6>
+                                                <h6 class="text-center"><strong><em>a</em> = {{$a = round(pow(10, $logy/$data->count()), 9)}}</strong></h6>
                                                 <?php Cache::put('a', $a); ?>
                                             </div>
                                             <div class="bg-info col-6 pt-1">
-                                                <h6 class="text-center"><strong><em>b</em> = {{$b = pow(10, $xlogy/$x2)}}</strong></h6>
+                                                <h6 class="text-center"><strong><em>b</em> = {{$b = round(pow(10, $xlogy/$x2), 9)}}</strong></h6>
                                                 <?php Cache::put('b', $b); ?>
                                             </div>
                                         </div>

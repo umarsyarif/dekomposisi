@@ -189,7 +189,7 @@ class UjiController extends Controller
             $penyesuaian = Cache::get('penyesuaian', null);
             $this->cekCache($a, $b, $penyesuaian);
             // get data uji
-            $uji = Uji::whereDate('waktu', '>=', $awal)->whereDate('waktu', '<=', $akhir)->get();
+            $uji = Uji::whereDate('waktu', '>=', $awal)->whereDate('waktu', '<=', $akhir)->orderBy('waktu')->get();
             if ($uji->isEmpty()) {
                 return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('error', 'Data titik api tidak ada!');
             }
