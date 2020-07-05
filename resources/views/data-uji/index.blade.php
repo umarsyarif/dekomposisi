@@ -107,8 +107,7 @@ $title = 'Persentase Kesalahan';
                                                         <a href="{{route('data-uji.export', ['tahun' => $row->year])}}" class="btn btn-warning">
                                                             <i class="fas fa-upload mr-1"></i> Export
                                                         </a>
-                                                        <button class="btn btn-danger" onclick="event.preventDefault();
-                                                        document.getElementById('delete-form-{{$row->year}}').submit();">
+                                                        <button class="btn btn-danger" onclick="deleteByYear({{$row->year}})">
                                                             <i class="fas fa-trash mr-1"></i> Hapus
                                                         </button>
                                                         <form id="delete-form-{{$row->year}}" action="{{route('data-uji.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
@@ -129,8 +128,7 @@ $title = 'Persentase Kesalahan';
                                                             <a href="{{route('data-uji.export', ['bulan' => $row->month, 'tahun' => $row->year])}}" class="btn btn-warning">
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
-                                                            <button class="btn btn-danger" onclick="event.preventDefault();
-                                                            document.getElementById('delete-form-{{$row->month}}-{{$row->year}}').submit();">
+                                                            <button class="btn btn-danger" onclick="deleteByMonth({{$row->month}},{{$row->year}})">
                                                                 <i class="fas fa-trash mr-1"></i> Hapus
                                                             </button>
                                                             <form id="delete-form-{{$row->month}}-{{$row->year}}" action="{{route('data-uji.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
@@ -275,8 +273,6 @@ $title = 'Persentase Kesalahan';
 </div>
 @endsection
 @push('scripts')
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="{{asset('x-editable/bootstrap-editable.min.js')}}"></script>
     <script>
         $('#file').on('change',function(){
@@ -299,6 +295,8 @@ $title = 'Persentase Kesalahan';
             minViewMode : 1,
             autoclose : true
         });
+
+
 
         $("#yearpicker").datepicker({
             format: "yyyy",
@@ -329,6 +327,48 @@ $title = 'Persentase Kesalahan';
                 return 'x';
             };
         });
+
+        function deleteByYear(year){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            })
+            .then((result) => {
+                if (result.value) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data Berhasil dihapus'
+                    })
+                    $('#delete-form-'+year).submit();
+                }
+            });
+        }
+
+        function deleteByMonth(month, year){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            })
+            .then((result) => {
+                if (result.value) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data Berhasil dihapus'
+                    })
+                    $('#delete-form-'+month+'-'+month).submit();
+                }
+            });
+        }
 
     </script>
 @endpush

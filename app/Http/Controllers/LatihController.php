@@ -98,6 +98,8 @@ class LatihController extends Controller
                 Latih::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
             }
         }
+        Cache::forget('trend');
+        Cache::forget('musiman');
         return $this->page($request);
     }
 
@@ -133,6 +135,8 @@ class LatihController extends Controller
     public function update(Request $request, Latih $latih)
     {
         $latih->update([$request->name => $request->value]);
+        Cache::forget('trend');
+        Cache::forget('musiman');
     }
 
     /**

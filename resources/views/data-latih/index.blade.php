@@ -106,8 +106,7 @@ $title = 'Data Titik Api';
                                                         <a href="{{route('data-latih.export', ['tahun' => $row->year])}}" class="btn btn-warning">
                                                             <i class="fas fa-upload mr-1"></i> Export
                                                         </a>
-                                                        <button class="btn btn-danger" onclick="event.preventDefault();
-                                                        document.getElementById('delete-form-{{$row->year}}').submit();">
+                                                        <button class="btn btn-danger" onclick="deleteByYear({{$row->year}})">
                                                             <i class="fas fa-trash mr-1"></i> Hapus
                                                         </button>
                                                         <form id="delete-form-{{$row->year}}" action="{{route('data-latih.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
@@ -128,8 +127,7 @@ $title = 'Data Titik Api';
                                                             <a href="{{route('data-latih.export', ['bulan' => $row->month, 'tahun' => $row->year])}}" class="btn btn-warning">
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
-                                                            <button class="btn btn-danger" onclick="event.preventDefault();
-                                                            document.getElementById('delete-form-{{$row->month}}-{{$row->year}}').submit();">
+                                                            <button class="btn btn-danger" onclick="deleteByMonth({{$row->month}},{{$row->year}})">
                                                                 <i class="fas fa-trash mr-1"></i> Hapus
                                                             </button>
                                                             <form id="delete-form-{{$row->month}}-{{$row->year}}" action="{{route('data-latih.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
@@ -288,6 +286,40 @@ $title = 'Data Titik Api';
                 return 'x';
             };
         });
+
+        function deleteByYear(year){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            })
+            .then((result) => {
+                if (result.value) {
+                    $('#delete-form-'+year).submit();
+                }
+            });
+        }
+
+        function deleteByMonth(month, year){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            })
+            .then((result) => {
+                if (result.value) {
+                    $('#delete-form-'+month+'-'+year).submit();
+                }
+            });
+        }
 
     </script>
 @endpush
