@@ -68,14 +68,14 @@ $title = 'Persentase Kesalahan';
                                 <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
                                 @foreach ($uji as $row)
                                 <tr>
-                                    <?php $xt++; $aditif = ($a + pow($b, $xt)) + $row->musiman; $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?>
-                                    <td>{{$loop->iteration}}</td>
+                                    <?php $xt; $aditif = ($a + pow($b, $xt)) + $row->musiman; $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?>
+                                    <td>{{$xt++}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
-                                    <td class="text-center">{{$row->jumlah}}</td>
+                                    <td class="text-center">{{$jumlah = $row->jumlah}}</td>
                                     <td class="text-center">{{round($aditif)}}</td>
-                                    <td class="text-center">{{($xt - $aditif) / $xt * 100}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? ($jumlah - $aditif) / $row->jumlah : 0}}</td>
                                     <td class="text-center">{{round($multiplikatif)}}</td>
-                                    <td class="text-center">{{($xt - $multiplikatif) / $xt * 100}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? ($jumlah - $multiplikatif) / $row->jumlah : 0}}</td>
                                 </tr>
                                 <?php
                                     $jumlahAditif += $aditif;
