@@ -98,7 +98,6 @@ $title = 'Peramalan';
                     </div>
                     <div class="modal-body">
                         <h5 class="text-center">Akurasi</h5>
-                        {{-- <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6> --}}
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-purple col-6 pt-1">
@@ -109,13 +108,6 @@ $title = 'Peramalan';
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-12">
-                            <div class="row mt-3">
-                                <div class="bg-success col-12 pt-1">
-                                    <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
