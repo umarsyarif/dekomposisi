@@ -19,7 +19,7 @@ class UjiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['update']);
     }
 
     public function page(Request $request)
@@ -133,7 +133,7 @@ class UjiController extends Controller
      */
     public function update(Request $request, Uji $uji)
     {
-        //
+        $uji->update([$request->name => $request->value]);
     }
 
     /**
@@ -145,13 +145,9 @@ class UjiController extends Controller
     public function destroy(Request $request)
     {
         if (is_null($request->month)) {
-            $data = Uji::whereYear('waktu', $request->year)->get()->each(function ($data) {
-                $data->delete();
-            });
+            Uji::whereYear('waktu', $request->year)->delete();
         } else {
-            $data = Uji::whereYear('waktu', $request->year)->whereMonth('waktu', $request->month)->get()->each(function ($data) {
-                $data->delete();
-            });
+            Uji::whereYear('waktu', $request->year)->whereMonth('waktu', $request->month)->delete();
         }
         return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('success', 'Data berhasil dihapus!');
     }

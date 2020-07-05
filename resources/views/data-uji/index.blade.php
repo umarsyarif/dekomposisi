@@ -66,8 +66,8 @@ $title = 'Persentase Kesalahan';
                                         <tr>
                                             @if ($filter == null)
                                                 <th>No</th>
-                                                <th>Tahun</th>
-                                                <th>Jumlah titik api</th>
+                                                <th class="text-center">Tanggal</th>
+                                                <th class="text-center">Jumlah titik api</th>
                                                 <th>Created At</th>
                                                 <th>Update At</th>
                                             @elseif ($filter == 'tahun')
@@ -78,7 +78,7 @@ $title = 'Persentase Kesalahan';
                                                 <th>Actions</th>
                                             @elseif ($filter == 'bulan')
                                                 <th>No</th>
-                                                <th>Bulan</th>
+                                                <th>Bulan/Tahun</th>
                                                 <th>Jumlah data</th>
                                                 <th>Jumlah titik api</th>
                                                 <th>Actions</th>
@@ -90,8 +90,8 @@ $title = 'Persentase Kesalahan';
                                             @foreach ($uji as $row)
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
-                                                    <td>{{$row->waktu->format('d F Y')}}</td>
-                                                    <td>{{$row->jumlah}}</td>
+                                                    <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
+                                                    <td class="text-center"><a href="javascript:void(0)" class="jumlah" data-type="text" data-pk="{{$row->id}}" data-url="/api/uji/{{$row->id}}" data-name="jumlah" data-title="Jumlah Titik Api">{{$row->jumlah}}</a></td>
                                                     <td>{{$row->created_at->format('d/m/Y H:i')}}</td>
                                                     <td>{{$row->updated_at->format('d/m/Y H:i')}}</td>
                                                 </tr>
@@ -130,10 +130,10 @@ $title = 'Persentase Kesalahan';
                                                                 <i class="fas fa-upload mr-1"></i> Export
                                                             </a>
                                                             <button class="btn btn-danger" onclick="event.preventDefault();
-                                                            document.getElementById('delete-form-{{$row->year}}').submit();">
+                                                            document.getElementById('delete-form-{{$row->month}}-{{$row->year}}').submit();">
                                                                 <i class="fas fa-trash mr-1"></i> Hapus
                                                             </button>
-                                                            <form id="delete-form-{{$row->year}}" action="{{route('data-uji.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
+                                                            <form id="delete-form-{{$row->month}}-{{$row->year}}" action="{{route('data-uji.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
@@ -275,8 +275,9 @@ $title = 'Persentase Kesalahan';
 </div>
 @endsection
 @push('scripts')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="{{asset('x-editable/bootstrap-editable.min.js')}}"></script>
     <script>
         $('#file').on('change',function(){
             //get the file name
@@ -319,6 +320,14 @@ $title = 'Persentase Kesalahan';
                 $('#monthpicker').attr('required', true);
                 $('#yearpicker').removeAttr('required');
             }
+        });
+
+        $.fn.editable.defaults.mode = 'inline';
+        $('.jumlah').editable('option', 'validate', function(v) {
+            if(!v) {
+                alert('Jumlah tidak boleh kosong');
+                return 'x';
+            };
         });
 
     </script>

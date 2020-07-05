@@ -18,7 +18,7 @@ class LatihController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['update']);
     }
 
     public function page(Request $request)
@@ -132,7 +132,7 @@ class LatihController extends Controller
      */
     public function update(Request $request, Latih $latih)
     {
-        //
+        $latih->update([$request->name => $request->value]);
     }
 
     /**
@@ -144,13 +144,9 @@ class LatihController extends Controller
     public function destroy(Request $request)
     {
         if (is_null($request->month)) {
-            $data = Latih::whereYear('waktu', $request->year)->get()->each(function ($data) {
-                $data->delete();
-            });
+            Latih::whereYear('waktu', $request->year)->delete();
         } else {
-            $data = Latih::whereYear('waktu', $request->year)->whereMonth('waktu', $request->month)->get()->each(function ($data) {
-                $data->delete();
-            });
+            Latih::whereYear('waktu', $request->year)->whereMonth('waktu', $request->month)->delete();
         }
         Cache::forget('trend');
         Cache::forget('musiman');
