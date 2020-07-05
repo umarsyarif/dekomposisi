@@ -38,14 +38,12 @@ $title = 'Persentase Kesalahan';
                                     <button type="submit" class="btn btn-primary ml-2">Check</button>
                                 </div>
                             </div>
-                            {{-- <small class="text-muted"><em>*)Tanggal yang dipilih harus memiliki data aktual</em></small> --}}
                         </div>
                     </form>
                 </div>
                 <div class="card">
                     <div class="card-header">
                         <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
-                            {{-- <i class="fas fa-tachometer-alt mr-1"></i>  --}}
                             Cek MAPE
                         </button>
                     </div>
@@ -55,7 +53,6 @@ $title = 'Persentase Kesalahan';
                                 <tr>
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                                    {{-- <th class="text-center" rowspan="2">xt</th> --}}
                                     <th class="text-center" rowspan="2">Data Aktual</th>
                                     <th class="text-center" colspan="2">Dekomposisi Aditif</th>
                                     <th class="text-center" colspan="2">Dekomposisi Multiplikatif</th>
@@ -76,9 +73,9 @@ $title = 'Persentase Kesalahan';
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$row->jumlah}}</td>
                                     <td class="text-center">{{round($aditif)}}</td>
-                                    <td class="text-center">{{($xt - $aditif) / $xt}}</td>
+                                    <td class="text-center">{{($xt - $aditif) / $xt * 100}}</td>
                                     <td class="text-center">{{round($multiplikatif)}}</td>
-                                    <td class="text-center">{{($xt - $multiplikatif) / $xt}}</td>
+                                    <td class="text-center">{{($xt - $multiplikatif) / $xt * 100}}</td>
                                 </tr>
                                 <?php
                                     $jumlahAditif += $aditif;
@@ -103,7 +100,6 @@ $title = 'Persentase Kesalahan';
                     </div>
                     <div class="modal-body">
                         <h5 class="text-center">Akurasi</h5>
-                        {{-- <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6> --}}
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-purple col-6 pt-1">
@@ -114,13 +110,6 @@ $title = 'Persentase Kesalahan';
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-12">
-                            <div class="row mt-3">
-                                <div class="bg-success col-12 pt-1">
-                                    <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
