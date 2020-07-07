@@ -73,9 +73,9 @@ $title = 'Persentase Kesalahan';
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$jumlah = $row->jumlah}}</td>
                                     <td class="text-center">{{$aditif = round($aditif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? $errorAditif = ($jumlah - $aditif) / $jumlah : 0}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? $errorAditif = round(($jumlah - $aditif) / $jumlah, 9) : 0}}</td>
                                     <td class="text-center">{{$multiplikatif = round($multiplikatif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = ($jumlah - $multiplikatif) / $jumlah : 0}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = round(($jumlah - $multiplikatif) / $jumlah   , 9) : 0}}</td>
                                 </tr>
                                 <?php
                                     $xt++;
