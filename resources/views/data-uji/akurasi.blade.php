@@ -68,14 +68,14 @@ $title = 'Persentase Kesalahan';
                                 <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
                                 @foreach ($uji as $row)
                                 <tr>
-                                    <?php $xt; $aditif = ($a + pow($b, $xt)) + $row->musiman; $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?>
+                                    <?php $xt; $aditif = ($a + round(pow($b, $xt), 2)) + round($row->musiman, 2); $multiplikatif = ($a + round(pow($b, $xt), 2)) * round($row->musiman, 2) ?>
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$jumlah = $row->jumlah}}</td>
                                     <td class="text-center">{{$aditif = round($aditif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? $errorAditif = round(($jumlah - $aditif) / $jumlah, 9) : 0}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? $errorAditif = round(($jumlah - $aditif) / $jumlah, 2) : $errorAditif = 0}}</td>
                                     <td class="text-center">{{$multiplikatif = round($multiplikatif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = round(($jumlah - $multiplikatif) / $jumlah   , 9) : 0}}</td>
+                                    <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = round(($jumlah - $multiplikatif) / $jumlah   , 2) : $errorAditif = 0}}</td>
                                 </tr>
                                 <?php
                                     $xt++;
@@ -104,10 +104,11 @@ $title = 'Persentase Kesalahan';
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="bg-purple col-6 pt-1">
-                                    <h6 class="text-center"><strong>Aditif <br> <em>{{round(abs($jumlahAditif * 100/ $uji->count()), 2)}} %</em></strong></h6>
+                                    <h6 class="text-center"><strong>Aditif <br> <em>{{round(abs(round($jumlahAditif, 2) * 100/ $uji->count()), 2)}} %</em></strong></h6>
                                 </div>
                                 <div class="bg-info col-6 pt-1">
-                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{round(abs($jumlahMultiplikatif * 100/ $uji->count()), 2)}} %</em></strong></h6>
+                                    {{-- <h6 class="text-center"><strong>Aditif <br> <em>{{$jumlahMultiplikatif}} %</em></strong></h6> --}}
+                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{round(abs(round($jumlahMultiplikatif, 2) * 100/ $uji->count()), 2)}} %</em></strong></h6>
                                 </div>
                             </div>
                         </div>

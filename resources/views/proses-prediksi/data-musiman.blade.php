@@ -59,8 +59,8 @@ $title = 'Nilai Indeks Musiman';
                                                 @endforeach
                                                 <?php
                                                 ?>
-                                                <td class="text-center">{{round($row->medial, 2)}}</td>
-                                                <td class="text-center">{{round($indeks = $row->medial * $penyesuaian, 2)}}</td>
+                                                <td class="text-center">{{$medial = round($row->medial, 2)}}</td>
+                                                <td class="text-center">{{$indeks = round($medial * $penyesuaian, 2)}}</td>
                                                 <?php $jumlahIndeks += $indeks ?>
                                             </tr>
                                         @endforeach
@@ -82,7 +82,6 @@ $title = 'Nilai Indeks Musiman';
                             </div>
                             <div class="modal-body">
                                 <h5 class="text-center">Rumus Nilai Indeks Musiman</h5>
-                                {{-- <h6 class="text-center"><strong><em>Y = a b<sup>x</sup></em></strong></h6> --}}
                                 <div class="col-12">
                                     <div class="row mt-3">
                                         <div class="bg-purple col-6 pt-1">
@@ -93,13 +92,6 @@ $title = 'Nilai Indeks Musiman';
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="col-12">
-                                    <div class="row mt-3">
-                                        <div class="bg-success col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>

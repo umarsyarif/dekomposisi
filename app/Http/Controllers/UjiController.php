@@ -196,7 +196,7 @@ class UjiController extends Controller
             foreach ($uji as $row) {
                 $tgl = $row->waktu;
                 $musiman = Musiman::whereMonth('waktu', $tgl->format('m'))->whereDay('waktu', $tgl->format('d'))->first();
-                $row->musiman = $musiman->medial * $penyesuaian;
+                $row->musiman = round($musiman->medial * $penyesuaian, 2);
             }
             $data = [
                 'uji' => $uji,
@@ -205,6 +205,7 @@ class UjiController extends Controller
                 'xt' => $xt,
                 'tanggal' => $request->tanggal
             ];
+            // return $data;
             return view('data-uji.akurasi', $data);
         }
         return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('error', 'Data aktual tidak ada!');
