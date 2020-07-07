@@ -46,52 +46,52 @@ class PrediksiController extends Controller
 
     public function musiman()
     {
-        // $data =  Cache::rememberForever('musiman', function () {
-        $data = $this->index()->toArray();
-        $years = $this->getYear();
-        $date = $this->getdate();
-        $result = $this->movingAverage($data);
-        $penyesuaian = 0;
-        foreach ($date as $row) {
-            $jumlah = new stdClass();
-            $ma = new stdClass();
-            foreach ($years as $year) {
-                $tgl = date('Y-m-d', mktime(0, 0, 0, $row->month, $row->day, $year));
-                $x = Latih::whereDate('waktu', $tgl)->first();
-                $currentMa = $this->getMovingAverage($tgl, $result);
-                if ($currentMa == null) {
-                    $ma->$year = null;
-                } else {
-                    $ma->$year =  $currentMa != 0 ? $x->jumlah / $currentMa * 100 : 0;
+        $data =  Cache::rememberForever('musiman', function () {
+            $data = $this->index()->toArray();
+            $years = $this->getYear();
+            $date = $this->getdate();
+            $result = $this->movingAverage($data);
+            $penyesuaian = 0;
+            foreach ($date as $row) {
+                $jumlah = new stdClass();
+                $ma = new stdClass();
+                foreach ($years as $year) {
+                    $tgl = date('Y-m-d', mktime(0, 0, 0, $row->month, $row->day, $year));
+                    $x = Latih::whereDate('waktu', $tgl)->first();
+                    $currentMa = $this->getMovingAverage($tgl, $result);
+                    if ($currentMa == null) {
+                        $ma->$year = null;
+                    } else {
+                        $ma->$year =  $currentMa != 0 ? $x->jumlah / $currentMa * 100 : 0;
+                    }
+                    if ($row->month == 2 && $row->day == 29 && $year % 4 != 0) {
+                        $jumlah->$year = null;
+                        $ma->$year = null;
+                    } else {
+                        $jumlah->$year = $x->jumlah;
+                    }
                 }
-                if ($row->month == 2 && $row->day == 29 && $year % 4 != 0) {
-                    $jumlah->$year = null;
-                    $ma->$year = null;
-                } else {
-                    $jumlah->$year = $x->jumlah;
-                }
+                $row->jumlah = $jumlah;
+                $row->ma = $ma;
+                $row->medial = round($this->medial($ma), 2);
+                $penyesuaian += $row->medial;
+                // save
+                $tgl = date('Y-m-d', mktime(0, 0, 0, $row->month, $row->day));
+                Musiman::updateOrCreate([
+                    'waktu' => $tgl
+                ], [
+                    'medial' => $row->medial
+                ]);
             }
-            $row->jumlah = $jumlah;
-            $row->ma = $ma;
-            $row->medial = round($this->medial($ma), 2);
-            $penyesuaian += $row->medial;
-            // save
-            $tgl = date('Y-m-d', mktime(0, 0, 0, $row->month, $row->day));
-            Musiman::updateOrCreate([
-                'waktu' => $tgl
-            ], [
-                'medial' => $row->medial
-            ]);
-        }
-        $penyesuaian = round((366 / $penyesuaian), 9);
-        Cache::put('penyesuaian', $penyesuaian);
-        $data = [
-            'data' => $date,
-            'year' => $years,
-            'penyesuaian' => $penyesuaian
-        ];
-        return $data;
-        // });
+            $penyesuaian = round((366 / $penyesuaian), 9);
+            Cache::put('penyesuaian', $penyesuaian);
+            $data = [
+                'data' => $date,
+                'year' => $years,
+                'penyesuaian' => $penyesuaian
+            ];
+            return $data;
+        });
         return view('proses-prediksi.data-musiman', $data);
     }
 
