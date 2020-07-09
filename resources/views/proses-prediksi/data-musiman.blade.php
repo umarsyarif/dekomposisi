@@ -88,7 +88,7 @@ $title = 'Nilai Indeks Musiman';
                                             <h6 class="text-center"><strong><em>Nilai penyesuaian</em>  {{$penyesuaian}}</strong></h6>
                                         </div>
                                         <div class="bg-info col-6 pt-1">
-                                            <h6 class="text-center"><strong><em>Jumlah Indeks Musiman</em> <br> {{$jumlahIndeks}}</strong></h6>
+                                            <h6 class="text-center"><strong><em>Jumlah Indeks Musiman</em> <br> {{round($jumlahIndeks)}}</strong></h6>
                                         </div>
                                     </div>
                                 </div>
