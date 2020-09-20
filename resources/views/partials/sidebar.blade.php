@@ -23,11 +23,11 @@
                 </a>
             </li>
 
-            <li class="nav-item has-treeview {{Str::startsWith($title, ['Data', 'Nilai']) ? 'menu-open' : ''}}">
-                <a href="javascript:void(0);" class="nav-link {{Str::startsWith($title, ['Data', 'Nilai']) ? 'active' : ''}}">
+            <li class="nav-item has-treeview {{Str::contains($title, ['Data Titik Api', 'Data Training']) ? 'menu-open' : ''}}">
+                <a href="javascript:void(0);" class="nav-link {{Str::contains($title, ['Data Titik Api', 'Data Training']) ? 'active' : ''}}">
                     <i class="nav-icon fas fa-chart-bar"></i>
                     <p>
-                        Data Titik Api
+                        Dataset
                         <i class="right fas fa-angle-left"></i>
                     </p>
                 </a>
@@ -35,9 +35,28 @@
                     <li class="nav-item">
                         <a href="{{route('data-latih.page')}}" class="nav-link {{Str::contains($title, 'Data Titik Api') ? 'active' : ''}}">
                             <i class="fas fa-chart-pie nav-icon"></i>
-                            <p>Jumlah Titik Api</p>
+                            <p>Data Titik Api</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{route('data-latih.persentase')}}" class="nav-link {{Str::contains($title, 'Data Training') ? 'active' : ''}}">
+                            <i class="fas fa-chart-line nav-icon"></i>
+                            <p>Data Training</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="nav-item has-treeview {{Str::contains($title, ['Pengujian', 'Nilai Trend', 'Nilai Indeks Musiman']) ? 'menu-open' : ''}}">
+                <a href="javascript:void(0);" class="nav-link {{Str::contains($title, ['Pengujian', 'Nilai Trend', 'Nilai Indeks Musiman']) ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-calculator"></i>
+                    <p>
+                        Peramalan
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="{{route('prediksi.data-trend')}}" class="nav-link {{Str::contains($title, 'Nilai Trend') ? 'active' : ''}}">
                             <i class="fas fa-chart-line nav-icon"></i>
@@ -51,15 +70,22 @@
                             <p>Nilai Indeks Musiman</p>
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="{{route('prediksi.page')}}" class="nav-link {{Str::contains($title, 'Pengujian') ? 'active' : ''}}">
+                            <i class="fas fa-chart-pie nav-icon"></i>
+                            <p>Pengujian</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{route('prediksi.page')}}" class="nav-link {{$title == 'Peramalan' ? 'active' : ''}}">
                     <i class="nav-icon fas fa-calculator"></i>
                     <p>Peramalan</p>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="nav-item">
                 <a href="{{route('data-uji.page')}}" class="nav-link {{$title == 'Persentase Kesalahan' ? 'active' : ''}}">

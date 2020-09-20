@@ -185,4 +185,30 @@ class LatihController extends Controller
         $year = $year->pluck('year');
         return $year;
     }
+
+    public function persentase(Request $request)
+    {
+        $data = [];
+        if($request->persentase){
+            $persentase = explode(' : ', $request->persentase);
+            $persenUji = $persentase[1];
+            $jumlah = Latih::all()->count();
+            $jumlahUji = round($persenUji / 100 * $jumlah);
+            $jumlahLatih = $jumlah - $jumlahUji;
+
+            $data = Cache::rememberForever($request->persentase, function () use ($jumlahUji, $jumlahLatih){
+                $randomData = Latih::inRandomOrder();
+                $dataUji = $randomData->limit($jumlahUji)->get();
+                $dataLatih = Latih::all()->reject(function ($value, $key) use ($dataUji){
+                    return $dataUji->pluck('waktu')->contains($value->waktu);
+                });
+                $result = [
+                    'dataUji' => $dataUji->sortBy('waktu'),
+                    'dataLatih' => $dataLatih->sortBy('waktu')
+                ];
+                return $result;
+            });
+        }
+        return view('data-latih.persentase', $data);
+    }
 }

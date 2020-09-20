@@ -22,6 +22,7 @@ Auth::routes(['register' => false]);
 Route::prefix('data-latih')->name('data-latih.')->group(function () {
     Route::get('/', 'LatihController@page')->name('page');
     Route::post('/', 'LatihController@store')->name('store');
+    Route::get('persentase', 'LatihController@persentase')->name('persentase');
     Route::get('get-year', 'LatihController@getYear')->name('get-year');
     Route::get('export', 'LatihController@export')->name('export');
     Route::post('import', 'LatihController@import')->name('import');

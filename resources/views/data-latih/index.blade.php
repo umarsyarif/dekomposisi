@@ -68,7 +68,7 @@ $title = 'Data Titik Api';
                                                 <th class="text-center">Tanggal</th>
                                                 <th class="text-center">Jumlah titik api</th>
                                                 <th>Created At</th>
-                                                <th>Update At</th>
+                                                <th>Updated At</th>
                                             @elseif ($filter == 'tahun')
                                                 <th>No</th>
                                                 <th>Tahun</th>
