@@ -27,27 +27,28 @@ $title = 'Peramalan';
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="text-center">SISTEM PERAMALAN JUMLAH KEMUNCULAN TITIK API DI RIAU</h4>
-                                <h5 class="text-center mb-5">MENGGUNAKAN METODE DEKOMPOSISI</h5>
+                                <h5 class="text-center mb-5">Menggunakan Metode Dekomposisi</h5>
                                 <p class="card-text">
-                                    Kebakaran hutan merupakan suatu keadaan dimana hutan di landa api yang kemudian
-                                    mengakibatkan rusaknya hutan dan menimbulkan kerugian ekonomis terhadap hasil hutan dan
-                                    atau nilai lingkungan. Selain faktor curah hujan yang menjadi indikator yang paling utama
-                                    sebagai pemicu kebakaran di Indonesia, Titik Panas (Hotspot) juga merupakan indikator
-                                    kebakaran hutan. Berdasarkan Data yang dikeluarkan oleh BNPB pada tahun 2019, Masalah
-                                    bencana yang terjadi di Indonesia salah satunya adalah terbakarnya luas lahan. Data KLHK
-                                    mencatat luas karhutla dari bulan Januri hingga bulan September 2019 yaitu sebesar 857.756 ha.
-                                    Data BNPB juga mencatat masih terjadi karhutla di sejumlah wilayah Indonesia pada bulan
-                                    Oktober 2019. Titik panas atau Hotspot teridentifikasi di beberapa provinsi. Salah satunya pada
-                                    Provinsi Riau. Berdasarkan masalah yang telah dijelaskan, maka akan dibangun sebuah aplikasi
-                                    peramalan jumlah kemunculan titik api yang merupakan salah satu proses penanggulangan
-                                    kebakaran hutan agar berkurangnya bencana kebakaran hutan dan lahan di Indonesia khususnya
-                                    pada Provinsi Riau. Aplikasi yang akan dibangun menggunakan metode Dekomposisi berbasis
-                                    web yang akan di implementasikan menggunakan bahasa pemrograman PHP. Data latih yang
-                                    akan digunakan yaitu data jumlah titik api di Provinsi Riau pada tahun 2014-2019 dan data uji
-                                    adalah data bulan Januari tahun 2020 yang diperoleh dari Lembaga Penerbangan Antariksa
-                                    Nasional (LAPAN). Pengujian dilakukan dengan pengujian black box dan pengujian akurasi
-                                    sistem menggunakan Mean Absolute Percent Error (MAPE).
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem tempore, eaque quam sint ea officia impedit, doloremque soluta, aperiam neque magni repudiandae fugiat minima facilis velit! Tenetur voluptatibus voluptate soluta.
                                 </p>
+                                <p class="card-text">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem tempore, eaque quam sint ea officia impedit, doloremque soluta, aperiam neque magni repudiandae fugiat minima facilis velit! Tenetur voluptatibus voluptate soluta.
+                                </p>
+                                <p class="card-text">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem tempore, eaque quam sint ea officia impedit, doloremque soluta, aperiam neque magni repudiandae fugiat minima facilis velit! Tenetur voluptatibus voluptate soluta.
+                                </p>
+                                {{-- <div class="col-12">
+                                    <form action="" method="post">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="datepicker" name="tanggal" placeholder="Pilih tanggal" required>
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-primary">Check</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div> --}}
                                 <a href="javascript:void(0);" class="btn btn-primary float-right mt-3" data-toggle="modal" data-target="#start-modal">Mulai</a>
                                 {{-- <a href="{{route('prediksi.hasil')}}" class="btn btn-primary float-right mt-3">Start</a> --}}
                             </div>
@@ -98,20 +99,14 @@ $title = 'Peramalan';
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
-        // $('#file').on('change',function(){
-        //     //get the file name
-        //     var fileName = $(this).val().replace('C:\\fakepath\\', "");
-        //     //replace the "Choose a file" label
-        //     $(this).next('.custom-file-label').html(fileName);
-        // })
 
-        // $(function () {
-        //   $("#example1").DataTable({
-        //     "autoWidth": true
-        //   });
-        // });
-
-        $("#datepicker").daterangepicker();
+        $("#datepicker").daterangepicker({
+            locale: {
+                format: "DD/MM/YYYY"
+            },
+            startDate: "01/01/2020",
+            endDate: "01/01/2020",
+        });
 
     </script>
 @endpush

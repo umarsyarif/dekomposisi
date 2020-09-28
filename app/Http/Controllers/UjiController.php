@@ -179,7 +179,7 @@ class UjiController extends Controller
         $awal = date('Y-m-d', strtotime($tanggal[0]));
         $akhir = date('Y-m-d', strtotime($tanggal[1]));
         $now = now();
-        if ($awal >= '2020-01-01' && $akhir < $now) {
+        if ($awal >= '2019-01-01' && $akhir < $now) {
             $xt = Latih::all()->count();
             $last = Latih::orderBy('waktu', 'DESC')->pluck('waktu')->first();
             $diff = $last->diff($awal)->format('%a');
@@ -199,13 +199,13 @@ class UjiController extends Controller
                 $row->musiman = round($musiman->medial * $penyesuaian, 2);
             }
             $data = [
+                'data' => Latih::all(),
                 'uji' => $uji,
                 'a' => $a,
                 'b' => $b,
                 'xt' => $xt,
                 'tanggal' => $request->tanggal
             ];
-            // return $data;
             return view('data-uji.akurasi', $data);
         }
         return redirect()->route('data-uji.page', ['filter' => $request->filter])->with('error', 'Data aktual tidak ada!');

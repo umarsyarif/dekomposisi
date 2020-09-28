@@ -32,7 +32,7 @@ $title = 'Nilai Trend';
                             </div>
                             <div class="card-body">
                                 <h4 class="text-center">Data Nilai Trend</h4>
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="trend" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -47,24 +47,18 @@ $title = 'Nilai Trend';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $logy = 0; $xlogy = 0; $x2 = 0 ?>
                                         @foreach ($data as $row)
-                                            <tr>
+                                            <tr id="trend-tr-{{$loop->iteration}}">
                                                 <td>{{$loop->iteration}}</td>
                                                 <td>{{$row->waktu->format('d F Y')}}</td>
                                                 <td class="text-center">{{$y = $row->jumlah}}</td>
-                                                <td class="text-center">{{$x = $loop->index - floor($loop->count/2)}}</td>
-                                                <td class="text-center">{{$y != 0 ? $x * $y : 0}}</td>
-                                                <td class="text-center">{{pow($x, 2)}}</td>
-                                                <td class="text-center">{{pow($y, 2)}}</td>
-                                                <td class="text-center">{{!is_infinite(log10($y)) ? $a = round(log10($y), 3) : $a = 0}}</td>
-                                                <td class="text-center">{{!is_infinite(log10($y)) ? $b = round($x * $a, 3) : $b = 0}}</td>
+                                                <td class="text-center replace"></td>
+                                                <td class="text-center replace"></td>
+                                                <td class="text-center replace"></td>
+                                                <td class="text-center replace"></td>
+                                                <td class="text-center replace"></td>
+                                                <td class="text-center replace"></td>
                                             </tr>
-                                            <?php
-                                                $x2 += pow($x, 2);
-                                                $logy += $a;
-                                                $xlogy += $b;
-                                            ?>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -89,19 +83,17 @@ $title = 'Nilai Trend';
                                     <div class="col-12">
                                         <div class="row mt-3">
                                             <div class="bg-purple col-6 pt-1">
-                                                <h6 class="text-center"><strong><em>a</em> = {{$a = round(pow(10, $logy/$data->count()), 9)}}</strong></h6>
-                                                <?php Cache::put('a', $a); ?>
+                                                <h6 class="text-center" id="a"></h6>
                                             </div>
                                             <div class="bg-info col-6 pt-1">
-                                                <h6 class="text-center"><strong><em>b</em> = {{$b = round(pow(10, $xlogy/$x2), 9)}}</strong></h6>
-                                                <?php Cache::put('b', $b); ?>
+                                                <h6 class="text-center" id="b"></h6>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="row mt-3">
                                             <div class="bg-success col-12 pt-1">
-                                                <h6 class="text-center"><strong><em>Y</em> = ({{$a}}) ({{$b}}) <em><sup>x</sup></em></strong></h6>
+                                                <h6 class="text-center" id="y"></h6>
                                             </div>
                                         </div>
                                     </div>
@@ -121,11 +113,61 @@ $title = 'Nilai Trend';
 @push('scripts')
     <script>
 
-        $(function () {
-          $("#example1").DataTable({
-            "autoWidth": true
-          });
-        });
+        // $(function () {
+        //   $("#example1").DataTable({
+        //     "autoWidth": true
+        //   });
+        // });
 
     </script>
+    @if ($data->count() > 0)
+        <script>
+
+        $(document).ready(()=>{
+            getTrend().then(() => {console.log('Data Trend')});
+        });
+
+        const getTrend = async () => {
+            $('.replace').remove();
+            const dataLatih = {!! json_encode($data->toArray()) !!};
+            const split = _.size(dataLatih) / 2;
+            let iteration = 0;
+            let logy = 0, xlogy = 0, x2 = 0;
+            $.each(dataLatih, (index, value) => {
+                let temp, x, y = value.jumlah, a = 0, b = 0;
+                let log10y = Math.log10(y);
+                temp += `<td class="text-center">${x = getX(iteration, split)}</td>`;
+                temp += `<td class="text-center">${y != 0 ? x * y : 0}</td>`;
+                temp += `<td class="text-center">${Math.pow(x, 2)}</td>`;
+                temp += `<td class="text-center">${Math.pow(y, 2)}</td>`;
+                temp += `<td class="text-center">${isFinite(log10y) ? a = log10y.toFixed(3) : a = 0}</td>`;
+                temp += `<td class="text-center">${isFinite(log10y) ? b = (x * a).toFixed(3) : b = 0}</td>`;
+                x2 += Math.pow(x, 2);
+                logy += parseFloat(a);
+                xlogy += parseFloat(b);
+                iteration++;
+                $('#trend-tr-'+iteration).append(temp);
+            });
+            let a = Math.pow(10, logy / _.size(dataLatih)).toFixed(9);
+            let b = Math.pow(10, xlogy / x2).toFixed(9);
+            console.log(a, b);
+            $('#a').append(`<strong><em>a</em> = ${a}</strong>`);
+            $('#b').append(`<strong><em>b</em> = ${b}</strong>`);
+            $('#y').append(`<strong><em>Y</em> = (${a}) (${b}) <em><sup>x</sup></em></strong>`);
+            $('#trend').DataTable({
+                "autoWidth": true
+            });
+        }
+
+        const getX = (iteration, split) =>{
+            const current = iteration - Math.round(split);
+            console.log(split * 2 % 2);
+            if (split * 2 % 2 == 0){
+                return  current * 2 + 1;
+            }
+            return current + 1;
+        }
+
+        </script>
+    @endif
 @endpush

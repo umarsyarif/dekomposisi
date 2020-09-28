@@ -48,7 +48,7 @@ $title = 'Persentase Kesalahan';
                         </button>
                     </div>
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="example1" class="table datatable table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th class="text-center" rowspan="2">No</th>
@@ -75,15 +75,18 @@ $title = 'Persentase Kesalahan';
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$jumlah = $row->jumlah}}</td>
-                                    <td class="text-center">{{$aditif = round($aditif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? $errorAditif = round(($jumlah - $aditif) / $jumlah, 2) : $errorAditif = 0}}</td>
-                                    <td class="text-center">{{$multiplikatif = round($multiplikatif)}}</td>
-                                    <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = round(($jumlah - $multiplikatif) / $jumlah   , 2) : $errorMultiplikatif = 0}}</td>
+                                    <td class="text-center" id="aditif-{{$loop->iteration}}"></td>
+                                    <td class="text-center" id="error-aditif-{{$loop->iteration}}"></td>
+                                    <td class="text-center" id="multiplikatif-{{$loop->iteration}}"></td>
+                                    <td class="text-center" id="error-multiplikatif-{{$loop->iteration}}"></td>
+                                    {{-- <td class="text-center" id="error-aditif-{{$loop->iteration}}">{{$jumlah != 0 ? $errorAditif = round(($jumlah - $aditif) / $jumlah, 2) : $errorAditif = 0}}</td> --}}
+                                    {{-- <td class="text-center">{{$multiplikatif = round($multiplikatif)}}</td> --}}
+                                    {{-- <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = round(($jumlah - $multiplikatif) / $jumlah   , 2) : $errorMultiplikatif = 0}}</td> --}}
                                 </tr>
                                 <?php
-                                    $xt++;
-                                    $jumlahAditif += $errorAditif;
-                                    $jumlahMultiplikatif += $errorMultiplikatif;
+                                    // $xt++;
+                                    // $jumlahAditif += $errorAditif;
+                                    // $jumlahMultiplikatif += $errorMultiplikatif;
                                 ?>
                                 @endforeach
                             </tbody>
@@ -129,13 +132,70 @@ $title = 'Persentase Kesalahan';
 @push('scripts')
     <script>
 
-        $(function () {
-          $("#example1").DataTable({
-            "autoWidth": true
-          });
+        $("#datepicker").daterangepicker();
+
+        const a = 0;
+        const b = 0;
+        $(document).ready(() => {
+            $('.replace').remove();
+            getTrend().then(result => {
+                this.a = result.a;
+                this.b = result.b;
+                replace();
+            });
         });
 
-        $("#datepicker").daterangepicker();
+        const getTrend = async () => {
+            const dataLatih = {!! json_encode($data->toArray()) !!};
+            const split = _.size(dataLatih) / 2;
+            let iteration = 1;
+            let logy = 0, xlogy = 0, x2 = 0;
+            $.each(dataLatih, (index, value) => {
+                let temp, x, y = value.jumlah, a = 0, b = 0;
+                let log10y = Math.log10(y);
+                $('#x-'+iteration).html(x = getX(iteration, split));
+                $('#xy-'+iteration).html(y != 0 ? x * y : 0);
+                $('#x2-'+iteration).html(Math.pow(x, 2));
+                $('#y2-'+iteration).html(Math.pow(y, 2));
+                $('#logy-'+iteration).html(isFinite(log10y) ? a = log10y.toFixed(3) : a = 0);
+                $('#xlogy-'+iteration).html(isFinite(log10y) ? b = (x * a).toFixed(3) : b = 0);
+                x2 += Math.pow(x, 2);
+                logy += parseFloat(a);
+                xlogy += parseFloat(b);
+                iteration++;
+            });
+            const a = Math.pow(10, logy / _.size(dataLatih)).toFixed(9);
+            const b = Math.pow(10, xlogy / x2).toFixed(9);
+            return {a, b};
+        }
+
+        const getX = (iteration, split) =>{
+            const current = iteration - Math.round(split);
+            if (split * 2 % 2 == 0){
+                return  current * 2 - 1;
+            }
+            return current + 1;
+        }
+
+        const replace  = () => {
+            const dataUji = {!! json_encode($uji->toArray()) !!};
+            let xt = "{{ $xt }}";
+            let iteration = 1;
+            $.each(dataUji, (index, value) => {
+                const result = parseFloat(this.a) * Math.pow(parseFloat(this.b), parseFloat(xt));
+                $('#xt-'+iteration).html(xt);
+                $('#aditif-'+iteration).html(aditif = Math.round(result + parseFloat(value.musiman.toFixed(2))));
+                $('#error-aditif-'+iteration).html((value.jumlah - aditif) / value.jumlah);
+                $('#multiplikatif-'+iteration).html(multiplikatif = Math.round(result * parseFloat(value.musiman.toFixed(2))));
+                $('#error-multiplikatif-'+iteration).html((value.jumlah - multiplikatif) / value.jumlah)
+                iteration++;
+                xt++;
+            })
+
+            $('.datatable').DataTable({
+                "autoWidth": true
+            });
+        }
 
     </script>
 @endpush

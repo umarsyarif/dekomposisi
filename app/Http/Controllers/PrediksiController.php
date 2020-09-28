@@ -35,11 +35,8 @@ class PrediksiController extends Controller
 
     public function trend()
     {
-        $data = Cache::rememberForever('trend', function () {
-            return $this->index();
-        });
         $data = [
-            'data' => $data
+            'data' => $this->index()
         ];
         return view('proses-prediksi.data-trend', $data);
     }
@@ -92,7 +89,8 @@ class PrediksiController extends Controller
             ];
             return $data;
         });
-        return view('proses-prediksi.data-musiman', $data);
+        // return view('proses-prediksi.data-musiman', $data);
+        return $data;
     }
 
     public function medial($data)
@@ -141,9 +139,10 @@ class PrediksiController extends Controller
 
     public function hasil(Request $request)
     {
-        $tanggal = explode('-', $request->tanggal);
-        $awal = date('Y-m-d', strtotime($tanggal[0]));
-        $akhir = date('Y-m-d', strtotime($tanggal[1]));
+        $tanggal = explode(' - ', $request->tanggal);
+        $awal = date('Y-m-d', strtotime(str_replace('/', '-', $tanggal[0])));
+        $akhir = date('Y-m-d', strtotime(str_replace('/', '-', $tanggal[1])));;
+        // dd($akhir);
         $uji = new DatePeriod(
             new DateTime($awal),
             new DateInterval('P1D'),
@@ -153,15 +152,15 @@ class PrediksiController extends Controller
         $last = Latih::orderBy('waktu', 'DESC')->pluck('waktu')->first();
         $diff = $last->diff($awal)->format('%a');
         $xt += $diff;
-        $a = Cache::get('a', null);
-        $b = Cache::get('b', null);
+        // $a = Cache::get('a', null);
+        // $b = Cache::get('b', null);
         $penyesuaian = Cache::get('penyesuaian', null);
-        if (is_null($a) || is_null($b)) {
-            return redirect()->route('prediksi.data-trend');
-        }
-        if (is_null($penyesuaian)) {
-            return redirect()->route('prediksi.data-musiman');
-        }
+        // if (is_null($a) || is_null($b)) {
+        //     return redirect()->route('prediksi.data-trend');
+        // }
+        // if (is_null($penyesuaian)) {
+        //     return redirect()->route('prediksi.data-musiman');
+        // }
         $prediksi = collect();
         foreach ($uji as $row) {
             $tmp = new stdClass();
@@ -172,9 +171,9 @@ class PrediksiController extends Controller
             $prediksi->push($tmp);
         }
         $data = [
+            'data' => Latih::all(),
+            'musiman' => $this->musiman(),
             'uji' => $prediksi,
-            'a' => $a,
-            'b' => $b,
             'xt' => $xt,
             'tanggal' => $request->tanggal
         ];

@@ -23,7 +23,14 @@
                 </a>
             </li>
 
-            <li class="nav-item has-treeview {{Str::startsWith($title, ['Data', 'Nilai']) ? 'menu-open' : ''}}">
+            <li class="nav-item">
+                <a href="{{route('data-latih.page')}}" class="nav-link {{$title == 'Data Titik Api' ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-chart-bar"></i>
+                    <p>Data Titik Api</p>
+                </a>
+            </li>
+
+            {{-- <li class="nav-item has-treeview {{Str::startsWith($title, ['Data', 'Nilai']) ? 'menu-open' : ''}}">
                 <a href="javascript:void(0);" class="nav-link {{Str::startsWith($title, ['Data', 'Nilai']) ? 'active' : ''}}">
                     <i class="nav-icon fas fa-chart-bar"></i>
                     <p>
@@ -52,7 +59,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
             <li class="nav-item">
                 <a href="{{route('prediksi.page')}}" class="nav-link {{$title == 'Peramalan' ? 'active' : ''}}">

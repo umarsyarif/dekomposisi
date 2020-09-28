@@ -107,10 +107,10 @@ class HomeController extends Controller
                 $row->musiman = $musiman->medial * $penyesuaian;
             }
             $aditif = array_map(function ($x) use ($a, $b, $xt) {
-                return ($a + pow($b, $xt++)) + $x['musiman'];
+                return ($a * pow($b, $xt++)) + $x['musiman'];
             }, $uji->toArray());
             $multiplikatif = array_map(function ($x) use ($a, $b, $xt) {
-                return ($a + pow($b, $xt++)) * $x['musiman'];
+                return ($a * pow($b, $xt++)) * $x['musiman'];
             }, $uji->toArray());
             return [
                 'aditif' => $aditif,
