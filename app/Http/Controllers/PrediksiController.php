@@ -89,7 +89,7 @@ class PrediksiController extends Controller
             ];
             return $data;
         });
-        // return view('proses-prediksi.data-musiman', $data);
+        return view('proses-prediksi.data-musiman', $data);
         return $data;
     }
 
@@ -213,6 +213,7 @@ class PrediksiController extends Controller
             $prediksi->push($tmp);
         }
         $data = [
+            'tanggal' => $request->tanggal,
             'uji' => $prediksi,
             'a' => $a,
             'b' => $b,

@@ -30,28 +30,29 @@ $title = 'Evaluasi Kesalahan';
                                 <div class="col-12">
                                     <div class="row mt-3">
                                         <div class="border col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Peramalan Aditif</em> = 00 </strong></h6>
+                                            <h6 class="text-center"><strong><em>Peramalan Aditif</em> = {{round($jumlah['aditif'] * 100 / $uji->count(), 2)}} </strong></h6>
                                         </div>
                                         <div class="border col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Peramalan Multiplikatif</em> = 00 </strong></h6>
+                                            <h6 class="text-center"><strong><em>Peramalan Multiplikatif</em> = {{round($jumlah['multiplikatif'] * 100 / $uji->count(), 2)}} </strong></h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body col-6">
-                                <h5>Nilai Indeks Musiman</h5>
-                                <p class="text-muted">Nilai indeks musiman adalah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore autem dignissimos praesentium dicta odit iste temporibus minima eveniet nemo quae exercitationem, consectetur repellendus ullam sed, molestiae consequatur similique cupiditate.</p>
+                                <h5>Evalusi Kesalahan</h5>
+                                <p class="text-muted">Evalusi kesalahan dilakukan dengan Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore autem dignissimos praesentium dicta odit iste temporibus minima eveniet nemo quae exercitationem, consectetur repellendus ullam sed, molestiae consequatur similique cupiditate.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
                             Cek MAPE
                         </button>
-                    </div>
+                    </div> --}}
                     <div class="card-body">
+                        <h4 class="text-center">Evaluasi Kesalahan</h4>
                         <table id="example1" class="table datatable table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -72,26 +73,14 @@ $title = 'Evaluasi Kesalahan';
                                 <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
                                 @foreach ($uji as $row)
                                 <tr>
-                                    <?php
-                                        $trend = ($a + round(pow($b, $xt), 2));
-                                        $aditif = $trend + round($row->musiman, 2);
-                                        $multiplikatif = $trend * round($row->musiman, 2) ?>
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$jumlah = $row->jumlah}}</td>
-                                    <td class="text-center" id="aditif-{{$loop->iteration}}"></td>
-                                    <td class="text-center" id="error-aditif-{{$loop->iteration}}"></td>
-                                    <td class="text-center" id="multiplikatif-{{$loop->iteration}}"></td>
-                                    <td class="text-center" id="error-multiplikatif-{{$loop->iteration}}"></td>
-                                    {{-- <td class="text-center" id="error-aditif-{{$loop->iteration}}">{{$jumlah != 0 ? $errorAditif = round(($jumlah - $aditif) / $jumlah, 2) : $errorAditif = 0}}</td> --}}
-                                    {{-- <td class="text-center">{{$multiplikatif = round($multiplikatif)}}</td> --}}
-                                    {{-- <td class="text-center">{{$jumlah != 0 ? $errorMultiplikatif = round(($jumlah - $multiplikatif) / $jumlah   , 2) : $errorMultiplikatif = 0}}</td> --}}
+                                    <td class="text-center">{{$row->aditif}}</td>
+                                    <td class="text-center">{{round($row->error_aditif, 2)}}</td>
+                                    <td class="text-center">{{$row->multiplikatif}}</td>
+                                    <td class="text-center">{{round($row->error_multiplikatif, 2)}}</td>
                                 </tr>
-                                <?php
-                                    // $xt++;
-                                    // $jumlahAditif += $errorAditif;
-                                    // $jumlahMultiplikatif += $errorMultiplikatif;
-                                ?>
                                 @endforeach
                             </tbody>
                         </table>
@@ -136,70 +125,13 @@ $title = 'Evaluasi Kesalahan';
 @push('scripts')
     <script>
 
-        $("#datepicker").daterangepicker();
-
-        const a = 0;
-        const b = 0;
-        $(document).ready(() => {
-            $('.replace').remove();
-            getTrend().then(result => {
-                this.a = result.a;
-                this.b = result.b;
-                replace();
-            });
+        $(function () {
+          $("#example1").DataTable({
+            "autoWidth": true
+          });
         });
 
-        const getTrend = async () => {
-            const dataLatih = {!! json_encode($data->toArray()) !!};
-            const split = _.size(dataLatih) / 2;
-            let iteration = 1;
-            let logy = 0, xlogy = 0, x2 = 0;
-            $.each(dataLatih, (index, value) => {
-                let temp, x, y = value.jumlah, a = 0, b = 0;
-                let log10y = Math.log10(y);
-                $('#x-'+iteration).html(x = getX(iteration, split));
-                $('#xy-'+iteration).html(y != 0 ? x * y : 0);
-                $('#x2-'+iteration).html(Math.pow(x, 2));
-                $('#y2-'+iteration).html(Math.pow(y, 2));
-                $('#logy-'+iteration).html(isFinite(log10y) ? a = log10y.toFixed(3) : a = 0);
-                $('#xlogy-'+iteration).html(isFinite(log10y) ? b = (x * a).toFixed(3) : b = 0);
-                x2 += Math.pow(x, 2);
-                logy += parseFloat(a);
-                xlogy += parseFloat(b);
-                iteration++;
-            });
-            const a = Math.pow(10, logy / _.size(dataLatih)).toFixed(9);
-            const b = Math.pow(10, xlogy / x2).toFixed(9);
-            return {a, b};
-        }
-
-        const getX = (iteration, split) =>{
-            const current = iteration - Math.round(split);
-            if (split * 2 % 2 == 0){
-                return  current * 2 - 1;
-            }
-            return current + 1;
-        }
-
-        const replace  = () => {
-            const dataUji = {!! json_encode($uji->toArray()) !!};
-            let xt = "{{ $xt }}";
-            let iteration = 1;
-            $.each(dataUji, (index, value) => {
-                const result = parseFloat(this.a) * Math.pow(parseFloat(this.b), parseFloat(xt));
-                $('#xt-'+iteration).html(xt);
-                $('#aditif-'+iteration).html(aditif = Math.round(result + parseFloat(value.musiman.toFixed(2))));
-                $('#error-aditif-'+iteration).html((value.jumlah - aditif) / value.jumlah);
-                $('#multiplikatif-'+iteration).html(multiplikatif = Math.round(result * parseFloat(value.musiman.toFixed(2))));
-                $('#error-multiplikatif-'+iteration).html((value.jumlah - multiplikatif) / value.jumlah)
-                iteration++;
-                xt++;
-            })
-
-            $('.datatable').DataTable({
-                "autoWidth": true
-            });
-        }
+        $("#datepicker").daterangepicker();
 
     </script>
 @endpush

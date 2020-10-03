@@ -24,54 +24,54 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{route('data-latih.page')}}" class="nav-link {{$title == 'Data Titik Api' ? 'active' : ''}}">
+                <a href="{{route('dataset.page')}}" class="nav-link {{$title == 'Datasets' ? 'active' : ''}}">
                     <i class="nav-icon fas fa-chart-bar"></i>
-                    <p>Data Titik Api</p>
+                    <p>Datasets</p>
                 </a>
             </li>
 
-            {{-- <li class="nav-item has-treeview {{Str::startsWith($title, ['Data', 'Nilai']) ? 'menu-open' : ''}}">
-                <a href="javascript:void(0);" class="nav-link {{Str::startsWith($title, ['Data', 'Nilai']) ? 'active' : ''}}">
-                    <i class="nav-icon fas fa-chart-bar"></i>
+            <li class="nav-item">
+                <a href="{{route('dataset.devide')}}" class="nav-link {{$title == 'Pembagian Data' ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-project-diagram"></i>
+                    <p>Pembagian Data</p>
+                </a>
+            </li>
+
+            <li class="nav-item has-treeview {{Str::startsWith($title, ['Nilai']) ? 'menu-open' : ''}}">
+                <a href="javascript:void(0);" class="nav-link {{Str::startsWith($title, ['Nilai']) ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-sort-amount-down"></i>
                     <p>
-                        Data Titik Api
+                        Dekomposisi
                         <i class="right fas fa-angle-left"></i>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{route('data-latih.page')}}" class="nav-link {{Str::contains($title, 'Data Titik Api') ? 'active' : ''}}">
+                        <a href="{{route('dekomposisi.trend')}}" class="nav-link {{Str::contains($title, 'Nilai Trend') ? 'active' : ''}}">
                             <i class="fas fa-chart-pie nav-icon"></i>
-                            <p>Jumlah Titik Api</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{route('prediksi.data-trend')}}" class="nav-link {{Str::contains($title, 'Nilai Trend') ? 'active' : ''}}">
-                            <i class="fas fa-chart-line nav-icon"></i>
                             <p>Nilai Trend</p>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a href="{{route('prediksi.data-musiman')}}" class="nav-link {{Str::contains($title, 'Nilai Indeks Musiman') ? 'active' : ''}}">
-                            <i class="fas fa-chart-area nav-icon"></i>
+                        <a href="{{route('dekomposisi.musiman')}}" class="nav-link {{Str::contains($title, 'Nilai Indeks Musiman') ? 'active' : ''}}">
+                            <i class="fas fa-chart-line nav-icon"></i>
                             <p>Nilai Indeks Musiman</p>
                         </a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
 
             <li class="nav-item">
-                <a href="{{route('prediksi.page')}}" class="nav-link {{$title == 'Peramalan' ? 'active' : ''}}">
-                    <i class="nav-icon fas fa-calculator"></i>
+                <a href="{{route('dekomposisi.peramalan')}}" class="nav-link {{$title == 'Peramalan' ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-fire"></i>
                     <p>Peramalan</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{{route('data-uji.page')}}" class="nav-link {{$title == 'Persentase Kesalahan' ? 'active' : ''}}">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>Persentase Kesalahan</p>
+                <a href="{{route('dekomposisi.evaluasi')}}" class="nav-link {{$title == 'Evaluasi Kesalahan' ? 'active' : ''}}">
+                <i class="nav-icon fas fa-book"></i>
+                <p>Evaluasi Kesalahan</p>
                 </a>
             </li>
 

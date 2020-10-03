@@ -19,6 +19,22 @@ Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
 Auth::routes(['register' => false]);
 
+Route::prefix('dataset')->name('dataset.')->group(function () {
+    Route::get('/', 'DatasetController@page')->name('page');
+    Route::post('/', 'DatasetController@store')->name('store');
+    Route::get('devide', 'DatasetController@devide')->name('devide');
+    Route::get('export', 'DatasetController@export')->name('export');
+    Route::post('import', 'DatasetController@import')->name('import');
+    Route::delete('/{year}', 'DatasetController@destroy')->name('destroy');
+});
+
+Route::prefix('dekomposisi')->name('dekomposisi.')->group(function () {
+    Route::get('trend', 'DekomposisiController@nilaiTrend')->name('trend');
+    Route::get('musiman', 'DekomposisiController@nilaiIndeksMusiman')->name('musiman');
+    Route::get('peramalan', 'DekomposisiController@peramalan')->name('peramalan');
+    Route::get('evaluasi', 'DekomposisiController@evaluasi')->name('evaluasi');
+});
+
 Route::prefix('data-latih')->name('data-latih.')->group(function () {
     Route::get('/', 'LatihController@page')->name('page');
     Route::post('/', 'LatihController@store')->name('store');
