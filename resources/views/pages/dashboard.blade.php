@@ -141,7 +141,7 @@ $title = 'Dashboard';
 @endsection
 @push('scripts')
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
-    <script>
+    {{-- <script>
         // bar chart
         let labels = {!! json_encode($year) !!};
         let data = {!! json_encode($jumlah) !!};
@@ -259,6 +259,6 @@ $title = 'Dashboard';
             }
             return color;
         }
-    </script>
+    </script> --}}
 @endpush
 
