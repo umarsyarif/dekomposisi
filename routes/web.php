@@ -19,7 +19,7 @@ Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
 Auth::routes(['register' => false]);
 
-Route::prefix('dataset')->name('dataset.')->group(function () {
+Route::middleware('auth')->prefix('dataset')->name('dataset.')->group(function () {
     Route::get('/', 'DatasetController@page')->name('page');
     Route::post('/', 'DatasetController@store')->name('store');
     Route::get('devide', 'DatasetController@devide')->name('devide');
@@ -28,38 +28,38 @@ Route::prefix('dataset')->name('dataset.')->group(function () {
     Route::delete('/{year}', 'DatasetController@destroy')->name('destroy');
 });
 
-Route::prefix('dekomposisi')->name('dekomposisi.')->group(function () {
+Route::middleware('auth')->prefix('dekomposisi')->name('dekomposisi.')->group(function () {
     Route::get('trend', 'DekomposisiController@nilaiTrend')->name('trend');
     Route::get('musiman', 'DekomposisiController@nilaiIndeksMusiman')->name('musiman');
     Route::get('peramalan', 'DekomposisiController@peramalan')->name('peramalan');
     Route::get('evaluasi', 'DekomposisiController@evaluasi')->name('evaluasi');
 });
 
-Route::prefix('data-latih')->name('data-latih.')->group(function () {
-    Route::get('/', 'LatihController@page')->name('page');
-    Route::post('/', 'LatihController@store')->name('store');
-    Route::get('get-year', 'LatihController@getYear')->name('get-year');
-    Route::get('export', 'LatihController@export')->name('export');
-    Route::post('import', 'LatihController@import')->name('import');
-    Route::delete('/{year}', 'LatihController@destroy')->name('destroy');
-});
+// Route::prefix('data-latih')->name('data-latih.')->group(function () {
+//     Route::get('/', 'LatihController@page')->name('page');
+//     Route::post('/', 'LatihController@store')->name('store');
+//     Route::get('get-year', 'LatihController@getYear')->name('get-year');
+//     Route::get('export', 'LatihController@export')->name('export');
+//     Route::post('import', 'LatihController@import')->name('import');
+//     Route::delete('/{year}', 'LatihController@destroy')->name('destroy');
+// });
 
-Route::prefix('data-uji')->name('data-uji.')->group(function () {
-    Route::get('/', 'UjiController@page')->name('page');
-    Route::post('/', 'UjiController@store')->name('store');
-    Route::get('get-year', 'UjiController@getYear')->name('get-year');
-    Route::post('akurasi', 'UjiController@akurasi')->name('akurasi');
-    Route::get('export', 'UjiController@export')->name('export');
-    Route::post('import', 'UjiController@import')->name('import');
-    Route::delete('/{year}', 'UjiController@destroy')->name('destroy');
-});
+// Route::prefix('data-uji')->name('data-uji.')->group(function () {
+//     Route::get('/', 'UjiController@page')->name('page');
+//     Route::post('/', 'UjiController@store')->name('store');
+//     Route::get('get-year', 'UjiController@getYear')->name('get-year');
+//     Route::post('akurasi', 'UjiController@akurasi')->name('akurasi');
+//     Route::get('export', 'UjiController@export')->name('export');
+//     Route::post('import', 'UjiController@import')->name('import');
+//     Route::delete('/{year}', 'UjiController@destroy')->name('destroy');
+// });
 
-Route::prefix('prediksi')->name('prediksi.')->group(function () {
-    Route::get('/', 'PrediksiController@page')->name('page');
-    Route::get('data-trend', 'PrediksiController@trend')->name('data-trend');
-    Route::get('data-musiman', 'PrediksiController@musiman')->name('data-musiman');
-    Route::post('hasil', 'PrediksiController@hasil')->name('hasil');
-});
+// Route::prefix('prediksi')->name('prediksi.')->group(function () {
+//     Route::get('/', 'PrediksiController@page')->name('page');
+//     Route::get('data-trend', 'PrediksiController@trend')->name('data-trend');
+//     Route::get('data-musiman', 'PrediksiController@musiman')->name('data-musiman');
+//     Route::post('hasil', 'PrediksiController@hasil')->name('hasil');
+// });
 
 
 
