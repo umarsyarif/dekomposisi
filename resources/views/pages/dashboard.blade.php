@@ -94,7 +94,7 @@ $title = 'Dashboard';
                                             </div>
                                             <div class="box-body">
                                             <div class="chart">
-                                                <canvas id="barChart" style="height:250px"></canvas>
+                                                <canvas id="chart-titik-api" style="height:250px"></canvas>
                                             </div>
                                             </div>
                                             <!-- /.box-body -->
@@ -129,6 +129,147 @@ $title = 'Dashboard';
 @endsection
 @push('scripts')
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script>
+
+        $(document).ready( () => {
+
+            const data = {
+                //
+            }
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('api.home.chart') }}',
+                data: data,
+                dataType: 'json',
+                success: (response) => {
+                    console.log(response)
+                    chartRamalan(response.ramalan);
+                },
+                error: function(error){
+                    console.error(error);
+                }
+            })
+
+        });
+
+        const chartTitikApi = async (data) => {
+
+            console.log(data);
+            var lineChartData = {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Data Aktual',
+                    borderColor: color = this.getRandomColor(),
+                    backgroundColor: color,
+                    fill: false,
+                    data: data.jumlah,
+                    yAxisID: 'y-axis-1',
+                }]
+            };
+
+            var ctx = $('#chart-titik-api')[0].getContext('2d');
+            window.myLine = Chart.Line(ctx, {
+                data: lineChartData,
+                options: {
+                    responsive: true,
+                    hoverMode: 'index',
+                    stacked: false,
+                    title: {
+                        display: true,
+                        text: data.judul
+                    },
+                    scales: {
+                        yAxes: [{
+                            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: true,
+                            position: 'left',
+                            id: 'y-axis-1',
+                        }, {
+                            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: true,
+                            position: 'right',
+                            id: 'y-axis-2',
+
+                            // grid line settings
+                            gridLines: {
+                                drawOnChartArea: false, // only want the grid lines for one axis to show up
+                            },
+                        }],
+                    }
+                }
+            });
+        }
+
+        const chartRamalan = async (data) => {
+            var lineChartData = {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Data Aktual',
+                    borderColor: color = this.getRandomColor(),
+                    backgroundColor: color,
+                    fill: false,
+                    data: data.jumlah,
+                    yAxisID: 'y-axis-1',
+                }, {
+                    label: 'Ramalan Aditif',
+                    borderColor: color = this.getRandomColor(),
+                    backgroundColor: color,
+                    fill: false,
+                    data: data.aditif,
+                    yAxisID: 'y-axis-2'
+                }, {
+                    label: 'Ramalan Multiplikatif',
+                    borderColor: color = this.getRandomColor(),
+                    backgroundColor: color,
+                    fill: false,
+                    data: data.multiplikatif,
+                    yAxisID: 'y-axis-2'
+                }]
+            };
+
+			var ctx = $('#lineChart')[0].getContext('2d');
+			window.myLine = Chart.Line(ctx, {
+				data: lineChartData,
+				options: {
+					responsive: true,
+					hoverMode: 'index',
+					stacked: false,
+					title: {
+						display: true,
+						text: 'waktu'
+					},
+					scales: {
+						yAxes: [{
+							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+							display: true,
+							position: 'left',
+							id: 'y-axis-1',
+						}, {
+							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+							display: true,
+							position: 'right',
+							id: 'y-axis-2',
+
+							// grid line settings
+							gridLines: {
+								drawOnChartArea: false, // only want the grid lines for one axis to show up
+							},
+						}],
+					}
+				}
+			});
+        }
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+    </script>
     {{-- <script>
         // bar chart
         let labels = {!! json_encode($year) !!};
@@ -173,6 +314,7 @@ $title = 'Dashboard';
         });
 
         // end bar chart
+
         let waktu = {!! json_encode($waktu) !!};
         labels = {!! json_encode($uji['waktu']) !!};
         data1 = {!! json_encode($uji['jumlah']) !!};

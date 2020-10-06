@@ -57,7 +57,7 @@ $title = 'Pembagian Data';
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
                                                 <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
-                                                <td class="text-center"><a href="javascript:void(0)" class="jumlah" data-type="text" data-pk="{{$row->id}}" data-url="/api/latih/{{$row->id}}" data-name="jumlah" data-title="Jumlah Titik Api">{{$row->jumlah}}</a></td>
+                                                <td class="text-center"><a href="javascript:void(0)" class="jumlah">{{$row->jumlah}}</a></td>
                                                 <td>{{$row->created_at->format('d/m/Y H:i')}}</td>
                                                 <td>{{$row->updated_at->format('d/m/Y H:i')}}</td>
                                             </tr>
@@ -81,7 +81,7 @@ $title = 'Pembagian Data';
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
                                                 <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
-                                                <td class="text-center"><a href="javascript:void(0)" class="jumlah" data-type="text" data-pk="{{$row->id}}" data-url="/api/latih/{{$row->id}}" data-name="jumlah" data-title="Jumlah Titik Api">{{$row->jumlah}}</a></td>
+                                                <td class="text-center"><a href="javascript:void(0)" class="jumlah">{{$row->jumlah}}</a></td>
                                                 <td>{{$row->created_at->format('d/m/Y H:i')}}</td>
                                                 <td>{{$row->updated_at->format('d/m/Y H:i')}}</td>
                                             </tr>

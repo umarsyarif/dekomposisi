@@ -51,6 +51,15 @@ class DekomposisiController extends Controller
         return view('pages.peramalan', $data);
     }
 
+    public function peramalanApi(Request $request)
+    {
+        if (!is_null($request->tanggal)) {
+            $data = Dataset::getPeramalan($request->tanggal);
+            $reply['data'] = $data;
+            return response()->json($reply);
+        }
+    }
+
     public function evaluasi(Request $request)
     {
         $dataUji = Dataset::getDataUji();

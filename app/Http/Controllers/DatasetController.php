@@ -80,6 +80,11 @@ class DatasetController extends Controller
         return $this->page($request);
     }
 
+    public function update(Request $request, Dataset $data)
+    {
+        $data->update([$request->name => $request->value]);
+    }
+
     public function destroy(Request $request)
     {
         if (is_null($request->month)) {

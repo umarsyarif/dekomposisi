@@ -28,10 +28,14 @@ class Dataset extends Model
         return $dataLatih;
     }
 
-    public static function getDataUji()
+    public static function getDataUji($month = 0)
     {
         $lastYear = self::getLastYear();
-        $dataUji = self::whereYear('waktu', $lastYear)->get();
+        $dataUji = self::whereYear('waktu', $lastYear)
+            ->when($month != 0, function ($q) use ($month) {
+                return $q->whereMonth('waktu', $month);
+            })
+            ->get();
         return $dataUji;
     }
 
@@ -86,7 +90,7 @@ class Dataset extends Model
             $ma = collect([]);
             foreach ($years->pluck('year') as $year) {
                 $date = date('Y-m-d H:i:s', mktime(0, 0, 0, $row->month, $row->day, $year));
-                $x = Latih::whereDate('waktu', $date)->first();
+                $x = $dataLatih->whereDate('waktu', $date)->first();
                 $currentMa = $movingAverage->firstWhere('waktu', $date)->ma;
                 if ($currentMa == null) {
                     $ma->put($year, null);
