@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dataset;
 use App\Uji;
 use App\Latih;
 use App\Musiman;
@@ -39,8 +40,8 @@ class HomeController extends Controller
     {
         $this->middleware('guest');
         $data = [
-            'latih' => Latih::all()->count(),
-            'tahun' => $this->getYear()->count(),
+            'latih' => Dataset::getDataLatih()->count(),
+            'tahun' => Dataset::getYear()->count(),
             'jumlah' => Latih::sum('jumlah')
         ];
         return view('welcome2', $data);
@@ -50,34 +51,28 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
         // data pertahun
-        $latih = Latih::select(DB::raw('YEAR(waktu) as year'))->orderBy('year')->distinct()->get();
-        $year = $latih->pluck('year')->toArray();
-        $jumlah = [];
-        foreach ($latih as $row) {
-            $tmp = Latih::whereYear('waktu', $row->year)->get()->sum('jumlah');
-            array_push($jumlah, $tmp);
-            $row->jumlah = $jumlah;
-        }
+        $dataset = [
+            'all' => Dataset::all(),
+            'latih' => Dataset::getDataLatih(),
+            'uji' => Dataset::getDataUji(),
+        ];
+        $year = Dataset::getYear();
+        $year->pop();
         // data akurasi
-        $tmp = Uji::orderBy('waktu', 'DESC')->distinct('waktu')->first();
-        $month = $tmp->waktu->format('m');
-        $tahun = $tmp->waktu->format('Y');
-        $waktu = $tmp->waktu->format('F') . ' ' . $tahun;
-        $tmp = Uji::whereMonth('waktu', $month)->whereYear('waktu', $tahun)->get()->toArray();
-        $uji['waktu'] = array_map(function ($x) {
-            return date('d', strtotime($x['waktu']));
-        }, $tmp);
-        $uji['jumlah'] = array_map(function ($x) {
-            return $x['jumlah'];
-        }, $tmp);
+        // $tmp = Uji::orderBy('waktu', 'DESC')->distinct('waktu')->first();
+        // $month = $tmp->waktu->format('m');
+        // $tahun = $tmp->waktu->format('Y');
+        // $waktu = $tmp->waktu->format('F') . ' ' . $tahun;
+        // $tmp = Uji::whereMonth('waktu', $month)->whereYear('waktu', $tahun)->get()->toArray();
+        // $uji['waktu'] = array_map(function ($x) {
+        //     return date('d', strtotime($x['waktu']));
+        // }, $tmp);
+        // $uji['jumlah'] = array_map(function ($x) {
+        //     return $x['jumlah'];
+        // }, $tmp);
         $data = [
-            'jumlah' => $jumlah,
+            'data' => $dataset,
             'year' => $year,
-            'waktu' => $waktu,
-            'uji' => $uji,
-            'prediksi' => $this->prediksi($month, $tahun),
-            'latih' => Latih::all()->count(),
-            'aktual' => Uji::all()->count()
         ];
         return view('pages.dashboard', $data);
     }

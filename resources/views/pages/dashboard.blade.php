@@ -30,13 +30,13 @@ $title = 'Dashboard';
 
                             <div class="info-box-content">
                             <span class="info-box-text">Total Data Latih</span>
-                            <span class="info-box-number">{{number_format($latih,0,'.','.')}} Data</span>
+                            <span class="info-box-number">{{number_format($data['latih']->count(),0,'.','.')}} Data</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                    Tahun {{reset($year) .'-'. end($year)}}
+                                    Tahun {{$year->first()->year .'-'. $year->last()->year}}
                                 </span>
                             </div>
                             <!-- /.info-box-content -->
@@ -50,7 +50,7 @@ $title = 'Dashboard';
 
                             <div class="info-box-content">
                             <span class="info-box-text">Total Data Aktual</span>
-                            <span class="info-box-number">{{number_format($aktual,0,'.','.')}} Data</span>
+                            <span class="info-box-number">{{number_format($data['uji']->count(),0,'.','.')}} Data</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 0%"></div>
@@ -70,13 +70,13 @@ $title = 'Dashboard';
 
                             <div class="info-box-content">
                             <span class="info-box-text">Total Jumlah Api</span>
-                            <span class="info-box-number">{{number_format(array_sum($jumlah),0,'.','.')}} Titik</span>
+                            <span class="info-box-number">{{number_format($data['all']->count(),0,'.','.')}} Titik</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                    {{end($year) - reset($year)}} Tahun terakhir
+                                    {{$year->count()}} Tahun terakhir
                                 </span>
                             </div>
                             <!-- /.info-box-content -->
@@ -88,18 +88,6 @@ $title = 'Dashboard';
                             <div class="col-6">
                                 <div class="card">
                                     <div class="card-body">
-                                        {{-- <div class="card-body">
-                                            <h4 class="text-center">SISTEM PERAMALAN JUMLAH KEMUNCULAN TITIK API DI RIAU</h4>
-                                            <h5 class="text-center mb-5">MENGGUNAKAN METODE DEKOMPOSISI</h5>
-                                            <p class="card-text">
-                                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum ipsam quia ducimus, explicabo harum amet expedita non. Quis labore iste saepe voluptas, hic voluptatem sapiente, itaque eos, et eaque expedita.
-                                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita consequuntur et doloremque quos! Porro, laboriosam eveniet blanditiis distinctio laborum quam ut. Suscipit quod recusandae eaque voluptatibus itaque praesentium facere similique.
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis quisquam suscipit in assumenda inventore nulla id labore unde rerum doloribus, repellendus repellat quibusdam ducimus aliquam voluptates similique dolorum accusamus amet.
-                                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi odit sit velit quos qui, expedita sequi iusto aliquid ea perferendis quas, voluptates dolorem eveniet deleniti laborum officia, nulla nesciunt consequuntur?
-                                            </p>
-                                            <a href="{{route('page', 'data-latih')}}" class="btn btn-primary float-right mt-3">Start</a>
-                                        </div> --}}
-                                        <!-- LINE CHART -->
                                         <div class="box box-info">
                                             <div class="box-header with-border">
                                             <h4 class="box-title">Jumlah Titik Api</h4>

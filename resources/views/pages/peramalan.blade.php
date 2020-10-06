@@ -79,9 +79,9 @@ $title = 'Peramalan';
                                     <td class="text-center">{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$xt}}</td>
-                                    <?php $aditif = ($a + pow($b, $xt)) + $row->musiman ?>
+                                    <?php $aditif = ($a * pow($b, $xt)) + $row->musiman ?>
                                     <td class="text-center">{{round($aditif)}}</td>
-                                    <?php $multiplikatif = ($a + pow($b, $xt)) * $row->musiman ?>
+                                    <?php $multiplikatif = ($a * pow($b, $xt)) * $row->musiman ?>
                                     <td class="text-center">{{round($multiplikatif)}}</td>
                                 </tr>
                                 <?php
