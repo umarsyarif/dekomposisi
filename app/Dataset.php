@@ -90,7 +90,7 @@ class Dataset extends Model
             $ma = collect([]);
             foreach ($years->pluck('year') as $year) {
                 $date = date('Y-m-d H:i:s', mktime(0, 0, 0, $row->month, $row->day, $year));
-                $x = $dataLatih->whereDate('waktu', $date)->first();
+                $x = $dataLatih->where('waktu', $date)->first();
                 $currentMa = $movingAverage->firstWhere('waktu', $date)->ma;
                 if ($currentMa == null) {
                     $ma->put($year, null);

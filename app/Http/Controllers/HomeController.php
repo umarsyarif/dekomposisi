@@ -79,19 +79,25 @@ class HomeController extends Controller
 
     public function chart(Request $request)
     {
-        $dataUji = Dataset::getDataUji(12);
-        $ramalan = [
-            'judul' => date('F Y', '2019/12/01'),
-            'labels' => $dataUji->pluck('waktu')->map(function ($x) {
+        $dataset = [
+            'labels' => Dataset::all()->pluck('waktu')->map(function ($x) {
                 return $x->format('d');
             }),
-            'jumlah' => $dataUji->pluck('jumlah'),
-            'aditif' => $dataUji->pluck('jumlah'),
-            'multiplikatif' => $dataUji->pluck('jumlah')
+            'jumlah' => Dataset::all()->pluck('jumlah')
         ];
+        // $dataUji = Dataset::getDataUji(12);
+        // $ramalan = [
+        //     'judul' => date('F Y', '2019/12/01'),
+        //     'labels' => $dataUji->pluck('waktu')->map(function ($x) {
+        //         return $x->format('d');
+        //     }),
+        //     'jumlah' => $dataUji->pluck('jumlah'),
+        //     'aditif' => $dataUji->pluck('jumlah'),
+        //     'multiplikatif' => $dataUji->pluck('jumlah')
+        // ];
         $data = [
-            'dataset' => Dataset::all(),
-            'ramalan' => $ramalan
+            'dataset' => $dataset,
+            // 'ramalan' => $ramalan
         ];
         return response()->json($data);
     }

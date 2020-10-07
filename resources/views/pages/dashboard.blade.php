@@ -142,8 +142,9 @@ $title = 'Dashboard';
                 data: data,
                 dataType: 'json',
                 success: (response) => {
-                    console.log(response)
-                    chartRamalan(response.ramalan);
+                    console.log(response);
+                    chartTitikApi(response.dataset);
+                    // chartRamalan(response.ramalan);
                 },
                 error: function(error){
                     console.error(error);
