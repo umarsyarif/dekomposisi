@@ -40,7 +40,7 @@ $title = 'Nilai Indeks Musiman';
                             </div>
                             <div class="card-body col-6">
                                 <h5>Nilai Indeks Musiman</h5>
-                                <p class="text-muted">Nilai indeks musiman adalah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore autem dignissimos praesentium dicta odit iste temporibus minima eveniet nemo quae exercitationem, consectetur repellendus ullam sed, molestiae consequatur similique cupiditate.</p>
+                                <p class="text-muted">Untuk mencari nilai indeks musiman pada proses Dekomposisi, digunakan salah satu metode indeks musiman yaitu metode rasio terhadap rata-rata bergerak.</p>
                             </div>
                         </div>
                     </div>

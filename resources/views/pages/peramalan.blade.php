@@ -46,7 +46,7 @@ $title = 'Peramalan';
                             </div>
                             <div class="card-body col-6">
                                 <h5>Pilih tanggal ramalan</h5>
-                                <p class="text-muted">Untuk peramalan, disarankan untuk memilih tanggal diatas datasets yang tersedia ({{$years->min('year') .'-'. $years->max('year')}}). Ramalan akan dilakukan dengan metode dekomposisi aditif dan multiplikatif. Tanggal yang dipilih akan diramal jumlah titik api yang akan muncul pada tanggal tersebut berdasarkan dataset yang sudah ada.</p>
+                                <p class="text-muted">Ramalan akan dilakukan dengan metode dekomposisi aditif dan multiplikatif. Tanggal yang dipilih akan diramal jumlah titik api yang akan muncul pada tanggal tersebut berdasarkan dataset yang sudah ada.</p>
                             </div>
                         </div>
                     </div>

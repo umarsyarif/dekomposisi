@@ -40,7 +40,7 @@ $title = 'Evaluasi Kesalahan';
                             </div>
                             <div class="card-body col-6">
                                 <h5>Evalusi Kesalahan</h5>
-                                <p class="text-muted">Evalusi kesalahan dilakukan dengan Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore autem dignissimos praesentium dicta odit iste temporibus minima eveniet nemo quae exercitationem, consectetur repellendus ullam sed, molestiae consequatur similique cupiditate.</p>
+                                <p class="text-muted"> Pada tahap ini akan dilakukan pemeriksaan apakah pola atau informasi yang ditemukan bertentangan dengan fakta atau hipotesis sebelumnya. Evaluasi data menggunakan perhitungan kesalahan peramalan (error) yaitu MAPE.                       MAPE=(∑(Aktual-Ramalan)/Aktual× 100%)/n.</p>
                             </div>
                         </div>
                     </div>

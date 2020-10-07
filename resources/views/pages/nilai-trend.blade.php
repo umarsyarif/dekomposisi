@@ -48,7 +48,7 @@ $title = 'Nilai Trend';
                             </div>
                             <div class="card-body col-6">
                                 <h5>Nilai Trend</h5>
-                                <p class="text-muted">Nilai trend adalah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum labore autem dignissimos praesentium dicta odit iste temporibus minima eveniet nemo quae exercitationem, consectetur repellendus ullam sed, molestiae consequatur similique cupiditate.</p>
+                                <p class="text-muted">Untuk mencari nilai komponen Trend pada proses Dekomposisi, digunakan salah satu metode trend yaitu metode trend exponential.</p>
                             </div>
                         </div>
                     </div>

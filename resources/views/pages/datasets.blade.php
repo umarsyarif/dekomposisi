@@ -147,7 +147,7 @@ $title = 'Datasets';
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="create-modal-label">Tambah Data Latih</h5>
+                            <h5 class="modal-title" id="create-modal-label">Tambah Dataset</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -200,7 +200,7 @@ $title = 'Datasets';
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="import-modal-label">Import Data Latih</h5>
+                            <h5 class="modal-title" id="import-modal-label">Import Dataset</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

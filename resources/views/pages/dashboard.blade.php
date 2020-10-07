@@ -36,7 +36,7 @@ $title = 'Dashboard';
                                 <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                    Tahun {{$year->first()->year .'-'. $year->last()->year}}
+                                    Tahun {{$year->first()->year .'-'. $year[count($year)-2]->year}}
                                 </span>
                             </div>
                             <!-- /.info-box-content -->
@@ -56,7 +56,7 @@ $title = 'Dashboard';
                                 <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                    Data aktual jumlah titik api
+                                    Tahun {{$year->last()->year}}
                                 </span>
                             </div>
                             <!-- /.info-box-content -->
@@ -76,7 +76,7 @@ $title = 'Dashboard';
                                 <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                    {{$year->count()}} Tahun terakhir
+                                    Tahun {{$year->first()->year .'-'. $year->last()->year}}
                                 </span>
                             </div>
                             <!-- /.info-box-content -->

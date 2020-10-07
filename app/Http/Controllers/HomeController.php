@@ -67,7 +67,7 @@ class HomeController extends Controller
             'multiplikatif' => $dataset['uji']->pluck('jumlah')
         ];
         $year = Dataset::getYear();
-        $year->pop();
+        // $year->pop();
         $data = [
             'data' => $dataset,
             'year' => $year,
