@@ -58,15 +58,15 @@ $title = 'Evaluasi Kesalahan';
                                 <tr>
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                                    <th class="text-center" rowspan="2">Data Aktual</th>
+                                    <th class="text-center" rowspan="2">Data Aktual (A)</th>
                                     <th class="text-center" colspan="2">Dekomposisi Aditif</th>
                                     <th class="text-center" colspan="2">Dekomposisi Multiplikatif</th>
                                 </tr>
                                 <tr>
-                                    <td class="text-center">Jumlah Titik Api</td>
-                                    <td class="text-center">Error</td>
-                                    <td class="text-center">Jumlah Titik Api</td>
-                                    <td class="text-center">Error</td>
+                                    <td class="text-center">Ramalan (Fa)</td>
+                                    <td class="text-center">Error (A-Fa) / 2</td>
+                                    <td class="text-center">Ramalan (Fm)</td>
+                                    <td class="text-center">Error (A-Fm) / 2</td>
                                 </tr>
                             </thead>
                             <tbody>

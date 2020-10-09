@@ -85,20 +85,22 @@ class HomeController extends Controller
             }),
             'jumlah' => Dataset::all()->pluck('jumlah')
         ];
-        // $dataUji = Dataset::getDataUji(12);
-        // $ramalan = [
-        //     'judul' => date('F Y', '2019/12/01'),
-        //     'labels' => $dataUji->pluck('waktu')->map(function ($x) {
-        //         return $x->format('d');
-        //     }),
-        //     'jumlah' => $dataUji->pluck('jumlah'),
-        //     'aditif' => $dataUji->pluck('jumlah'),
-        //     'multiplikatif' => $dataUji->pluck('jumlah')
-        // ];
+        $dataUji = Dataset::getDataUji(12);
+        $getperamalan = Dataset::getPeramalan('01/12/2019 - 01/12/2019');
+        $evaluasi = Dataset::getEvaluasi($getperamalan);
+        $ramalan = [
+            'judul' => 'Desember',
+            'labels' => $dataUji->pluck('waktu')->map(function ($x) {
+                return $x->format('d');
+            }),
+            'jumlah' => $dataUji->pluck('jumlah'),
+            'ramalan' => $evaluasi
+        ];
         $data = [
             'dataset' => $dataset,
-            // 'ramalan' => $ramalan
+            'ramalan' => $ramalan
         ];
+        return $data;
         return response()->json($data);
     }
 

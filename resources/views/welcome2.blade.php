@@ -127,7 +127,7 @@
                     web yang akan di implementasikan menggunakan bahasa pemrograman PHP.
                   </p>
                   <p class="lead">
-                    Data latih yang
+                    Data utama yang
                     akan digunakan yaitu data jumlah titik api di Provinsi Riau pada tahun 2014-2019 dan data uji
                     adalah data tahun 2020 yang diperoleh dari Lembaga Penerbangan Antariksa
                     Nasional (LAPAN). Pengujian dilakukan dengan pengujian black box dan pengujian akurasi

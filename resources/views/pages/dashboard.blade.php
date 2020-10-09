@@ -49,7 +49,7 @@ $title = 'Dashboard';
                             <span class="info-box-icon bg-success"><i class="fas fa-chart-area"></i></span>
 
                             <div class="info-box-content">
-                            <span class="info-box-text">Total Data Aktual</span>
+                            <span class="info-box-text">Total Data uji</span>
                             <span class="info-box-number">{{number_format($data['uji']->count(),0,'.','.')}} Data</span>
 
                             <div class="progress">
@@ -69,7 +69,7 @@ $title = 'Dashboard';
                             <span class="info-box-icon bg-red"><i class="fas fa-fire"></i></span>
 
                             <div class="info-box-content">
-                            <span class="info-box-text">Total Jumlah Api</span>
+                            <span class="info-box-text">Total Titik Api</span>
                             <span class="info-box-number">{{number_format($data['all']->count(),0,'.','.')}} Titik</span>
 
                             <div class="progress">
@@ -144,7 +144,7 @@ $title = 'Dashboard';
                 success: (response) => {
                     console.log(response);
                     chartTitikApi(response.dataset);
-                    // chartRamalan(response.ramalan);
+                    chartRamalan(response.ramalan);
                 },
                 error: function(error){
                     console.error(error);
@@ -237,7 +237,7 @@ $title = 'Dashboard';
 					stacked: false,
 					title: {
 						display: true,
-						text: 'waktu'
+						text: data.judul
 					},
 					scales: {
 						yAxes: [{
