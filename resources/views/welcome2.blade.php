@@ -152,7 +152,7 @@
               Data
             </h3>
             <p class="subtitle-a">
-                Data latih yang
+                Data utama yang
                 akan digunakan yaitu data jumlah titik api di Provinsi Riau pada tahun 2014-2019.
             </p>
             <div class="line-mf"></div>
