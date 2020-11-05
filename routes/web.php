@@ -35,32 +35,5 @@ Route::middleware('auth')->prefix('dekomposisi')->name('dekomposisi.')->group(fu
     Route::get('evaluasi', 'DekomposisiController@evaluasi')->name('evaluasi');
 });
 
-// Route::prefix('data-latih')->name('data-latih.')->group(function () {
-//     Route::get('/', 'LatihController@page')->name('page');
-//     Route::post('/', 'LatihController@store')->name('store');
-//     Route::get('get-year', 'LatihController@getYear')->name('get-year');
-//     Route::get('export', 'LatihController@export')->name('export');
-//     Route::post('import', 'LatihController@import')->name('import');
-//     Route::delete('/{year}', 'LatihController@destroy')->name('destroy');
-// });
-
-// Route::prefix('data-uji')->name('data-uji.')->group(function () {
-//     Route::get('/', 'UjiController@page')->name('page');
-//     Route::post('/', 'UjiController@store')->name('store');
-//     Route::get('get-year', 'UjiController@getYear')->name('get-year');
-//     Route::post('akurasi', 'UjiController@akurasi')->name('akurasi');
-//     Route::get('export', 'UjiController@export')->name('export');
-//     Route::post('import', 'UjiController@import')->name('import');
-//     Route::delete('/{year}', 'UjiController@destroy')->name('destroy');
-// });
-
-// Route::prefix('prediksi')->name('prediksi.')->group(function () {
-//     Route::get('/', 'PrediksiController@page')->name('page');
-//     Route::get('data-trend', 'PrediksiController@trend')->name('data-trend');
-//     Route::get('data-musiman', 'PrediksiController@musiman')->name('data-musiman');
-//     Route::post('hasil', 'PrediksiController@hasil')->name('hasil');
-// });
-
-
 
 Route::get('/{page}', 'HomeController@index')->name('page');
