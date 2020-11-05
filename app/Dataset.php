@@ -253,6 +253,6 @@ class Dataset extends Model
             ->orderBy('year', 'DESC')
             ->distinct()
             ->first();
-        return $lastYear->year;
+        return optional($lastYear)->year;
     }
 }
