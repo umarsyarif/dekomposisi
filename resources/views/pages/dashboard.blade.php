@@ -70,7 +70,7 @@ $title = 'Dashboard';
 
                             <div class="info-box-content">
                             <span class="info-box-text">Total Titik Api</span>
-                            <span class="info-box-number">{{number_format($data['all']->count(),0,'.','.')}} Titik</span>
+                            <span class="info-box-number">{{number_format($data['all']->sum('jumlah'),0,'.','.')}} Titik</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 0%"></div>
@@ -90,10 +90,10 @@ $title = 'Dashboard';
                                     <div class="card-body">
                                         <div class="box box-info">
                                             <div class="box-header with-border">
-                                            <h4 class="box-title">Jumlah Titik Api</h4>
+                                                <h4 class="box-title">Dataset</h4>
                                             </div>
                                             <div class="box-body">
-                                            <div class="chart">
+                                            <div class="chart" id="chart-container">
                                                 <canvas id="chart-titik-api" style="height:250px"></canvas>
                                             </div>
                                             </div>
@@ -107,12 +107,24 @@ $title = 'Dashboard';
                                     <div class="card-body">
                                         <div class="box box-info">
                                             <div class="box-header with-border">
-                                            <h4 class="box-title">Akurasi</h4>
+                                                <h4 class="box-title">Akurasi</h4>
                                             </div>
                                             <div class="box-body">
-                                            <div class="chart">
-                                                <canvas id="lineChart" style="height:250px"></canvas>
-                                            </div>
+                                                <div class="row">
+                                                    <div class="col-1 pt-2">
+                                                        <a href="javascript:void(0);" id="prevBtn">
+                                                            <i class="fas fa-chevron-left"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="chart col-10 px-0" id="lineChart-container">
+                                                        <canvas id="lineChart" style="height:250px"></canvas>
+                                                    </div>
+                                                    <div class="col-1 pt-2">
+                                                        <a href="javascript:void(0);" id="nextBtn">
+                                                            <i class="fas fa-chevron-right"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <!-- /.box-body -->
                                         </div>
@@ -132,34 +144,61 @@ $title = 'Dashboard';
     <script>
 
         $(document).ready( () => {
-
-            const data = {
-                //
+            const bulan = [1,2,3,4,5,6,7,8,9,10,11,12];
+            var current = 1;
+            var data = {
+                bulan : current
             }
+            request(data);
+
+            $('#nextBtn').click(function() {
+                $(this).addClass('disabled');
+                if (bulan.indexOf(current + 1) > -1) {
+                    current = current + 1;
+                    var data = {
+                        bulan : current
+                    }
+                    resetCanvas('lineChart');
+                    request(data);
+                }
+                return;
+            });
+
+            $('#prevBtn').click(function() {
+                console.log('prev');
+                if (bulan.indexOf(current - 1) > -1) {
+                    current = current - 1;
+                    var data = {
+                        bulan : current
+                    }
+                    resetCanvas('lineChart');
+                    request(data);
+                }
+                return;
+            });
+        });
+
+        function request(data) {
             $.ajax({
                 type: 'POST',
                 url: '{{ route('api.home.chart') }}',
                 data: data,
                 dataType: 'json',
                 success: (response) => {
-                    console.log(response);
-                    chartTitikApi(response.dataset);
+                    data.bulan == 1 && chartTitikApi(response.dataset);
                     chartRamalan(response.ramalan);
                 },
                 error: function(error){
                     console.error(error);
                 }
-            })
-
-        });
+            });
+        }
 
         const chartTitikApi = async (data) => {
-
-            console.log(data);
             var lineChartData = {
                 labels: data.labels,
                 datasets: [{
-                    label: 'Data Aktual',
+                    label: 'Jumlah Titik Api',
                     borderColor: color = this.getRandomColor(),
                     backgroundColor: color,
                     fill: false,
@@ -169,9 +208,10 @@ $title = 'Dashboard';
             };
 
             var ctx = $('#chart-titik-api')[0].getContext('2d');
-            window.myLine = Chart.Line(ctx, {
+            window.myLine = Chart.Bar(ctx, {
                 data: lineChartData,
                 options: {
+                    maintainAspectRatio: false,
                     responsive: true,
                     hoverMode: 'index',
                     stacked: false,
@@ -202,6 +242,7 @@ $title = 'Dashboard';
         }
 
         const chartRamalan = async (data) => {
+            var ramalan = this.getRamalan(data.ramalan);
             var lineChartData = {
                 labels: data.labels,
                 datasets: [{
@@ -216,14 +257,14 @@ $title = 'Dashboard';
                     borderColor: color = this.getRandomColor(),
                     backgroundColor: color,
                     fill: false,
-                    data: data.aditif,
+                    data: ramalan.aditif,
                     yAxisID: 'y-axis-2'
                 }, {
                     label: 'Ramalan Multiplikatif',
                     borderColor: color = this.getRandomColor(),
                     backgroundColor: color,
                     fill: false,
-                    data: data.multiplikatif,
+                    data: ramalan.multiplikatif,
                     yAxisID: 'y-axis-2'
                 }]
             };
@@ -232,6 +273,7 @@ $title = 'Dashboard';
 			window.myLine = Chart.Line(ctx, {
 				data: lineChartData,
 				options: {
+                    maintainAspectRatio: false,
 					responsive: true,
 					hoverMode: 'index',
 					stacked: false,
@@ -261,6 +303,11 @@ $title = 'Dashboard';
 			});
         }
 
+        function resetCanvas(name) {
+            $(`#${name}`).remove();
+            $(`#${name}-container`).append(`<canvas id="${name}" style="height:250px"></canvas>`);
+        }
+
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
             var color = '#';
@@ -268,6 +315,16 @@ $title = 'Dashboard';
                 color += letters[Math.floor(Math.random() * 16)];
             }
             return color;
+        }
+
+        function getRamalan(data) {
+            var aditif = data.uji.map(x => {
+                return (Math.round((data.a * Math.pow(data.b, data.xt)) + x.musiman))
+            })
+            var multiplikatif = data.uji.map(x => {
+                return (Math.round((data.a * Math.pow(data.b, data.xt)) * x.musiman))
+            })
+            return {aditif: aditif, multiplikatif: multiplikatif};
         }
 
     </script>

@@ -410,8 +410,6 @@
         });
 
 
-        var months = [ "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-           "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
         let val = $('#datepicker').val();
         $("#ramalan-form").submit((e) => {
             let data = {
@@ -433,7 +431,6 @@
                     let no = 1;
                     let print = uji.map(x => {
                         const date = new Date(x.waktu.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-                        console.log(date);
                         let tmp = '<tr>';
                         tmp += '<td>'+no+'</td>';
                         tmp += `<td class="text-center">${date}</td>`;

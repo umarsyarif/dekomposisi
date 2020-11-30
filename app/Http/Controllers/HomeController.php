@@ -52,7 +52,6 @@ class HomeController extends Controller
         $this->middleware('auth');
         // data pertahun
 
-        // $dataset = Dataset::whereYear('waktu', 2014);
         $dataset = [
             'all' => Dataset::all(),
             'latih' => Dataset::getDataLatih(),
@@ -67,40 +66,41 @@ class HomeController extends Controller
             'multiplikatif' => $dataset['uji']->pluck('jumlah')
         ];
         $year = Dataset::getYear();
-        // $year->pop();
         $data = [
             'data' => $dataset,
             'year' => $year,
             'chart' => $data
         ];
-        // return $data;
         return view('pages.dashboard', $data);
     }
 
     public function chart(Request $request)
     {
+        $data = Dataset::getYear()->pluck('year');
+        $jumlah = $data->map(function ($item) {
+            return Dataset::whereYear('waktu', $item)->sum('jumlah');
+        });
         $dataset = [
-            'labels' => Dataset::all()->pluck('waktu')->map(function ($x) {
-                return $x->format('d');
-            }),
-            'jumlah' => Dataset::all()->pluck('jumlah')
+            'judul' => '',
+            'labels' => $data,
+            'jumlah' => $jumlah
         ];
-        $dataUji = Dataset::getDataUji(12);
-        $getperamalan = Dataset::getPeramalan('01/12/2019 - 01/12/2019');
-        $evaluasi = Dataset::getEvaluasi($getperamalan);
+
+        $bulan = $request->bulan ?? 1;
+        $dataUji = Dataset::getDataUji($bulan);
+        $getperamalan = Dataset::getPeramalan($dataUji->first()->waktu->format('d/m/Y') . ' - ' . $dataUji->last()->waktu->format('d/m/Y'));
         $ramalan = [
-            'judul' => 'Desember',
+            'judul' => $dataUji->first()->waktu->format('F Y'),
             'labels' => $dataUji->pluck('waktu')->map(function ($x) {
                 return $x->format('d');
             }),
             'jumlah' => $dataUji->pluck('jumlah'),
-            'ramalan' => $evaluasi
+            'ramalan' => $getperamalan
         ];
         $data = [
             'dataset' => $dataset,
             'ramalan' => $ramalan
         ];
-        return $data;
         return response()->json($data);
     }
 
