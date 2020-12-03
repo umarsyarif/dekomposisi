@@ -418,7 +418,7 @@
             e.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: '/api/peramalan',
+                url: '{{ route('api.dekomposisi.peramalan') }}',
                 data: data,
                 dataType: 'json',
                 success: (response) => {
