@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Musiman;
 use App\Dataset;
+use App\Kecamatan;
 use stdClass;
 use DateTime;
 use DatePeriod;
@@ -15,27 +16,58 @@ class DekomposisiController extends Controller
 {
     public function nilaiTrend(Request $request)
     {
-        $nilaiTrend = Cache::rememberForever('trend', function () {
-            $data = Dataset::getNilaiTrend();
+        $kecamatan = $request->kecamatan;
 
-            Cache::put('a', $data['a']);
-            Cache::put('b', $data['b']);
-            return $data;
-        });
+        if ($kecamatan) {
+            $nilaiTrend = Cache::rememberForever('trend-' . $kecamatan, function () use ($kecamatan) {
+                $data = Dataset::getNilaiTrend($kecamatan);
 
-        return view('pages.nilai-trend', $nilaiTrend);
+                Cache::put('a-' . $kecamatan, $data['a']);
+                Cache::put('b-' . $kecamatan, $data['b']);
+                return $data;
+            });
+        }
+
+        $allKecamatan = Kecamatan::all();
+
+        $data = [
+            'data' => $nilaiTrend['data'] ?? [],
+            'a' => $nilaiTrend['a'] ?? '',
+            'b' => $nilaiTrend['b'] ?? '',
+            'kecamatan' => $kecamatan,
+            'allKecamatan' => $allKecamatan,
+        ];
+
+        return view('pages.nilai-trend', $data);
     }
 
     public function nilaiIndeksMusiman(Request $request)
     {
-        $nilaiIndeksMusiman = Cache::rememberForever('musiman', function () {
-            $data = Dataset::getNilaiIndeksMusiman();
+        $kecamatan = $request->kecamatan;
 
-            Cache::put('penyesuaian', $data['penyesuaian']);
-            return $data;
-        });
+        if ($kecamatan) {
+            $nilaiIndeksMusiman = Cache::rememberForever('musiman', function () {
+                $data = Dataset::getNilaiIndeksMusiman();
 
+                Cache::put('a-' . $kecamatan, $data['a']);
+                Cache::put('b-' . $kecamatan, $data['b']);
+
+                Cache::put('penyesuaian', $data['penyesuaian']);
+                return $data;
+            });
+        }
+
+        $allKecamatan = Kecamatan::all();
         return view('pages.nilai-musiman', $nilaiIndeksMusiman);
+
+
+        // $nilaiIndeksMusiman = Cache::rememberForever('musiman', function () {
+        //     $data = Dataset::getNilaiIndeksMusiman();
+
+        //     Cache::put('penyesuaian', $data['penyesuaian']);
+        //     return $data;
+        // });
+
     }
 
     public function peramalan(Request $request)

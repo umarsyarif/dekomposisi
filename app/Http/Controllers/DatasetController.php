@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dataset;
+use App\Kecamatan;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -17,35 +18,47 @@ class DatasetController extends Controller
     public function page(Request $request)
     {
         $filter = $request->filter;
+        $kecamatan = $request->kecamatan;
         if ($filter == 'tahun') {
             $dataset = Dataset::getYear();
             foreach ($dataset as $row) {
-                $row->jumlah = Dataset::whereYear('waktu', $row->year)->get();
+                $row->jumlah = Dataset::getPerYear($row->year, $kecamatan);
             }
         } else if ($filter == 'bulan') {
             $dataset = Dataset::getMonth();
             foreach ($dataset as $row) {
-                $row->jumlah = Dataset::whereYear('waktu', $row->year)->whereMonth('waktu', $row->month)->get();
+                $row->jumlah = Dataset::getPerMonth($row->year, $row->month, $kecamatan);
             }
         } else {
-            $dataset = Dataset::all();
+            $dataset = Dataset::getPerKecamatan($kecamatan);
         }
+        $allKecamatan = Kecamatan::all();
 
         $data = [
             'dataset' => $dataset,
-            'filter' => $filter
+            'allKecamatan' => $allKecamatan,
+            'filter' => $filter,
+            'kecamatan' => $kecamatan,
         ];
         return view('pages.datasets', $data);
     }
 
     public function devide(Request $request)
     {
-        $dataLatih = Dataset::getDataLatih();
-        $dataUji = Dataset::getDataUji();
+        $kecamatan = $request->kecamatan;
+
+        if ($kecamatan) {
+            $dataLatih = Dataset::getDataLatih($kecamatan);
+            $dataUji = Dataset::getDataUji($kecamatan);
+        }
+
+        $allKecamatan = Kecamatan::all();
 
         $data = [
-            'dataLatih' => $dataLatih,
-            'dataUji' => $dataUji
+            'dataLatih' => $dataLatih ?? [],
+            'dataUji' => $dataUji ?? [],
+            'kecamatan' => $kecamatan,
+            'allKecamatan' => $allKecamatan
         ];
         return view('pages.pembagian-data', $data);
     }

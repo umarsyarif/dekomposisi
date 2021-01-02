@@ -21,17 +21,20 @@ class Dataset extends Model
      */
     protected $dates = ['waktu'];
 
-    public static function getDataLatih()
+    public static function getDataLatih($kecamatan = null)
     {
         $lastYear = self::getLastYear();
-        $dataLatih = self::whereYear('waktu', '!=', $lastYear)->get();
+        $dataLatih = self::where('kecamatan_id', $kecamatan)
+            ->whereYear('waktu', '!=', $lastYear)
+            ->get();
         return $dataLatih;
     }
 
-    public static function getDataUji($month = 0)
+    public static function getDataUji($kecamatan, $month = 0)
     {
         $lastYear = self::getLastYear();
         $dataUji = self::whereYear('waktu', $lastYear)
+            ->where('kecamatan_id', $kecamatan)
             ->when($month != 0, function ($q) use ($month) {
                 return $q->whereMonth('waktu', $month);
             })
@@ -39,9 +42,35 @@ class Dataset extends Model
         return $dataUji;
     }
 
-    public static function getNilaiTrend()
+    public static function getPerYear($year, $kecamatan = null)
     {
-        $dataLatih = self::getDataLatih();
+        return self::with('kecamatan')
+            ->whereYear('waktu', $year)
+            ->when($kecamatan, function ($q) use ($kecamatan) {
+                return $q->where('kecamatan_id', $kecamatan);
+            })->get();
+    }
+
+    public static function getPerMonth($year, $month, $kecamatan = null)
+    {
+        return self::with('kecamatan')
+            ->whereYear('waktu', $year)->whereMonth('waktu', $month)
+            ->when($kecamatan, function ($q) use ($kecamatan) {
+                return $q->where('kecamatan_id', $kecamatan);
+            })->get();
+    }
+
+    public static function getPerKecamatan($kecamatan = null)
+    {
+        return self::with('kecamatan')
+            ->when($kecamatan, function ($q) use ($kecamatan) {
+                return $q->where('kecamatan_id', $kecamatan);
+            })->get();
+    }
+
+    public static function getNilaiTrend($kecamatan)
+    {
+        $dataLatih = self::getDataLatih($kecamatan);
         $sum = [
             'x2' => 0,
             'logy' => 0,
@@ -77,9 +106,9 @@ class Dataset extends Model
         return $data;
     }
 
-    public static function getNilaiIndeksMusiman()
+    public static function getNilaiIndeksMusiman($kecamatan)
     {
-        $dataLatih = self::getDataLatih();
+        $dataLatih = self::getDataLatih($kecamatan);
         $years = self::getYear();
         $years->pop();
         $dateRange = self::getDate();
@@ -254,5 +283,10 @@ class Dataset extends Model
             ->distinct()
             ->first();
         return optional($lastYear)->year;
+    }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo('App\Kecamatan');
     }
 }

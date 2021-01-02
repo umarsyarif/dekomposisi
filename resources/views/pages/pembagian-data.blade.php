@@ -28,8 +28,23 @@ $title = 'Pembagian Data';
                         <p class="text-muted">Membagi datasets menjadi <em>data latih</em> dan <em>data uji</em>. Untuk data tahun terakhir pada datasets akan dijadikan data uji, sedangkan selebihnya akan menjadi data latih.</p>
                     </div>
                 </div>
+                @if ($kecamatan)
                 <div class="card card-primary card-outline card-tabs">
                     <div class="card-header p-0 border-bottom-0">
+                        <form action="{{route('dataset.devide')}}" class="mt-2">
+                            <div class="col-6 form-group row">
+                                <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                <div class="btn-group col-sm-9">
+                                    <select class="custom-select" name="kecamatan">
+                                        <option value="" selected>Pilih Kecamatan</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-primary"><i class="fas fa-search"></i> </button>
+                                </div>
+                            </div>
+                        </form>
                         <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="custom-tabs-three-latih-tab" data-toggle="pill" href="#custom-tabs-three-latih" role="tab" aria-controls="custom-tabs-three-latih" aria-selected="true">Data Latih</a>
@@ -92,6 +107,29 @@ $title = 'Pembagian Data';
                         </div>
                     </div>
                 </div>
+                @else
+                <div class="card">
+                    <div class="card-header">
+                        Kecamatan
+                    </div>
+                    <div class="card-body">
+                        <form action="{{route('dataset.devide')}}">
+                            <div class="col-6 form-group row">
+                                <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                <div class="btn-group col-sm-9">
+                                    <select class="custom-select" name="kecamatan">
+                                        <option value="" selected>Pilih Kecamatan</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-primary"><i class="fas fa-search"></i> </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>

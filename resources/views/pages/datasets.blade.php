@@ -22,6 +22,40 @@ $title = 'Datasets';
         <!-- Main content -->
         <div class="content">
             <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-filter mr-2"></i>
+                        <h5 class="d-inline">Filter</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{route('dataset.page')}}">
+                        <div class="col-12 row">
+                                <div class="col-6 form-group row">
+                                    <label for="filter" class="col-sm-3 col-form-label">Waktu</label>
+                                    <div class="col-sm-9">
+                                        <select class="custom-select" name="filter">
+                                            <option value="" selected>Harian</option>
+                                            <option value="bulan" {{$filter == 'bulan' ? 'selected' : ''}}>Bulanan</option>
+                                            <option value="tahun" {{$filter == 'tahun' ? 'selected' : ''}}>Tahunan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6 form-group row">
+                                    <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                    <div class="col-sm-9">
+                                        <select class="custom-select" name="kecamatan">
+                                            <option value="" selected>All</option>
+                                            @foreach ($allKecamatan as $row)
+                                            <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary float-right">Filter</button>
+                        </form>
+                    </div>
+                </div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -36,110 +70,95 @@ $title = 'Datasets';
                     {{ $message }}
                   </div>
                 @endif
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <form action="{{route('dataset.page')}}">
-                                    <h3 class="card-title mt-2 mr-3">Filter :</h3>
-                                    <div class="btn-group mb-2 mr-2" class="in-line">
-                                        <select class="custom-select" name="filter">
-                                            <option value="" selected>Harian</option>
-                                            <option value="bulan" {{$filter == 'bulan' ? 'selected' : ''}}>Bulanan</option>
-                                            <option value="tahun" {{$filter == 'tahun' ? 'selected' : ''}}>Tahunan</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fas fa-filter"></i>
-                                        </button>
-                                    </div>
-                                    <a href="javascript:void(0);" class="btn btn-success float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
-                                    <a href="javascript:void(0);" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#import-modal"><i class="fas fa-download mr-2"></i> Import</a>
-                                </form>
-                            </div>
-                            <div class="card-body">
-                                <h4 class="text-center">Data Jumlah Titik Api</h4>
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
+                <div class="card">
+                    <div class="card-header">
+                        <a href="javascript:void(0);" class="btn btn-success float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
+                        <a href="javascript:void(0);" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#import-modal"><i class="fas fa-download mr-2"></i> Import</a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="text-center">Data Jumlah Titik Api</h4>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    @if ($filter == null)
+                                        <th>No</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Jumlah titik api</th>
+                                        <th class="text-center">Kecamatan</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                    @elseif ($filter == 'tahun')
+                                        <th>No</th>
+                                        <th>Tahun</th>
+                                        <th>Jumlah data</th>
+                                        <th>Jumlah titik api</th>
+                                        <th>Actions</th>
+                                    @elseif ($filter == 'bulan')
+                                        <th>No</th>
+                                        <th>Bulan/Tahun</th>
+                                        <th>Jumlah data</th>
+                                        <th>Jumlah titik api</th>
+                                        <th>Actions</th>
+                                    @endif
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($filter == null)
+                                    @foreach ($dataset as $row)
                                         <tr>
-                                            @if ($filter == null)
-                                                <th>No</th>
-                                                <th class="text-center">Tanggal</th>
-                                                <th class="text-center">Jumlah titik api</th>
-                                                <th>Created At</th>
-                                                <th>Update At</th>
-                                            @elseif ($filter == 'tahun')
-                                                <th>No</th>
-                                                <th>Tahun</th>
-                                                <th>Jumlah data</th>
-                                                <th>Jumlah titik api</th>
-                                                <th>Actions</th>
-                                            @elseif ($filter == 'bulan')
-                                                <th>No</th>
-                                                <th>Bulan/Tahun</th>
-                                                <th>Jumlah data</th>
-                                                <th>Jumlah titik api</th>
-                                                <th>Actions</th>
-                                            @endif
+                                            <td>{{$loop->iteration}}</td>
+                                            <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
+                                            <td class="text-center"><a href="javascript:void(0)" class="jumlah" data-type="text" data-pk="{{$row->id}}" data-url="/api/dataset/{{$row->id}}" data-name="jumlah" data-title="Jumlah Titik Api">{{$row->jumlah}}</a></td>
+                                            <td class="text-center">{{$row->kecamatan->nama}}</td>
+                                            <td>{{$row->created_at->format('d/m/Y H:i')}}</td>
+                                            <td>{{$row->updated_at->format('d/m/Y H:i')}}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ($filter == null)
-                                            @foreach ($dataset as $row)
-                                                <tr>
-                                                    <td>{{$loop->iteration}}</td>
-                                                    <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
-                                                    <td class="text-center"><a href="javascript:void(0)" class="jumlah" data-type="text" data-pk="{{$row->id}}" data-url="/api/dataset/{{$row->id}}" data-name="jumlah" data-title="Jumlah Titik Api">{{$row->jumlah}}</a></td>
-                                                    <td>{{$row->created_at->format('d/m/Y H:i')}}</td>
-                                                    <td>{{$row->updated_at->format('d/m/Y H:i')}}</td>
-                                                </tr>
-                                            @endforeach
-                                        @elseif ($filter == 'tahun')
-                                            @foreach ($dataset as $row)
-                                                <tr>
-                                                    <td>{{$loop->iteration}}</td>
-                                                    <td>{{$row->year}}</td>
-                                                    <td>{{$row->jumlah->count()}}</td>
-                                                    <td>{{$row->jumlah->sum('jumlah')}}</td>
-                                                    <td>
-                                                        <a href="{{route('dataset.export', ['tahun' => $row->year])}}" class="btn btn-warning">
-                                                            <i class="fas fa-upload mr-1"></i> Export
-                                                        </a>
-                                                        <button class="btn btn-danger" onclick="deleteByYear({{$row->year}})">
-                                                            <i class="fas fa-trash mr-1"></i> Hapus
-                                                        </button>
-                                                        <form id="delete-form-{{$row->year}}" action="{{route('dataset.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @elseif ($filter == 'bulan')
-                                                @foreach ($dataset as $row)
-                                                    <tr>
-                                                        <td>{{$loop->iteration}}</td>
-                                                        <td>{{date('F', mktime(0, 0, 0, $row->month, 10))}} {{$row->year}}</td>
-                                                        <td>{{$row->jumlah->count()}}</td>
-                                                        <td>{{$row->jumlah->sum('jumlah')}}</td>
-                                                        <td>
-                                                            <a href="{{route('dataset.export', ['bulan' => $row->month, 'tahun' => $row->year])}}" class="btn btn-warning">
-                                                                <i class="fas fa-upload mr-1"></i> Export
-                                                            </a>
-                                                            <button class="btn btn-danger" onclick="deleteByMonth({{$row->month}},{{$row->year}})">
-                                                                <i class="fas fa-trash mr-1"></i> Hapus
-                                                            </button>
-                                                            <form id="delete-form-{{$row->month}}-{{$row->year}}" action="{{route('dataset.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                    @endforeach
+                                @elseif ($filter == 'tahun')
+                                    @foreach ($dataset as $row)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$row->year}}</td>
+                                            <td>{{$row->jumlah->count()}}</td>
+                                            <td>{{$row->jumlah->sum('jumlah')}}</td>
+                                            <td>
+                                                <a href="{{route('dataset.export', ['tahun' => $row->year])}}" class="btn btn-warning">
+                                                    <i class="fas fa-upload mr-1"></i> Export
+                                                </a>
+                                                <button class="btn btn-danger" onclick="deleteByYear({{$row->year}})">
+                                                    <i class="fas fa-trash mr-1"></i> Hapus
+                                                </button>
+                                                <form id="delete-form-{{$row->year}}" action="{{route('dataset.destroy', ['year' => $row->year, 'filter' => $filter])}}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @elseif ($filter == 'bulan')
+                                        @foreach ($dataset as $row)
+                                            <tr>
+                                                <td>{{$loop->iteration}}</td>
+                                                <td>{{date('F', mktime(0, 0, 0, $row->month, 10))}} {{$row->year}}</td>
+                                                <td>{{$row->jumlah->count()}}</td>
+                                                <td>{{$row->jumlah->sum('jumlah')}}</td>
+                                                <td>
+                                                    <a href="{{route('dataset.export', ['bulan' => $row->month, 'tahun' => $row->year])}}" class="btn btn-warning">
+                                                        <i class="fas fa-upload mr-1"></i> Export
+                                                    </a>
+                                                    <button class="btn btn-danger" onclick="deleteByMonth({{$row->month}},{{$row->year}})">
+                                                        <i class="fas fa-trash mr-1"></i> Hapus
+                                                    </button>
+                                                    <form id="delete-form-{{$row->month}}-{{$row->year}}" action="{{route('dataset.destroy', ['month' => $row->month, 'year' => $row->year, 'filter' => $filter])}}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <!-- Modal Create -->

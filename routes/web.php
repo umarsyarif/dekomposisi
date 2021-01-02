@@ -35,5 +35,12 @@ Route::middleware('auth')->prefix('dekomposisi')->name('dekomposisi.')->group(fu
     Route::get('evaluasi', 'DekomposisiController@evaluasi')->name('evaluasi');
 });
 
+Route::middleware('auth')->prefix('kecamatan')->name('kecamatan.')->group(function () {
+    Route::get('/', 'KecamatanController@page')->name('page');
+    Route::post('/', 'KecamatanController@store')->name('store');
+    Route::put('/{kecamatan?}', 'KecamatanController@update')->name('update');
+    Route::delete('/{kecamatan?}', 'KecamatanController@destroy')->name('destroy');
+});
+
 
 Route::get('/{page}', 'HomeController@index')->name('page');
