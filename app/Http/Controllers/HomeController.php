@@ -49,12 +49,11 @@ class HomeController extends Controller
     public function dashboard()
     {
         $this->middleware('auth');
-        // data pertahun
 
         $dataset = [
             'all' => Dataset::all(),
             'latih' => Dataset::getDataLatih(),
-            'uji' => Dataset::getDataUji(),
+            'uji' => Dataset::getDataUji(1),
         ];
         $data = [
             'labels' => $dataset['uji']->pluck('waktu')->map(function ($x) {
