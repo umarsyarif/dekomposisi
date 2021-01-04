@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Musiman;
 use App\Dataset;
 use App\Kecamatan;
-use stdClass;
-use DateTime;
-use DatePeriod;
-use DateInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -19,12 +14,8 @@ class DekomposisiController extends Controller
         $kecamatan = $request->kecamatan;
 
         if ($kecamatan) {
-            $nilaiTrend = Cache::rememberForever('trend-' . $kecamatan, function () use ($kecamatan) {
-                $data = Dataset::getNilaiTrend($kecamatan);
-
-                Cache::put('a-' . $kecamatan, $data['a']);
-                Cache::put('b-' . $kecamatan, $data['b']);
-                return $data;
+            $nilaiTrend = Cache::rememberForever('trend-' . $kecamatan, function ()  use ($kecamatan) {
+                return Dataset::getNilaiTrend($kecamatan);
             });
         }
 
@@ -46,28 +37,22 @@ class DekomposisiController extends Controller
         $kecamatan = $request->kecamatan;
 
         if ($kecamatan) {
-            $nilaiIndeksMusiman = Cache::rememberForever('musiman', function () {
-                $data = Dataset::getNilaiIndeksMusiman();
-
-                Cache::put('a-' . $kecamatan, $data['a']);
-                Cache::put('b-' . $kecamatan, $data['b']);
-
-                Cache::put('penyesuaian', $data['penyesuaian']);
-                return $data;
+            $nilaiIndeksMusiman = Cache::rememberForever('musiman-' . $kecamatan, function () use ($kecamatan) {
+                return Dataset::getNilaiIndeksMusiman($kecamatan);
             });
         }
 
         $allKecamatan = Kecamatan::all();
-        return view('pages.nilai-musiman', $nilaiIndeksMusiman);
 
-
-        // $nilaiIndeksMusiman = Cache::rememberForever('musiman', function () {
-        //     $data = Dataset::getNilaiIndeksMusiman();
-
-        //     Cache::put('penyesuaian', $data['penyesuaian']);
-        //     return $data;
-        // });
-
+        $data = [
+            'allKecamatan' => $allKecamatan,
+            'kecamatan' => $kecamatan,
+            'data' => $nilaiIndeksMusiman['data'] ?? [],
+            'year' => $nilaiIndeksMusiman['year'] ?? [],
+            'penyesuaian' => $nilaiIndeksMusiman['penyesuaian'] ?? '',
+            'jumlahIndeks' => $nilaiIndeksMusiman['jumlahIndeks'] ?? '',
+        ];
+        return view('pages.nilai-musiman', $data);
     }
 
     public function peramalan(Request $request)
@@ -80,6 +65,8 @@ class DekomposisiController extends Controller
         }
 
         $data = Dataset::getPeramalan($request->tanggal);
+        $data['allKecamatan'] = Kecamatan::all();
+
         return view('pages.peramalan', $data);
     }
 
@@ -87,20 +74,38 @@ class DekomposisiController extends Controller
     {
         if (!is_null($request->tanggal)) {
             $data = Dataset::getPeramalan($request->tanggal);
-            $reply['data'] = $data;
+            $allKecamatan = Kecamatan::get();
+            $reply = [
+                'data' => $data,
+                'allKecamatan' => $allKecamatan,
+            ];
             return response()->json($reply);
         }
     }
 
     public function evaluasi(Request $request)
     {
-        $dataUji = Dataset::getDataUji();
-        $first = $dataUji->first()->waktu;
-        $last = $dataUji->last()->waktu;
-        $tanggal = $first->format('d/m/Y') . ' - ' . $last->format('d/m/Y');
+        $kecamatan = $request->kecamatan;
 
-        $peramalan = Dataset::getPeramalan($tanggal);
-        $evaluasi = Dataset::getEvaluasi($peramalan);
-        return view('pages.evaluasi', $evaluasi);
+        if ($kecamatan) {
+            $dataUji = Dataset::getDataUji($kecamatan);
+            $first = $dataUji->first()->waktu;
+            $last = $dataUji->last()->waktu;
+            $tanggal = $first->format('d/m/Y') . ' - ' . $last->format('d/m/Y');
+
+            $peramalan = Dataset::getPeramalan($tanggal);
+            $evaluasi = Dataset::getEvaluasi($kecamatan, $peramalan);
+        }
+
+        $allKecamatan = Kecamatan::all();
+        $data = [
+            'kecamatan' => $kecamatan,
+            'allKecamatan' => $allKecamatan,
+            'evaluasi' => $evaluasi,
+            'jumlah' => $evaluasi['jumlah'],
+            'uji' => $evaluasi['uji'],
+        ];
+        // return $data;
+        return view('pages.evaluasi', $data);
     }
 }

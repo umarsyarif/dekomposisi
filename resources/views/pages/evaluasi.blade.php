@@ -22,6 +22,7 @@ $title = 'Evaluasi Kesalahan';
         <!-- Main content -->
         <div class="content">
             <div class="container-fluid">
+                @if ($kecamatan)
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -30,10 +31,10 @@ $title = 'Evaluasi Kesalahan';
                                 <div class="col-12">
                                     <div class="row mt-3">
                                         <div class="border col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Peramalan Aditif</em> = {{round($jumlah['aditif'] * 100 / $uji->count(), 2)}} </strong></h6>
+                                            <h6 class="text-center"><strong><em>Peramalan Aditif</em> = {{number_format((float)$jumlah['aditif'] / $uji->count(), 2, '.', '')}} </strong></h6>
                                         </div>
                                         <div class="border col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Peramalan Multiplikatif</em> = {{round($jumlah['multiplikatif'] * 100 / $uji->count(), 2)}} </strong></h6>
+                                            <h6 class="text-center"><strong><em>Peramalan Multiplikatif</em> = {{number_format((float)$jumlah['multiplikatif'] / $uji->count(), 2, '.', '')}} </strong></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -46,11 +47,6 @@ $title = 'Evaluasi Kesalahan';
                     </div>
                 </div>
                 <div class="card">
-                    {{-- <div class="card-header">
-                        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-hasil">
-                            Cek MAPE
-                        </button>
-                    </div> --}}
                     <div class="card-body">
                         <h4 class="text-center">Evaluasi Kesalahan</h4>
                         <table id="example1" class="table datatable table-bordered table-striped">
@@ -58,67 +54,59 @@ $title = 'Evaluasi Kesalahan';
                                 <tr>
                                     <th class="text-center" rowspan="2">No</th>
                                     <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                                    <th class="text-center" rowspan="2">Data Aktual (A)</th>
+                                    <th class="text-center" rowspan="2">Data Aktual</th>
                                     <th class="text-center" colspan="2">Dekomposisi Aditif</th>
                                     <th class="text-center" colspan="2">Dekomposisi Multiplikatif</th>
                                 </tr>
                                 <tr>
-                                    <td class="text-center">Ramalan (Fa)</td>
-                                    <td class="text-center">Error (A-Fa) / 2</td>
-                                    <td class="text-center">Ramalan (Fm)</td>
-                                    <td class="text-center">Error (A-Fm) / 2</td>
+                                    <td class="text-center">Ramalan</td>
+                                    <td class="text-center">Absulute Percentage Error</td>
+                                    <td class="text-center">Ramalan</td>
+                                    <td class="text-center">Absulute Percentage Error</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?>
+                                {{-- <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?> --}}
                                 @foreach ($uji as $row)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$row->waktu->format('d F Y')}}</td>
                                     <td class="text-center">{{$jumlah = $row->jumlah}}</td>
                                     <td class="text-center">{{$row->aditif}}</td>
-                                    <td class="text-center">{{round($row->error_aditif, 2)}}</td>
+                                    <td class="text-center">{{number_format((float)abs($row->error_aditif) * 100, 2, '.', '')}}</td>
                                     <td class="text-center">{{$row->multiplikatif}}</td>
-                                    <td class="text-center">{{round($row->error_multiplikatif, 2)}}</td>
+                                    <td class="text-center">{{number_format((float)abs($row->error_multiplikatif) * 100, 2, '.', '')}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="modal-hasil" tabindex="-1" role="dialog" aria-labelledby="modal-hasil-label" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modal-hasil-label">Peramalan Jumlah Titik Api</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                @else
+                <div class="card">
+                    <div class="card-header">
+                        Kecamatan
                     </div>
-                    <div class="modal-body">
-                        <h5 class="text-center">Akurasi</h5>
-                        <div class="col-12">
-                            <div class="row mt-3">
-                                <div class="bg-purple col-6 pt-1">
-                                    <h6 class="text-center"><strong>Aditif <br> <em>{{round(abs(round($jumlahAditif, 2) * 100/ $uji->count()), 2)}} %</em></strong></h6>
-                                </div>
-                                <div class="bg-info col-6 pt-1">
-                                    {{-- <h6 class="text-center"><strong>Aditif <br> <em>{{$jumlahMultiplikatif}} %</em></strong></h6> --}}
-                                    <h6 class="text-center"><strong>Multiplikatif <br> <em>{{round(abs(round($jumlahMultiplikatif, 2) * 100/ $uji->count()), 2)}} %</em></strong></h6>
+                    <div class="card-body">
+                        <form action="{{route('dekomposisi.evaluasi')}}">
+                            <div class="col-6 form-group row">
+                                <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                <div class="btn-group col-sm-9">
+                                    <select class="custom-select" name="kecamatan">
+                                        <option value="" selected>Pilih Kecamatan</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-primary"><i class="fas fa-search"></i> </button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        </form>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
-        {{-- end modal --}}
     </div>
 </div>
 @endsection

@@ -248,8 +248,9 @@
                           <tr>
                               <th class="text-center" rowspan="2">No</th>
                               <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                              <th class="text-center" rowspan="2">Xt</th>
-                              <th class="text-center" colspan="2">Jumlah Titik Api</th>
+                              @foreach ($allKecamatan as $key => $value)
+                              <th class="text-center">{{$value}}</th>
+                              @endforeach
                           </tr>
                       </thead>
                       <tbody id="peramalan-table-body">
@@ -396,9 +397,6 @@
   <script src="{{asset('DevFolio/js/main.js')}}"></script>
 
   <script>
-        // $("#example1").DataTable({
-        //     "autoWidth": true
-        // });
 
         $("#datepicker").daterangepicker({
             locale: {
@@ -424,21 +422,27 @@
                 success: (response) => {
                     $('#ramalan-table').removeClass('d-none');
                     $('#peramalan-table-body').empty();
+                    const kecamatan = response.allKecamatan;
                     let xt = response.data.xt;
                     let uji = response.data.uji;
                     let a = response.data.a;
                     let b = response.data.b;
+                    let medial = response.data.medial;
+                    let penyesuaian = response.data.penyesuaian;
                     let no = 1;
                     let print = uji.map(x => {
-                        const date = new Date(x.waktu.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                        let date = new Date(x.waktu.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                         let tmp = '<tr>';
                         tmp += '<td>'+no+'</td>';
                         tmp += `<td class="text-center">${date}</td>`;
-                        tmp += '<td class="text-center">'+xt+'</td>';
-                        tmp += '<td class="text-center">'+Math.round((a * Math.pow(b, xt)) + x.musiman)+'</td>';
+                        kecamatan.forEach((value, index) => {
+                            date = new Date(x.waktu.date).toLocaleDateString('en-US', { day: '2-digit', month: 'long' })
+                            date = date.split(' ');
+                            tmp += '<td class="text-center">'+Math.round((a[value.id] * Math.pow(b[value.id], xt[value.id])) + medial[value.id][`${date[1]}-${date[0]}`] * penyesuaian[value.id])+'</td>';
+                            xt[value.id]++;
+                        })
                         tmp += '</tr>'
                         no++;
-                        xt++;
                         return tmp;
                     });
                     $('#peramalan-table-body').append(print);

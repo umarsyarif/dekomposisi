@@ -21,6 +21,10 @@ class Dataset extends Model
      */
     protected $dates = ['waktu'];
 
+    protected $appends = [
+        'ma'
+    ];
+
     public static function getDataLatih($kecamatan = null)
     {
         $lastYear = self::getLastYear();
@@ -40,6 +44,13 @@ class Dataset extends Model
             })
             ->get();
         return $dataUji;
+    }
+
+    public static function getByDate($kecamatan, $date)
+    {
+        return self::when($kecamatan, function ($q) use ($kecamatan) {
+            return $q->where('kecamatan_id', $kecamatan);
+        })->whereDate('waktu', $date)->first();
     }
 
     public static function getPerYear($year, $kecamatan = null)
@@ -103,49 +114,37 @@ class Dataset extends Model
             'a' => round($a, 9),
             'b' => round($b, 9)
         ];
+        Cache::put('a-' . $kecamatan, $data['a']);
+        Cache::put('b-' . $kecamatan, $data['b']);
         return $data;
     }
 
     public static function getNilaiIndeksMusiman($kecamatan)
     {
-        $dataLatih = self::getDataLatih($kecamatan);
         $years = self::getYear();
         $years->pop();
         $dateRange = self::getDate();
-        $movingAverage = self::movingAverage($dataLatih);
         $penyesuaian = 0;
+        $medial = collect();
         foreach ($dateRange as $row) {
-            $jumlah = collect([]);
-            $ma = collect([]);
+            $data = collect([]);
             foreach ($years->pluck('year') as $year) {
                 $date = date('Y-m-d H:i:s', mktime(0, 0, 0, $row->month, $row->day, $year));
-                $x = $dataLatih->where('waktu', $date)->first();
-                $currentMa = $movingAverage->firstWhere('waktu', $date)->ma;
-                if ($currentMa == null) {
-                    $ma->put($year, null);
-                } else {
-                    $ma->put($year, $currentMa != 0 ? $x->jumlah / $currentMa * 100 : 0);
-                }
+                $x = self::getByDate($kecamatan, $date);
+                $data->put($year, $x->ma);
                 if ($row->month == 2 && $row->day == 29 && $year % 4 != 0) {
-                    $jumlah->put($year, null);
-                    $ma->put($year, null);
-                } else {
-                    $jumlah->put($year, $x->jumlah);
+                    $data->put($year, null);
                 }
             }
-            $row->jumlah = $jumlah;
-            $row->ma = $ma;
-            $row->medial = round(($ma->sum() - $ma->min() - $ma->max()) / 2, 2);
+            $row->data = $data ?? null;
+            $row->medial = round(($data->sum() - $data->min() - $data->max()) / 2, 2);
             $penyesuaian += $row->medial;
-            // save
-            $tgl = date('Y-m-d', mktime(0, 0, 0, $row->month, $row->day));
-            Musiman::updateOrCreate([
-                'waktu' => $tgl
-            ], [
-                'medial' => $row->medial
-            ]);
+            $date = date('d-F', mktime(0, 0, 0, $row->month, $row->day, $year));
+            $medial[$date] = $row->medial;
         }
         $penyesuaian = round((366 / $penyesuaian), 9);
+        Cache::put('medial-' . $kecamatan, $medial);
+        Cache::put('penyesuaian-' . $kecamatan, $penyesuaian);
         $jumlahIndeksMusiman = 0;
         foreach ($dateRange as $row) {
             $medial = round($row->medial, 2);
@@ -170,52 +169,65 @@ class Dataset extends Model
             new DateInterval('P1D'),
             new DateTime($akhir . ' +1 day')
         );
-        $xt = Dataset::getDataLatih()->count();
-        $last = Dataset::getDataLatih()->sortByDesc('waktu')->pluck('waktu')->first();
-        $diff = $last->diff($awal)->format('%a');
-        $xt += $diff;
-        $nilai = [
-            'a' => Cache::get('a', null),
-            'b' => Cache::get('b', null),
-            'penyesuaian' => Cache::get('penyesuaian', null),
-        ];
+        $allKecamatan = Kecamatan::pluck('id');
+        $xt = collect();
+        $a = collect();
+        $b = collect();
+        $penyesuaian = collect();
+        foreach ($allKecamatan as $kecamatan) {
+            $tmp = self::getDataLatih($kecamatan)->count();
+            $last = self::getDataLatih($kecamatan)->sortByDesc('waktu')->pluck('waktu')->first();
+            $diff = $last->diff($awal)->format('%a');
+            $tmp += $diff;
+            $xt[$kecamatan] = $tmp;
+
+            $tmp = Cache::get('a-' . $kecamatan, null);
+            $a[$kecamatan] = $tmp;
+            $tmp = Cache::get('b-' . $kecamatan, null);
+            $b[$kecamatan] = $tmp;
+            $tmp = Cache::get('penyesuaian-' . $kecamatan, null);
+            $penyesuaian[$kecamatan] = $tmp;
+            $tmp = Cache::get('medial-' . $kecamatan, null);
+            $medial[$kecamatan] = $tmp;
+        }
         $prediksi = collect();
         foreach ($uji as $row) {
             $tmp = new stdClass();
             $tgl = $row;
-            $musiman = Musiman::whereMonth('waktu', $tgl->format('m'))->whereDay('waktu', $tgl->format('d'))->first();
-            $tmp->musiman = $musiman->medial * $nilai['penyesuaian'];
             $tmp->waktu = $tgl;
             $prediksi->push($tmp);
         }
         $data = [
             'tanggal' => $date,
-            'years' => Dataset::getYear(),
+            'medial' => $medial,
+            'penyesuaian' => $penyesuaian,
             'uji' => $prediksi,
-            'a' => $nilai['a'],
-            'b' => $nilai['b'],
+            'a' => $a,
+            'b' => $b,
             'xt' => $xt
         ];
         return $data;
     }
 
-    public static function getEvaluasi($data)
+    public static function getEvaluasi($kecamatan, $data)
     {
-        $dataUji = self::getDataUji();
+        $dataUji = self::getDataUji($kecamatan);
         $xt = $data['xt'];
         $jumlah = [
             'aditif' => 0, 'multiplikatif' => 0
         ];
+        // dd($data);
         foreach ($data['uji'] as $row) {
+            $musiman = $data['medial'][$kecamatan][$row->waktu->format('d-F')] * $data['penyesuaian'][$kecamatan];
             $row->jumlah = $dataUji->firstWhere('waktu', $row->waktu)->jumlah;
-            $result = $data['a'] * pow($data['b'], $xt);
+            $result = $data['a'][$kecamatan] * pow($data['b'][$kecamatan], $xt[$kecamatan]);
             $row->xt = $xt;
-            $row->aditif = round($result + $row->musiman);
+            $row->aditif = round($result + $musiman);
             $row->error_aditif = $row->jumlah ? ($row->jumlah - $row->aditif) / $row->jumlah : 0;
-            $row->multiplikatif = round($result * $row->musiman);
+            $row->multiplikatif = round($result * $musiman);
             $row->error_multiplikatif = $row->jumlah ? ($row->jumlah - $row->multiplikatif) / $row->jumlah : 0;
-            $jumlah['aditif'] += $row->error_aditif;
-            $jumlah['multiplikatif'] += $row->error_multiplikatif;
+            $jumlah['aditif'] += abs($row->error_aditif * 100);
+            $jumlah['multiplikatif'] += abs($row->error_multiplikatif * 100);
             $xt++;
         }
         $data['jumlah'] = $jumlah;
@@ -247,6 +259,24 @@ class Dataset extends Model
             $y--;
         }
         return $result;
+    }
+
+    public function getMaAttribute()
+    {
+        $kecamatan = $this->kecamatan()->first();
+        if (is_null($kecamatan)) {
+            return null;
+        }
+
+        $movingAverage = Cache::rememberForever('ma-' . $kecamatan->id, function () use ($kecamatan) {
+            return self::movingAverage(self::getDataLatih($kecamatan->id));
+        });
+
+        $currentMa = $movingAverage->firstWhere('waktu', $this->waktu)->ma;
+        if ($currentMa == null) {
+            return null;
+        }
+        return $currentMa != 0 ? $this->jumlah / $currentMa * 100 : 0;
     }
 
     public static function getDate()

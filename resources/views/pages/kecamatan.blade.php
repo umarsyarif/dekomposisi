@@ -41,18 +41,6 @@ $title = 'Kecamatan';
                         <div class="card">
                             <div class="card-header">
                                 <form action="{{route('dataset.page')}}">
-                                    {{-- <h3 class="card-title mt-2 mr-3">Filter :</h3>
-                                    <div class="btn-group mb-2 mr-2" class="in-line">
-                                        <select class="custom-select" name="filter">
-                                            <option value="" selected>Harian</option>
-                                            <option value="bulan" {{$filter == 'bulan' ? 'selected' : ''}}>Bulanan</option>
-                                            <option value="tahun" {{$filter == 'tahun' ? 'selected' : ''}}>Tahunan</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fas fa-filter"></i>
-                                        </button>
-                                    </div> --}}
-                                    {{-- <a href="javascript:void(0);" class="btn btn-warning float-right mr-2" data-toggle="modal" data-target="#import-modal"><i class="fas fa-download mr-2"></i> Import</a> --}}
                                     <a href="javascript:void(0);" class="btn btn-success float-right" data-toggle="modal" data-target="#create-modal">+ Tambah Data</a>
                                 </form>
                             </div>
@@ -72,7 +60,7 @@ $title = 'Kecamatan';
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
                                                 <td class="text-center">{{$row->nama}}</td>
-                                                <td class="text-center">{{$row->dataset->count()}}</td>
+                                                <td class="text-center">{{$row->jumlah_dataset}}</td>
                                                 <td class="text-center">
                                                     <button class="btn btn-warning btn-edit" data-form="{{ $row }}"><i class="fas fa-edit"></i> Ubah</button>
                                                     <button class="btn btn-danger" onclick="destroy({{$row->id}})">

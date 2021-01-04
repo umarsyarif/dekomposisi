@@ -25,6 +25,7 @@ $title = 'Nilai Indeks Musiman';
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            @if ($kecamatan)
                             <div class="card-body col-6">
                                 <p class="text-center">Rumus Nilai Indeks Musiman :</p>
                                 <div class="col-12">
@@ -38,6 +39,7 @@ $title = 'Nilai Indeks Musiman';
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <div class="card-body col-6">
                                 <h5>Nilai Indeks Musiman</h5>
                                 <p class="text-muted">Untuk mencari nilai indeks musiman pada proses Dekomposisi, digunakan salah satu metode indeks musiman yaitu metode rasio terhadap rata-rata bergerak.</p>
@@ -45,47 +47,84 @@ $title = 'Nilai Indeks Musiman';
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="text-center">Nilai Indeks Musiman</h4>
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" rowspan="2">No</th>
-                                            <th class="text-center" rowspan="2">Tanggal / Bulan</th>
-                                            <th class="text-center" colspan="{{$year->count()}}">Jumlah titik api</th>
-                                            <th class="text-center" rowspan="2">Rata-Rata Medial</th>
-                                            <th class="text-center" rowspan="2">Indeks Musiman</th>
-                                        </tr>
-                                        <tr>
-                                            @foreach ($year as $row)
-                                                <th class="text-center">{{$row->year}}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $row)
-                                            <tr>
-                                                <td>{{$loop->iteration}}</td>
-                                                <td class="text-center">{{$row->day}} {{date('F', mktime(0, 0, 0, $row->month, 10))}}</td>
-                                                @foreach ($row->ma as $item)
-                                                    <?php $ma = $item ?? '-' ?>
-                                                    <td class="text-center">{{$ma > 0 ? round($ma, 2) : $ma}}</td>
-                                                @endforeach
-                                                <?php
-                                                ?>
-                                                <td class="text-center">{{$row->medial}}</td>
-                                                <td class="text-center">{{round($row->medial * $penyesuaian, 2)}}</td>
-                                            </tr>
+                @if ($kecamatan)
+                <div class="card">
+                    <div class="card-header">
+                        <form action="{{route('dekomposisi.musiman')}}">
+                            <div class="col-6 form-group row">
+                                <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                <div class="btn-group col-sm-9">
+                                    <select class="custom-select" name="kecamatan">
+                                        <option value="" selected>Pilih Kecamatan</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
                                         @endforeach
-                                    </tbody>
-                                </table>
+                                    </select>
+                                    <button class="btn btn-primary"><i class="fas fa-search"></i> </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="text-center">Nilai Indeks Musiman</h4>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" rowspan="2">No</th>
+                                    <th class="text-center" rowspan="2">Tanggal / Bulan</th>
+                                    <th class="text-center" colspan="{{$year->count()}}">Jumlah titik api</th>
+                                    <th class="text-center" rowspan="2">Rata-Rata Medial</th>
+                                    <th class="text-center" rowspan="2">Indeks Musiman</th>
+                                </tr>
+                                <tr>
+                                    @foreach ($year as $row)
+                                        <th class="text-center">{{$row->year}}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $row)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td class="text-center">{{$row->day}} {{date('F', mktime(0, 0, 0, $row->month, 10))}}</td>
+                                        @foreach ($row->data as $item)
+                                            <?php $ma = $item ?? '-' ?>
+                                            <td class="text-center">{{$ma > 0 ? round($ma, 2) : $ma}}</td>
+                                        @endforeach
+                                        <?php
+                                        ?>
+                                        <td class="text-center">{{$row->medial}}</td>
+                                        <td class="text-center">{{round($row->medial * $penyesuaian, 2)}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                @else
+                <div class="card">
+                    <div class="card-header">
+                        Kecamatan
+                    </div>
+                    <div class="card-body">
+                        <form action="{{route('dekomposisi.musiman')}}">
+                            <div class="col-6 form-group row">
+                                <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                <div class="btn-group col-sm-9">
+                                    <select class="custom-select" name="kecamatan">
+                                        <option value="" selected>Pilih Kecamatan</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-primary"><i class="fas fa-search"></i> </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                @endif
             </div>
         </div>
     </div>

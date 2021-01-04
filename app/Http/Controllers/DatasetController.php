@@ -10,8 +10,11 @@ use DateInterval;
 use Illuminate\Http\Request;
 use App\Imports\DatasetImport;
 use App\Exports\DatasetExport;
+use App\Jobs\ProcessIndeksMusiman;
+use App\Jobs\ProcessTrend;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Queue;
 
 class DatasetController extends Controller
 {
@@ -53,7 +56,6 @@ class DatasetController extends Controller
         }
 
         $allKecamatan = Kecamatan::all();
-
         $data = [
             'dataLatih' => $dataLatih ?? [],
             'dataUji' => $dataUji ?? [],
@@ -133,7 +135,21 @@ class DatasetController extends Controller
 
     public function forgetCache()
     {
-        Cache::forget('trend');
-        Cache::forget('musiman');
+        Cache::flush();
+    }
+
+    public function processQueue()
+    {
+        // $size = Queue::size('trend');
+        // if ($size > 1) {
+        //     Queue::get
+        // }
+        // ProcessTrend::dispatch()->onQueue('trend');
+        // $allKecamatan = Kecamatan::all();
+        // foreach ($allKecamatan as $kecamatan) {
+        //     $queueName = 'kecamatan-' . $kecamatan->id;
+        //     Queue::size($queueName);
+        //     $job = ProcessIndeksMusiman::dispatch($kecamatan)->onQueue($queueName);
+        // }
     }
 }

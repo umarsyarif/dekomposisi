@@ -24,16 +24,16 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{route('dataset.page')}}" class="nav-link {{$title == 'Datasets' ? 'active' : ''}}">
-                    <i class="nav-icon fas fa-chart-bar"></i>
-                    <p>Datasets</p>
+                <a href="{{route('kecamatan.page')}}" class="nav-link {{$title == 'Kecamatan' ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-location-arrow"></i>
+                    <p>Kecamatan</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{{route('kecamatan.page')}}" class="nav-link {{$title == 'Kecamatan' ? 'active' : ''}}">
+                <a href="{{route('dataset.page')}}" class="nav-link {{$title == 'Datasets' ? 'active' : ''}}">
                     <i class="nav-icon fas fa-chart-bar"></i>
-                    <p>Kecamatan</p>
+                    <p>Datasets</p>
                 </a>
             </li>
 
