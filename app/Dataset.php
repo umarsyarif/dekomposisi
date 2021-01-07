@@ -34,7 +34,7 @@ class Dataset extends Model
         return $dataLatih;
     }
 
-    public static function getDataUji($kecamatan, $month = 0)
+    public static function getDataUji($kecamatan = null, $month = 0)
     {
         $lastYear = self::getLastYear();
         $dataUji = self::whereYear('waktu', $lastYear)
@@ -181,13 +181,25 @@ class Dataset extends Model
             $tmp += $diff;
             $xt[$kecamatan] = $tmp;
 
-            $tmp = Cache::get('a-' . $kecamatan, null);
+            $tmp = Cache::get('a-' . $kecamatan, function () use ($kecamatan) {
+                self::getNilaiTrend($kecamatan);
+                return Cache::get('a-' . $kecamatan, null);
+            });
             $a[$kecamatan] = $tmp;
-            $tmp = Cache::get('b-' . $kecamatan, null);
+            $tmp = Cache::get('b-' . $kecamatan, function () use ($kecamatan) {
+                self::getNilaiTrend($kecamatan);
+                return Cache::get('b-' . $kecamatan, null);
+            });
             $b[$kecamatan] = $tmp;
-            $tmp = Cache::get('penyesuaian-' . $kecamatan, null);
+            $tmp = Cache::get('penyesuaian-' . $kecamatan, function () use ($kecamatan) {
+                self::getNilaiIndeksMusiman($kecamatan);
+                return Cache::get('penyesuaian-' . $kecamatan, null);
+            });
             $penyesuaian[$kecamatan] = $tmp;
-            $tmp = Cache::get('medial-' . $kecamatan, null);
+            $tmp = Cache::get('medial-' . $kecamatan, function () use ($kecamatan) {
+                self::getNilaiIndeksMusiman($kecamatan);
+                return Cache::get('medial-' . $kecamatan, null);
+            });
             $medial[$kecamatan] = $tmp;
         }
         $prediksi = collect();
@@ -209,29 +221,54 @@ class Dataset extends Model
         return $data;
     }
 
-    public static function getEvaluasi($kecamatan, $data)
+    public static function getEvaluasi($kecamatan)
     {
-        $dataUji = self::getDataUji($kecamatan);
-        $xt = $data['xt'];
-        $jumlah = [
-            'aditif' => 0, 'multiplikatif' => 0
-        ];
-        // dd($data);
-        foreach ($data['uji'] as $row) {
-            $musiman = $data['medial'][$kecamatan][$row->waktu->format('d-F')] * $data['penyesuaian'][$kecamatan];
-            $row->jumlah = $dataUji->firstWhere('waktu', $row->waktu)->jumlah;
-            $result = $data['a'][$kecamatan] * pow($data['b'][$kecamatan], $xt[$kecamatan]);
-            $row->xt = $xt;
-            $row->aditif = round($result + $musiman);
-            $row->error_aditif = $row->jumlah ? ($row->jumlah - $row->aditif) / $row->jumlah : 0;
-            $row->multiplikatif = round($result * $musiman);
-            $row->error_multiplikatif = $row->jumlah ? ($row->jumlah - $row->multiplikatif) / $row->jumlah : 0;
-            $jumlah['aditif'] += abs($row->error_aditif * 100);
-            $jumlah['multiplikatif'] += abs($row->error_multiplikatif * 100);
-            $xt++;
+        return Cache::rememberForever('evaluasi-' . $kecamatan, function () use ($kecamatan) {
+            $dataUji = self::getDataUji($kecamatan);
+            $first = $dataUji->first()->waktu;
+            $last = $dataUji->last()->waktu;
+            $tanggal = $first->format('d/m/Y') . ' - ' . $last->format('d/m/Y');
+            $data = self::getPeramalan($tanggal);
+
+            $dataUji = self::getDataUji($kecamatan);
+            $xt = $data['xt'];
+            $jumlah = [
+                'aditif' => 0, 'multiplikatif' => 0
+            ];
+
+            foreach ($data['uji'] as $row) {
+                $musiman = $data['medial'][$kecamatan][$row->waktu->format('d-F')] * $data['penyesuaian'][$kecamatan];
+                $row->jumlah = $dataUji->firstWhere('waktu', $row->waktu)->jumlah;
+                $result = $data['a'][$kecamatan] * pow($data['b'][$kecamatan], $xt[$kecamatan]);
+                $row->xt = $xt;
+                $row->aditif = round($result + $musiman);
+                $row->error_aditif = $row->jumlah != $row->aditif ? abs($row->jumlah - $row->aditif) / max($row->jumlah, $row->aditif) : 0;
+                $row->multiplikatif = round($result * $musiman);
+                $row->error_multiplikatif = $row->jumlah != $row->multiplikatif ? abs($row->jumlah - $row->multiplikatif) / max($row->jumlah, $row->multiplikatif) : 0;
+                $jumlah['aditif'] += abs($row->error_aditif * 100);
+                $jumlah['multiplikatif'] += abs($row->error_multiplikatif * 100);
+                $xt++;
+            }
+            $data['jumlah'] = $jumlah;
+
+            return $data;
+        });
+    }
+
+    public static function getAllEvaluasi()
+    {
+        $allKecamatan = Kecamatan::all();
+
+        $data['uji'] = 0;
+        $jumlah = ['aditif' => 0, 'multiplikatif' => 0];
+        foreach ($allKecamatan as $kecamatan) {
+            $evaluasi = self::getEvaluasi($kecamatan->id);
+            // dd($evaluasi);
+            $jumlah['aditif'] += $evaluasi['jumlah']['aditif'];
+            $jumlah['multiplikatif'] += $evaluasi['jumlah']['multiplikatif'];
+            $data['uji'] += $evaluasi['uji']->count();
         }
         $data['jumlah'] = $jumlah;
-
         return $data;
     }
 

@@ -438,7 +438,7 @@
                         kecamatan.forEach((value, index) => {
                             date = new Date(x.waktu.date).toLocaleDateString('en-US', { day: '2-digit', month: 'long' })
                             date = date.split(' ');
-                            tmp += '<td class="text-center">'+Math.round((a[value.id] * Math.pow(b[value.id], xt[value.id])) + medial[value.id][`${date[1]}-${date[0]}`] * penyesuaian[value.id])+'</td>';
+                            tmp += '<td class="text-center">'+Math.round((a[value.id] * Math.pow(b[value.id], xt[value.id])) * (medial[value.id][`${date[1]}-${date[0]}`] * penyesuaian[value.id]))+'</td>';
                             xt[value.id]++;
                         })
                         tmp += '</tr>'

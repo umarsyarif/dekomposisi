@@ -88,22 +88,16 @@ class DekomposisiController extends Controller
         $kecamatan = $request->kecamatan;
 
         if ($kecamatan) {
-            $dataUji = Dataset::getDataUji($kecamatan);
-            $first = $dataUji->first()->waktu;
-            $last = $dataUji->last()->waktu;
-            $tanggal = $first->format('d/m/Y') . ' - ' . $last->format('d/m/Y');
-
-            $peramalan = Dataset::getPeramalan($tanggal);
-            $evaluasi = Dataset::getEvaluasi($kecamatan, $peramalan);
+            $evaluasi = Dataset::getEvaluasi($kecamatan);
+        } else {
+            $evaluasi = Dataset::getAllEvaluasi();
         }
-
         $allKecamatan = Kecamatan::all();
         $data = [
             'kecamatan' => $kecamatan,
             'allKecamatan' => $allKecamatan,
-            'evaluasi' => $evaluasi,
-            'jumlah' => $evaluasi['jumlah'],
-            'uji' => $evaluasi['uji'],
+            'jumlah' => $evaluasi['jumlah'] ?? [],
+            'uji' => $evaluasi['uji'] ?? [],
         ];
         // return $data;
         return view('pages.evaluasi', $data);

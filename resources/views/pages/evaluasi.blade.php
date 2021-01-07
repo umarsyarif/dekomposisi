@@ -22,7 +22,6 @@ $title = 'Evaluasi Kesalahan';
         <!-- Main content -->
         <div class="content">
             <div class="container-fluid">
-                @if ($kecamatan)
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -31,22 +30,42 @@ $title = 'Evaluasi Kesalahan';
                                 <div class="col-12">
                                     <div class="row mt-3">
                                         <div class="border col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Peramalan Aditif</em> = {{number_format((float)$jumlah['aditif'] / $uji->count(), 2, '.', '')}} </strong></h6>
+                                            <h6 class="text-center"><strong><em>Peramalan Aditif</em> = {{number_format((float)$jumlah['aditif'] / ($kecamatan ? $uji->count() : $uji), 2, '.', '')}} </strong></h6>
                                         </div>
                                         <div class="border col-12 pt-1">
-                                            <h6 class="text-center"><strong><em>Peramalan Multiplikatif</em> = {{number_format((float)$jumlah['multiplikatif'] / $uji->count(), 2, '.', '')}} </strong></h6>
+                                            <h6 class="text-center"><strong><em>Peramalan Multiplikatif</em> = {{number_format((float)$jumlah['multiplikatif'] / ($kecamatan ? $uji->count() : $uji), 2, '.', '')}} </strong></h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body col-6">
                                 <h5>Evalusi Kesalahan</h5>
-                                <p class="text-muted"> Pada tahap ini akan dilakukan pemeriksaan apakah pola atau informasi yang ditemukan bertentangan dengan fakta atau hipotesis sebelumnya. Evaluasi data menggunakan perhitungan kesalahan peramalan (error) yaitu MAPE.                       MAPE=(∑(Aktual-Ramalan)/Aktual× 100%)/n.</p>
+                                <p class="text-muted">
+                                    Pada tahap ini akan dilakukan pemeriksaan apakah pola atau informasi yang ditemukan bertentangan dengan fakta atau hipotesis sebelumnya. Evaluasi data menggunakan perhitungan kesalahan peramalan (error) yaitu MAPE.
+                                </p>
+                                <p> MAPE=(∑(Data Terbesar - Data Terkecil) / Data Terbesar × 100%)</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                @if ($kecamatan)
                 <div class="card">
+                    <div class="card-header">
+                        <form action="{{route('dekomposisi.evaluasi')}}">
+                            <div class="col-6 form-group row">
+                                <label for="kecamatan" class="col-sm-3 col-form-label">Kecamatan</label>
+                                <div class="btn-group col-sm-9">
+                                    <select class="custom-select" name="kecamatan">
+                                        <option value="" selected>Pilih Kecamatan</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}" {{$kecamatan == $row->id ? 'selected' : ''}}>{{$row->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-primary"><i class="fas fa-search"></i> </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="card-body">
                         <h4 class="text-center">Evaluasi Kesalahan</h4>
                         <table id="example1" class="table datatable table-bordered table-striped">
@@ -66,7 +85,6 @@ $title = 'Evaluasi Kesalahan';
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- <?php $jumlahAditif = 0; $jumlahMultiplikatif = 0; ?> --}}
                                 @foreach ($uji as $row)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>

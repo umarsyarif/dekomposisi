@@ -33,8 +33,11 @@ class DatasetController extends Controller
                 $row->jumlah = Dataset::getPerMonth($row->year, $row->month, $kecamatan);
             }
         } else {
-            $dataset = Dataset::getPerKecamatan($kecamatan);
+            $dataset = Cache::rememberForever('dataset-harian', function () use ($kecamatan) {
+                return Dataset::getPerKecamatan($kecamatan);
+            });
         }
+
         $allKecamatan = Kecamatan::all();
 
         $data = [
@@ -98,6 +101,7 @@ class DatasetController extends Controller
     public function update(Request $request, Dataset $data)
     {
         $data->update([$request->name => $request->value]);
+        $this->forgetCache();
     }
 
     public function destroy(Request $request)
