@@ -122,9 +122,11 @@ $title = 'Datasets';
                                             <td>{{$row->jumlah->count()}}</td>
                                             <td>{{$row->jumlah->sum('jumlah')}}</td>
                                             <td>
+                                                @if (!$kecamatan)
                                                 <a href="{{route('dataset.export', ['tahun' => $row->year])}}" class="btn btn-warning">
                                                     <i class="fas fa-upload mr-1"></i> Export
                                                 </a>
+                                                @endif
                                                 <button class="btn btn-danger" onclick="deleteByYear({{$row->year}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </button>
@@ -143,9 +145,11 @@ $title = 'Datasets';
                                                 <td>{{$row->jumlah->count()}}</td>
                                                 <td>{{$row->jumlah->sum('jumlah')}}</td>
                                                 <td>
+                                                    @if (!$kecamatan)
                                                     <a href="{{route('dataset.export', ['bulan' => $row->month, 'tahun' => $row->year])}}" class="btn btn-warning">
                                                         <i class="fas fa-upload mr-1"></i> Export
                                                     </a>
+                                                    @endif
                                                     <button class="btn btn-danger" onclick="deleteByMonth({{$row->month}},{{$row->year}})">
                                                         <i class="fas fa-trash mr-1"></i> Hapus
                                                     </button>
@@ -175,6 +179,15 @@ $title = 'Datasets';
                             @csrf
                             <div class="modal-body">
                                 <input type="hidden" name="filter" value="{{$filter}}">
+                                <div class="form-group">
+                                    <label for="new">Kecamatan :</label>
+                                    <select name="kecamatan" id="kecamatan" class="form-control custom-select">
+                                        <option value="">-- Pilih Kecamatan --</option>
+                                        @foreach ($allKecamatan as $row)
+                                        <option value="{{$row->id}}">{{$row->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label for="new">Tambah data :</label>
                                     <select name="new" id="new" class="form-control custom-select">

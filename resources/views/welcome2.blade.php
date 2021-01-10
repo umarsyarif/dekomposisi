@@ -251,6 +251,7 @@
                               @foreach ($allKecamatan as $key => $value)
                               <th class="text-center">{{$value}}</th>
                               @endforeach
+                              <th class="text-center">Total</th>
                           </tr>
                       </thead>
                       <tbody id="peramalan-table-body">
@@ -435,12 +436,16 @@
                         let tmp = '<tr>';
                         tmp += '<td>'+no+'</td>';
                         tmp += `<td class="text-center">${date}</td>`;
+                        let total = 0;
                         kecamatan.forEach((value, index) => {
                             date = new Date(x.waktu.date).toLocaleDateString('en-US', { day: '2-digit', month: 'long' })
                             date = date.split(' ');
-                            tmp += '<td class="text-center">'+Math.round((a[value.id] * Math.pow(b[value.id], xt[value.id])) * (medial[value.id][`${date[1]}-${date[0]}`] * penyesuaian[value.id]))+'</td>';
+                            const ramalan = Math.round((a[value.id] * Math.pow(b[value.id], xt[value.id])) * (medial[value.id][`${date[1]}-${date[0]}`] * penyesuaian[value.id]));
+                            tmp += '<td class="text-center">'+ramalan+'</td>';
+                            total += ramalan;
                             xt[value.id]++;
                         })
+                        tmp += `<td class="text-center">${total}</td>`;
                         tmp += '</tr>'
                         no++;
                         return tmp;

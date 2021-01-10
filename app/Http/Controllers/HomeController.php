@@ -51,29 +51,31 @@ class HomeController extends Controller
         $this->middleware('auth');
 
         $dataset = [
-            'all' => Dataset::all(),
-            'latih' => Dataset::getDataLatih(),
-            'uji' => Dataset::getDataUji(1),
+            'all' => Dataset::sum('jumlah'),
+            'latih' => 0,
+            'uji' => 0,
         ];
-        $data = [
-            'labels' => $dataset['uji']->pluck('waktu')->map(function ($x) {
-                return $x->format('d');
-            }),
-            'jumlah' => $dataset['uji']->pluck('jumlah'),
-            'aditif' => $dataset['uji']->pluck('jumlah'),
-            'multiplikatif' => $dataset['uji']->pluck('jumlah')
-        ];
+
+        $allKecamatan = Kecamatan::all();
+        foreach ($allKecamatan as $kecamatan) {
+            $latih = Dataset::getDataLatih($kecamatan->id);
+            $dataset['latih'] += $latih->count();
+            $uji = Dataset::getDataUji($kecamatan->id);
+            $dataset['uji'] += $uji->count();
+        }
+
         $year = Dataset::getYear();
         $data = [
             'data' => $dataset,
             'year' => $year,
-            'chart' => $data
         ];
         return view('pages.dashboard', $data);
     }
 
     public function chart(Request $request)
     {
+        $tahun = $request->tahun ?? 2014;
+
         $data = Dataset::getYear()->pluck('year');
         $jumlah = $data->map(function ($item) {
             return Dataset::whereYear('waktu', $item)->sum('jumlah');
@@ -84,20 +86,22 @@ class HomeController extends Controller
             'jumlah' => $jumlah
         ];
 
-        $bulan = $request->bulan ?? 1;
-        $dataUji = Dataset::getDataUji($bulan);
-        $getperamalan = Dataset::getPeramalan($dataUji->first()->waktu->format('d/m/Y') . ' - ' . $dataUji->last()->waktu->format('d/m/Y'));
-        $ramalan = [
-            'judul' => $dataUji->first()->waktu->format('F Y'),
-            'labels' => $dataUji->pluck('waktu')->map(function ($x) {
-                return $x->format('d');
-            }),
-            'jumlah' => $dataUji->pluck('jumlah'),
-            'ramalan' => $getperamalan
+        $allKecamatan = Kecamatan::all();
+        $data = [];
+        foreach ($allKecamatan as $row) {
+            $jumlah = Dataset::getDataLatih($row->id, $tahun)
+                ->sum('jumlah');
+            array_push($data, $jumlah);
+        }
+        $kecamatan = [
+            'judul' => $tahun,
+            'labels' => $allKecamatan->pluck('nama'),
+            'jumlah' => $data
         ];
+
         $data = [
             'dataset' => $dataset,
-            'ramalan' => $ramalan
+            'kecamatan' => $kecamatan
         ];
         return response()->json($data);
     }

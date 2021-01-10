@@ -25,11 +25,14 @@ class Dataset extends Model
         'ma'
     ];
 
-    public static function getDataLatih($kecamatan = null)
+    public static function getDataLatih($kecamatan = null, $tahun = null)
     {
         $lastYear = self::getLastYear();
         $dataLatih = self::where('kecamatan_id', $kecamatan)
             ->whereYear('waktu', '!=', $lastYear)
+            ->when($tahun, function ($q) use ($tahun) {
+                return $q->whereYear('waktu', $tahun);
+            })
             ->get();
         return $dataLatih;
     }

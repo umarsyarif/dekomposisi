@@ -70,6 +70,7 @@ class DatasetController extends Controller
 
     public function store(Request $request)
     {
+        $kecamatan = $request->kecamatan;
         if ($request->new == 'tahunan') {
             $tahun = $request->tahun;
             $period = new DatePeriod(
@@ -78,7 +79,10 @@ class DatasetController extends Controller
                 new DateTime($tahun + 1 . '-01-01')
             );
             foreach ($period as $key => $value) {
-                Dataset::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+                Dataset::updateOrCreate([
+                    'waktu' => $value->format('Y-m-d'),
+                    'kecamatan_id' => $kecamatan
+                ]);
             }
         } else if ($request->new == 'bulanan') {
             $string = $request->bulan;
@@ -91,7 +95,10 @@ class DatasetController extends Controller
                 new DateTime($tahun . '-' . $bulan . '-01')
             );
             foreach ($period as $key => $value) {
-                Dataset::updateOrCreate(['waktu' => $value->format('Y-m-d')]);
+                Dataset::updateOrCreate([
+                    'waktu' => $value->format('Y-m-d'),
+                    'kecamatan_id' => $kecamatan
+                ]);
             }
         }
         $this->forgetCache();
@@ -126,6 +133,7 @@ class DatasetController extends Controller
     {
         $tahun = $request->tahun;
         $bulan = $request->bulan;
+
         if ($tahun == null) {
             return 'Tahun tidak boleh kosong!';
         }
